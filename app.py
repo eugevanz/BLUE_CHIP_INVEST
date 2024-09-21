@@ -403,7 +403,7 @@ def contact_us():
             cls='uk-offcanvas-bar'
         ),
         id='contact-us',
-        uk_offcanvas='mode: push; overlay: true'
+        data_uk_offcanvas='mode: push; overlay: true'
     )
 
 
