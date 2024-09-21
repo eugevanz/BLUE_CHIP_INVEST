@@ -18,7 +18,7 @@ app = FastHTML(
 )
 
 nav_link = lambda href, title: Li(
-    A(title, href='#', data_uk_toggle=True)
+    A(title, href=href, data_uk_toggle=True)
 )
 calculator_group1 = [nav_link(href, title) for href, title in [
     ("#potential-interest-calculators", "Simple Interest Calculator"),
@@ -55,6 +55,260 @@ calc_input = lambda label, icon, description: Div(
     Div(description, cls='uk-text-small uk-padding-small uk-padding-remove-top'),
     cls='uk-margin'
 )
+nav = Nav(
+    Div(
+        Div(
+            Div(
+                A(aria_haspopup='true', aria_label='Open menu', href='#', role='button',
+                  data_uk_navbar_toggle_icon=True,
+                  cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
+                Div(
+                    Ul(
+                        Li(
+                            A('Culture', href='#')
+                        ),
+                        Li(
+                            A('Tailored Wealth Solutions', href='#')
+                        ),
+                        Li(
+                            A(
+                                'Precision Financial Tools',
+                                Span(data_uk_navbar_parent_icon=True),
+                                aria_haspopup='true',
+                                href='#',
+                                role='button'
+                            ),
+                            Div(
+                                Ul(
+                                    Li('Potential Interest Calculators', cls='uk-nav-header'),
+                                    *calculator_group1,
+                                    Li(cls='uk-nav-divider'),
+                                    Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
+                                    *calculator_group2,
+                                    Li(cls='uk-nav-divider'),
+                                    Li('Loan Amortisation Calculators', cls='uk-nav-header'),
+                                    *calculator_group3,
+                                    Li(cls='uk-nav-divider'),
+                                    Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
+                                    *calculator_group4,
+                                    cls='uk-nav uk-navbar-dropdown-nav'
+                                ),
+                                cls='uk-navbar-dropdown uk-drop uk-width-large'
+                            )
+                        ),
+                        Li(
+                            A('Research & Insights', href='#')
+                        ),
+                        Li(
+                            Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small')
+                        ),
+                        cls='uk-nav uk-navbar-dropdown-nav'
+                    ),
+                    cls='uk-navbar-dropdown uk-drop'
+                ),
+                A('Blue Chip Invest', aria_label='Back to Home', href='#',
+                  style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                  cls='uk-navbar-item uk-logo'),
+                Ul(
+                    Li(
+                        A('Culture', href='#')
+                    ),
+                    Li(
+                        A('Tailored Wealth Solutions', href='#')
+                    ),
+                    Li(
+                        A(
+                            'Financial Tools',
+                            Span(data_uk_navbar_parent_icon=True),
+                            aria_haspopup='true',
+                            href='#',
+                            role='button'
+                        ),
+                        Div(
+                            Ul(
+                                Li('Potential Interest Calculators', cls='uk-nav-header'),
+                                *calculator_group1,
+                                Li(cls='uk-nav-divider'),
+                                Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
+                                *calculator_group2,
+                                Li(cls='uk-nav-divider'),
+                                Li('Loan Amortisation Calculators', cls='uk-nav-header'),
+                                *calculator_group3,
+                                Li(cls='uk-nav-divider'),
+                                Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
+                                *calculator_group4,
+                                cls='uk-nav uk-navbar-dropdown-nav'
+                            ),
+                            cls='uk-navbar-dropdown uk-drop uk-width-large'
+                        )
+                    ),
+                    Li(
+                        A('Research & Insights', href='#')
+                    ),
+                    cls='uk-navbar-nav uk-visible@l'
+                ),
+                cls='uk-navbar-left'
+            ),
+            Div(
+                Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small uk-visible@l'),
+                A(data_uk_icon='user', cls='uk-icon-button uk-button-secondary uk-icon'),
+                cls='uk-navbar-right'
+            ),
+            uk_navbar='mode: click; target: !.uk-navbar; align: center',
+            cls='uk-navbar'
+        ),
+        cls='uk-container'
+    ),
+    cls='uk-navbar-container'
+)
+potential_interest_calculators = Div(
+    Div(
+        Button(type='button', data_uk_close=True, cls='uk-modal-close-full uk-close-large'),
+        Div(
+            Div(
+                H3('Potential Interest Calculators',
+                   style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                   cls='uk-text-uppercase uk-text-bolder'),
+                Div('''These are tools designed to help individuals or businesses estimate the amount of 
+                        interest they could earn or owe over time based on various financial scenarios. These 
+                        calculators typically focus on interest accumulated from savings, loans, or investments and 
+                        can be tailored for specific financial goals.''',
+                    cls='uk-text-small uk-width-2-3@s'),
+                Div(
+                    Div(
+                        Div(
+                            H4('Simple Interest Calculator'),
+                            Form(
+                                Fieldset(
+                                    calc_input(label='Principal (P)', icon='bag',
+                                               description='The initial amount of money that is being invested or loaned.'),
+                                    calc_input(label='Interest Rate (R)', icon='arrow-up-right',
+                                               description='The annual interest rate, usually provided as a percentage (e.g., 5%)'),
+                                    calc_input(label='Time (T)', icon='clock',
+                                               description='The time period for which the interest is calculated, typically in years.'),
+                                    Div(
+                                        Div('Result', cls='uk-text-bolder uk-text-small'),
+                                        Hr(),
+                                        Div(
+                                            Span('0.00', cls='uk-text-bolder'),
+                                            'per year'
+                                        ),
+                                        Hr(),
+                                        cls='uk-margin'
+                                    ),
+                                    cls='uk-fieldset'
+                                )
+                            ),
+                            cls='uk-card uk-card-default uk-card-body'
+                        )
+                    ),
+                    Div(
+                        Div(
+                            H4('Compound Interest Calculator'),
+                            Form(
+                                Fieldset(
+                                    calc_input(label='Principal (P)', icon='bag',
+                                               description='The initial amount of money that is being invested or loaned.'),
+                                    calc_input(label='Interest Rate (R)', icon='arrow-up-right',
+                                               description='The annual interest rate, usually provided as a '
+                                                           'percentage (e.g., 5%)'),
+                                    calc_input(label='Time (T)', icon='clock',
+                                               description='The time period for which the interest is '
+                                                           'calculated, typically in years.'),
+                                    calc_input(label='Compounding Frequency (n)', icon='calendar',
+                                               description='The number of times the interest is compounded '
+                                                           'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
+                                    Div('Common values for compounding frequency:',
+                                        cls='uk-text-small uk-padding-small uk-padding-remove-top'),
+                                    Div(
+                                        Ul(
+                                            Li('Annually (n = 1)'),
+                                            Li('Semi-Annually (n = 2)'),
+                                            Li('Quarterly (n = 4)'),
+                                            Li('Monthly (n = 12)'),
+                                            Li('Daily (n = 365)'),
+                                            cls='uk-list uk-list-collapse uk-list-disc'
+                                        ),
+                                        cls='uk-text-small uk-padding-small uk-padding-remove-top'
+                                    ),
+                                    Div(
+                                        Div('Result', cls='uk-text-bolder uk-text-small'),
+                                        Hr(),
+                                        Div(
+                                            Span('0.00', cls='uk-text-bolder'),
+                                            'per year'
+                                        ),
+                                        Hr(),
+                                        cls='uk-margin'
+                                    ),
+                                    cls='uk-fieldset'
+                                )
+                            ),
+                            cls='uk-card uk-card-default uk-card-body'
+                        )
+                    ),
+                    Div(
+                        Div(
+                            H4('Savings Interest Calculator'),
+                            Form(
+                                Fieldset(
+                                    calc_input(label='Principal (P)', icon='bag',
+                                               description='The initial amount of money that is being '
+                                                           'invested or loaned.'),
+                                    calc_input(label='Monthly Contributions (C)', icon='mail',
+                                               description='The amount of money added to the account each '
+                                                           'month, if applicable.'),
+                                    calc_input(label='Annual Interest Rate (R)', icon='mail',
+                                               description='The interest rate provided by the savings '
+                                                           'account, usually expressed as a percentage.'),
+                                    calc_input(label='Time (T)', icon='clock',
+                                               description='The duration for which the savings will '
+                                                           'accumulate interest, typically measured in years.'),
+                                    calc_input(label='Compounding Frequency (n)', icon='calendar',
+                                               description='The number of times the interest is compounded '
+                                                           'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
+                                    Div('Common values for compounding frequency:',
+                                        cls='uk-text-small uk-padding-small uk-padding-remove-top'),
+                                    Div(
+                                        Ul(
+                                            Li('Annually (n = 1)'),
+                                            Li('Semi-Annually (n = 2)'),
+                                            Li('Quarterly (n = 4)'),
+                                            Li('Monthly (n = 12)'),
+                                            Li('Daily (n = 365)'),
+                                            cls='uk-list uk-list-collapse uk-list-disc'
+                                        ),
+                                        cls='uk-text-small uk-padding-small uk-padding-remove-top'
+                                    ),
+                                    Div(
+                                        Div('Result', cls='uk-text-bolder uk-text-small'),
+                                        Hr(),
+                                        Div(
+                                            Span('0.00', cls='uk-text-bolder'),
+                                            'per year'
+                                        ),
+                                        Hr(),
+                                        cls='uk-margin'
+                                    ),
+                                    cls='uk-fieldset'
+                                )
+                            ),
+                            cls='uk-card uk-card-default uk-card-body'
+                        )
+                    ),
+                    data_uk_grid='masonry: pack',
+                    cls='uk-child-width-1-2@s uk-margin-medium-top'
+                ),
+                cls='uk-container'
+            ),
+            cls='uk-section uk-section-medium'
+        ),
+        cls='uk-modal-dialog'
+    ),
+    id='potential-interest-calculators',
+    data_uk_modal=True,
+    cls='uk-modal-full'
+)
 
 
 @app.route('/')
@@ -64,260 +318,8 @@ def home():
     #                 f'{testimonials_section}{guides_section}{footer}'
     #                 f'</body></html>')
     return Body(
-        Nav(
-            Div(
-                Div(
-                    Div(
-                        A(aria_haspopup='true', aria_label='Open menu', href='#', role='button',
-                          data_uk_navbar_toggle_icon=True,
-                          cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
-                        Div(
-                            Ul(
-                                Li(
-                                    A('Culture', href='#')
-                                ),
-                                Li(
-                                    A('Tailored Wealth Solutions', href='#')
-                                ),
-                                Li(
-                                    A(
-                                        'Precision Financial Tools',
-                                        Span(data_uk_navbar_parent_icon=True),
-                                        aria_haspopup='true',
-                                        href='#',
-                                        role='button'
-                                    ),
-                                    Div(
-                                        Ul(
-                                            Li('Potential Interest Calculators', cls='uk-nav-header'),
-                                            *calculator_group1,
-                                            Li(cls='uk-nav-divider'),
-                                            Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
-                                            *calculator_group2,
-                                            Li(cls='uk-nav-divider'),
-                                            Li('Loan Amortisation Calculators', cls='uk-nav-header'),
-                                            *calculator_group3,
-                                            Li(cls='uk-nav-divider'),
-                                            Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
-                                            *calculator_group4,
-                                            cls='uk-nav uk-navbar-dropdown-nav'
-                                        ),
-                                        cls='uk-navbar-dropdown uk-drop uk-width-large'
-                                    )
-                                ),
-                                Li(
-                                    A('Research & Insights', href='#')
-                                ),
-                                Li(
-                                    Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small')
-                                ),
-                                cls='uk-nav uk-navbar-dropdown-nav'
-                            ),
-                            cls='uk-navbar-dropdown uk-drop'
-                        ),
-                        A('Blue Chip Invest', aria_label='Back to Home', href='#',
-                          style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                          cls='uk-navbar-item uk-logo'),
-                        Ul(
-                            Li(
-                                A('Culture', href='#')
-                            ),
-                            Li(
-                                A('Tailored Wealth Solutions', href='#')
-                            ),
-                            Li(
-                                A(
-                                    'Financial Tools',
-                                    Span(data_uk_navbar_parent_icon=True),
-                                    aria_haspopup='true',
-                                    href='#',
-                                    role='button'
-                                ),
-                                Div(
-                                    Ul(
-                                        Li('Potential Interest Calculators', cls='uk-nav-header'),
-                                        *calculator_group1,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
-                                        *calculator_group2,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Loan Amortisation Calculators', cls='uk-nav-header'),
-                                        *calculator_group3,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
-                                        *calculator_group4,
-                                        cls='uk-nav uk-navbar-dropdown-nav'
-                                    ),
-                                    cls='uk-navbar-dropdown uk-drop uk-width-large'
-                                )
-                            ),
-                            Li(
-                                A('Research & Insights', href='#')
-                            ),
-                            cls='uk-navbar-nav uk-visible@l'
-                        ),
-                        cls='uk-navbar-left'
-                    ),
-                    Div(
-                        Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small uk-visible@l'),
-                        A(data_uk_icon='user', cls='uk-icon-button uk-button-secondary uk-icon'),
-                        cls='uk-navbar-right'
-                    ),
-                    uk_navbar='mode: click; target: !.uk-navbar; align: center',
-                    cls='uk-navbar'
-                ),
-                cls='uk-container'
-            ),
-            cls='uk-navbar-container'
-        ),
-        Div(
-            Div(
-                Button(type='button', data_uk_close=True, cls='uk-modal-close-full uk-close-large'),
-                Div(
-                    Div(
-                        H3('Potential Interest Calculators',
-                           style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                           cls='uk-text-uppercase uk-text-bolder'),
-                        Div('''These are tools designed to help individuals or businesses estimate the amount of 
-                        interest they could earn or owe over time based on various financial scenarios. These 
-                        calculators typically focus on interest accumulated from savings, loans, or investments and 
-                        can be tailored for specific financial goals.''',
-                            cls='uk-text-small uk-width-2-3@s'),
-                        Div(
-                            Div(
-                                Div(
-                                    H4('Simple Interest Calculator'),
-                                    Form(
-                                        Fieldset(
-                                            calc_input(label='Principal (P)', icon='bag',
-                                                       description='The initial amount of money that is being invested or loaned.'),
-                                            calc_input(label='Interest Rate (R)', icon='arrow-up-right',
-                                                       description='The annual interest rate, usually provided as a percentage (e.g., 5%)'),
-                                            calc_input(label='Time (T)', icon='clock',
-                                                       description='The time period for which the interest is calculated, typically in years.'),
-                                            Div(
-                                                Div('Result', cls='uk-text-bolder uk-text-small'),
-                                                Hr(),
-                                                Div(
-                                                    Span('0.00', cls='uk-text-bolder'),
-                                                    'per year'
-                                                ),
-                                                Hr(),
-                                                cls='uk-margin'
-                                            ),
-                                            cls='uk-fieldset'
-                                        )
-                                    ),
-                                    cls='uk-card uk-card-default uk-card-body'
-                                )
-                            ),
-                            Div(
-                                Div(
-                                    H4('Compound Interest Calculator'),
-                                    Form(
-                                        Fieldset(
-                                            calc_input(label='Principal (P)', icon='bag',
-                                                       description='The initial amount of money that is being invested or loaned.'),
-                                            calc_input(label='Interest Rate (R)', icon='arrow-up-right',
-                                                       description='The annual interest rate, usually provided as a '
-                                                                   'percentage (e.g., 5%)'),
-                                            calc_input(label='Time (T)', icon='clock',
-                                                       description='The time period for which the interest is '
-                                                                   'calculated, typically in years.'),
-                                            calc_input(label='Compounding Frequency (n)', icon='calendar',
-                                                       description='The number of times the interest is compounded '
-                                                                   'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
-                                            Div('Common values for compounding frequency:',
-                                                cls='uk-text-small uk-padding-small uk-padding-remove-top'),
-                                            Div(
-                                                Ul(
-                                                    Li('Annually (n = 1)'),
-                                                    Li('Semi-Annually (n = 2)'),
-                                                    Li('Quarterly (n = 4)'),
-                                                    Li('Monthly (n = 12)'),
-                                                    Li('Daily (n = 365)'),
-                                                    cls='uk-list uk-list-collapse uk-list-disc'
-                                                ),
-                                                cls='uk-text-small uk-padding-small uk-padding-remove-top'
-                                            ),
-                                            Div(
-                                                Div('Result', cls='uk-text-bolder uk-text-small'),
-                                                Hr(),
-                                                Div(
-                                                    Span('0.00', cls='uk-text-bolder'),
-                                                    'per year'
-                                                ),
-                                                Hr(),
-                                                cls='uk-margin'
-                                            ),
-                                            cls='uk-fieldset'
-                                        )
-                                    ),
-                                    cls='uk-card uk-card-default uk-card-body'
-                                )
-                            ),
-                            Div(
-                                Div(
-                                    H4('Savings Interest Calculator'),
-                                    Form(
-                                        Fieldset(
-                                            calc_input(label='Principal (P)', icon='bag',
-                                                       description='The initial amount of money that is being '
-                                                                   'invested or loaned.'),
-                                            calc_input(label='Monthly Contributions (C)', icon='mail',
-                                                       description='The amount of money added to the account each '
-                                                                   'month, if applicable.'),
-                                            calc_input(label='Annual Interest Rate (R)', icon='mail',
-                                                       description='The interest rate provided by the savings '
-                                                                   'account, usually expressed as a percentage.'),
-                                            calc_input(label='Time (T)', icon='clock',
-                                                       description='The duration for which the savings will '
-                                                                   'accumulate interest, typically measured in years.'),
-                                            calc_input(label='Compounding Frequency (n)', icon='calendar',
-                                                       description='The number of times the interest is compounded '
-                                                                   'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
-                                            Div('Common values for compounding frequency:',
-                                                cls='uk-text-small uk-padding-small uk-padding-remove-top'),
-                                            Div(
-                                                Ul(
-                                                    Li('Annually (n = 1)'),
-                                                    Li('Semi-Annually (n = 2)'),
-                                                    Li('Quarterly (n = 4)'),
-                                                    Li('Monthly (n = 12)'),
-                                                    Li('Daily (n = 365)'),
-                                                    cls='uk-list uk-list-collapse uk-list-disc'
-                                                ),
-                                                cls='uk-text-small uk-padding-small uk-padding-remove-top'
-                                            ),
-                                            Div(
-                                                Div('Result', cls='uk-text-bolder uk-text-small'),
-                                                Hr(),
-                                                Div(
-                                                    Span('0.00', cls='uk-text-bolder'),
-                                                    'per year'
-                                                ),
-                                                Hr(),
-                                                cls='uk-margin'
-                                            ),
-                                            cls='uk-fieldset'
-                                        )
-                                    ),
-                                    cls='uk-card uk-card-default uk-card-body'
-                                )
-                            ),
-                            data_uk_grid='masonry: pack',
-                            cls='uk-child-width-1-2@s uk-margin-medium-top'
-                        ),
-                        cls='uk-container'
-                    ),
-                    cls='uk-section uk-section-medium'
-                ),
-                cls='uk-modal-dialog'
-            ),
-            id='potential-interest-calculators',
-            data_uk_modal=True,
-            cls='uk-modal-full'
-        )
+        nav,
+        potential_interest_calculators
     )
 
 
