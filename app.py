@@ -13,8 +13,7 @@ app = FastHTML(
         Link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin=''),
         Link(rel='stylesheet',
              href='https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,700;0,900;1,'
-                  '700&display=swap'),
-        Title('Blue Chip Invest')
+                  '700&display=swap')
     ), surreal=False, pico=False, default_hdrs=False
 )
 
@@ -467,29 +466,44 @@ def subhero():
 
 def services():
     return Div(
-        Ul(
-            Li(
-                A('Active', href='#'),
-                cls='uk-active'
+        Div(
+            Div(
+                Div(
+                    *[Div(
+                        Div(
+                            Div(
+                                Img(src='images/photo.jpg', width='1800', height='1200', alt=''),
+                                cls='uk-card-media-top'
+                            ),
+                            Div(
+                                H3(title, cls='uk-card-title'),
+                                P('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.'),
+                                cls='uk-card-body'
+                            ),
+                            cls='uk-card'
+                        )
+                    ) for title in [
+                        'Financial Planning',
+                        'Investment Management',
+                        'Retirement Planning',
+                        'Investment Analysis',
+                        'Insurance'
+                    ]],
+                    cls='uk-slider-items uk-child-width-1-4@s uk-grid'
+                ),
+                A(href='#', data_uk_slidenav_previous=True, data_uk_slider_item='previous',
+                  cls='uk-position-center-left uk-position-small uk-hidden-hover'),
+                A(href='#', data_uk_slidenav_next=True, data_uk_slider_item='next',
+                  cls='uk-position-center-right uk-position-small uk-hidden-hover'),
+                tabindex='-1',
+                cls='uk-position-relative uk-visible-toggle'
             ),
-            Li(
-                A('Item', href='#')
-            ),
-            Li('Header', cls='uk-nav-header'),
-            Li(
-                A('Item', href='#')
-            ),
-            Li(
-                A('Item', href='#')
-            ),
-            Li(cls='uk-nav-divider'),
-            Li(
-                A('Item', href='#')
-            ),
-            cls='uk-nav uk-dropdown-nav'
+            Ul(cls='uk-slider-nav uk-dotnav uk-flex-center uk-margin'),
+            data_uk_slider=True,
+            cls='uk-slider-container-offset'
         ),
         data_uk_dropdown='boundary: !.uk-navbar; stretch: x; flip: false; mode: click',
-        cls='uk-navbar-dropdown'
+        cls='uk-navbar-dropdown uk-background-secondary'
     )
 
 
@@ -1202,7 +1216,7 @@ def footer():
 
 @app.route('/')
 def home():
-    return Body(
+    return Title('Blue Chip Invest'), Body(
         nav(),
         potential_interest_calculators(),
         hero(),
