@@ -69,7 +69,7 @@ def home():
                 Div(
                     Div(
                         A(aria_haspopup='true', aria_label='Open menu', href='#', role='button',
-                          uk_navbar_toggle_icon='',
+                          data_uk_navbar_toggle_icon=True,
                           cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
                         Div(
                             Ul(
@@ -82,7 +82,7 @@ def home():
                                 Li(
                                     A(
                                         'Precision Financial Tools',
-                                        Span(uk_navbar_parent_icon=''),
+                                        Span(data_uk_navbar_parent_icon=True),
                                         aria_haspopup='true',
                                         href='#',
                                         role='button'
@@ -128,7 +128,7 @@ def home():
                             Li(
                                 A(
                                     'Financial Tools',
-                                    Span(uk_navbar_parent_icon=''),
+                                    Span(data_uk_navbar_parent_icon=True),
                                     aria_haspopup='true',
                                     href='#',
                                     role='button'
@@ -160,7 +160,7 @@ def home():
                     ),
                     Div(
                         Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small uk-visible@l'),
-                        A(uk_icon='user', cls='uk-icon-button uk-button-secondary uk-icon'),
+                        A(data_uk_icon='user', cls='uk-icon-button uk-button-secondary uk-icon'),
                         cls='uk-navbar-right'
                     ),
                     uk_navbar='mode: click; target: !.uk-navbar; align: center',
@@ -172,7 +172,7 @@ def home():
         ),
         Div(
             Div(
-                Button(type='button', uk_close='', cls='uk-modal-close-full uk-close-large'),
+                Button(type='button', data_uk_close=True, cls='uk-modal-close-full uk-close-large'),
                 Div(
                     Div(
                         H3('Potential Interest Calculators',
@@ -305,7 +305,7 @@ def home():
                                     cls='uk-card uk-card-default uk-card-body'
                                 )
                             ),
-                            uk_grid='masonry: pack',
+                            data_uk_grid='masonry: pack',
                             cls='uk-child-width-1-2@s uk-margin-medium-top'
                         ),
                         cls='uk-container'
@@ -315,7 +315,7 @@ def home():
                 cls='uk-modal-dialog'
             ),
             id='potential-interest-calculators',
-            uk_modal='',
+            data_uk_modal=True,
             cls='uk-modal-full'
         )
     )
