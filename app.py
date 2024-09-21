@@ -1,6 +1,7 @@
 from fasthtml.common import FastHTML, serve
-from fasthtml.components import Script, Link, Title, Li, A, Body, Nav, Div, Ul, Span, Button, Input, Fieldset, Form, H4, \
-    Hr, H3, H1, Br, P, H2, H5, Img, Textarea
+from fasthtml.components import Script, Link, Li, A, Body, Nav, Div, Ul, Span, Button, Input, Fieldset, Form, H4, \
+    Hr, H3, H1, Br, P, H2, H5, Img, Textarea, Title
+from fasthtml.xtend import Titled
 
 app = FastHTML(
     hdrs=(
@@ -14,7 +15,7 @@ app = FastHTML(
              href='https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,700;0,900;1,'
                   '700&display=swap'),
         Title('Blue Chip Invest')
-    ), surreal=False, pico=False
+    ), surreal=False, pico=False, default_hdrs=False
 )
 
 
@@ -403,7 +404,7 @@ def contact_us():
             cls='uk-offcanvas-bar'
         ),
         id='contact-us',
-        uk_offcanvas='mode: push; overlay: true'
+        data_uk_offcanvas='mode: push; overlay: true'
     )
 
 
