@@ -1,6 +1,6 @@
 from fasthtml.common import FastHTML, serve
 from fasthtml.components import Script, Link, Title, Li, A, Body, Nav, Div, Ul, Span, Button, Input, Fieldset, Form, H4, \
-    Hr, H3, H1, Br, P, H2, H5, Img
+    Hr, H3, H1, Br, P, H2, H5, Img, Textarea
 
 app = FastHTML(
     hdrs=(
@@ -160,7 +160,8 @@ def nav():
                     cls='uk-navbar-left'
                 ),
                 Div(
-                    Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small uk-visible@l'),
+                    Button("Let's Talk", cls='uk-button uk-button-secondary uk-button-small uk-visible@l',
+                           data_uk_toggle='target: #contact-us'),
                     A(data_uk_icon='user', cls='uk-icon-button uk-button-secondary uk-icon'),
                     cls='uk-navbar-right'
                 ),
@@ -194,11 +195,14 @@ def potential_interest_calculators():
                                 Form(
                                     Fieldset(
                                         calc_input(label='Principal (P)', icon='bag',
-                                                   description='The initial amount of money that is being invested or loaned.'),
+                                                   description='The initial amount of money that is being invested or '
+                                                               'loaned.'),
                                         calc_input(label='Interest Rate (R)', icon='arrow-up-right',
-                                                   description='The annual interest rate, usually provided as a percentage (e.g., 5%)'),
+                                                   description='The annual interest rate, usually provided as a '
+                                                               'percentage (e.g., 5%)'),
                                         calc_input(label='Time (T)', icon='clock',
-                                                   description='The time period for which the interest is calculated, typically in years.'),
+                                                   description='The time period for which the interest is calculated, '
+                                                               'typically in years.'),
                                         Div(
                                             Div('Result', cls='uk-text-bolder uk-text-small'),
                                             Hr(),
@@ -212,7 +216,7 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body'
+                                cls='uk-card uk-card-default uk-card-body uk-card-secondary'
                             )
                         ),
                         Div(
@@ -221,7 +225,8 @@ def potential_interest_calculators():
                                 Form(
                                     Fieldset(
                                         calc_input(label='Principal (P)', icon='bag',
-                                                   description='The initial amount of money that is being invested or loaned.'),
+                                                   description='The initial amount of money that is being invested or '
+                                                               'loaned.'),
                                         calc_input(label='Interest Rate (R)', icon='arrow-up-right',
                                                    description='The annual interest rate, usually provided as a '
                                                                'percentage (e.g., 5%)'),
@@ -230,7 +235,8 @@ def potential_interest_calculators():
                                                                'calculated, typically in years.'),
                                         calc_input(label='Compounding Frequency (n)', icon='calendar',
                                                    description='The number of times the interest is compounded '
-                                                               'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
+                                                               'per year (e.g., annually, semi-annually, quarterly, '
+                                                               'monthly, daily).'),
                                         Div('Common values for compounding frequency:',
                                             cls='uk-text-small uk-padding-small uk-padding-remove-top'),
                                         Div(
@@ -257,7 +263,7 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body'
+                                cls='uk-card uk-card-default uk-card-body uk-card-secondary'
                             )
                         ),
                         Div(
@@ -279,7 +285,8 @@ def potential_interest_calculators():
                                                                'accumulate interest, typically measured in years.'),
                                         calc_input(label='Compounding Frequency (n)', icon='calendar',
                                                    description='The number of times the interest is compounded '
-                                                               'per year (e.g., annually, semi-annually, quarterly, monthly, daily).'),
+                                                               'per year (e.g., annually, semi-annually, quarterly, '
+                                                               'monthly, daily).'),
                                         Div('Common values for compounding frequency:',
                                             cls='uk-text-small uk-padding-small uk-padding-remove-top'),
                                         Div(
@@ -306,7 +313,7 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body'
+                                cls='uk-card uk-card-default uk-card-body uk-card-secondary'
                             )
                         ),
                         data_uk_grid='masonry: pack',
@@ -338,7 +345,8 @@ def hero():
                             cls='uk-text-bolder'
                         ),
                         P('Our Wealth Activating team can help you'),
-                        Button('Get Started', cls='uk-button uk-button-secondary uk-button-small'),
+                        Button('Get Started', cls='uk-button uk-button-secondary uk-button-small',
+                               data_uk_toggle='target: #contact-us'),
                         cls='uk-card uk-card-body uk-margin-auto-vertical'
                     ),
                     style='min-height: max(0px, 60vh);',
@@ -350,9 +358,52 @@ def hero():
             ),
             cls='uk-container'
         ),
-        style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/marten-bjork-6dW3xyQvcYE-unsplash.jpg)',
+        style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+              '/marten-bjork-6dW3xyQvcYE-unsplash.jpg)',
         tabindex='0',
         cls='uk-background-bottom-right uk-background-cover'
+    )
+
+
+def contact_us():
+    return Div(
+        Div(
+            Button(type='button', data_uk_close=True, cls='uk-offcanvas-close'),
+            H3('Chat to our team', cls='uk-text-bolder'),
+            P('Need help with something? Want a demo? Reach out to our friendly team, and we\'ll get back to you in '
+              'no time.'),
+            Form(
+                Div(
+                    Div(
+                        Span(uk_icon='icon: user', cls='uk-form-icon'),
+                        Input(type='text', placeholder='Your name', aria_label='Not clickable icon',
+                              cls='uk-input uk-width-large'),
+                        cls='uk-inline'
+                    ),
+                    cls='uk-margin'
+                ),
+                Div(
+                    Div(
+                        Span(uk_icon='icon: mail', cls='uk-form-icon'),
+                        Input(type='text', placeholder='you@company.com', aria_label='Email',
+                              cls='uk-input uk-width-large'),
+                        cls='uk-inline'
+                    ),
+                    cls='uk-margin'
+                ),
+                Div(
+                    Textarea(rows='5', placeholder='Leave a message', aria_label='Message', cls='uk-textarea'),
+                    cls='uk-margin'
+                ),
+                Div('No worries, your info stays with us. We don’t do the oversharing thing.',
+                    cls='uk-text-small uk-margin'),
+                Button('Send your message', cls='uk-button uk-button-default uk-width-1-1'),
+                cls='uk-margin-large-top'
+            ),
+            cls='uk-offcanvas-bar'
+        ),
+        id='contact-us',
+        uk_offcanvas='mode: push; overlay: true'
     )
 
 
@@ -367,6 +418,7 @@ def subhero():
                     cls='uk-text-bolder uk-margin-xlarge-left'
                 ),
                 Button('View All', cls='uk-button uk-button-text uk-margin-xlarge-left'),
+                services(),
                 cls='uk-margin-auto-vertical uk-card uk-card-body uk-card-large'
             ),
             cls='uk-background-secondary uk-width-2-5@m'
@@ -412,47 +464,87 @@ def subhero():
     )
 
 
+def services():
+    return Div(
+        Ul(
+            Li(
+                A('Active', href='#'),
+                cls='uk-active'
+            ),
+            Li(
+                A('Item', href='#')
+            ),
+            Li('Header', cls='uk-nav-header'),
+            Li(
+                A('Item', href='#')
+            ),
+            Li(
+                A('Item', href='#')
+            ),
+            Li(cls='uk-nav-divider'),
+            Li(
+                A('Item', href='#')
+            ),
+            cls='uk-nav uk-dropdown-nav'
+        ),
+        data_uk_dropdown='boundary: !.uk-navbar; stretch: x; flip: false; mode: click',
+        cls='uk-navbar-dropdown'
+    )
+
+
 def advisor_section():
     return Div(
         Div(
             Div(
                 Div(
-                    Div(style='height: 100px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd-f-5U_28ojjgms-unsplash.jpg)',
+                    Div(style='height: 100px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd'
+                              '-f-5U_28ojjgms-unsplash.jpg)',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(0px, 0px);',
                     cls='uk-visible@s uk-first-column'
                 ),
                 Div(
-                    Div(style='height: 150px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi-vedri-O5EMzfdxedg-unsplash.jpg)',
+                    Div(style='height: 150px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi'
+                              '-vedri-O5EMzfdxedg-unsplash.jpg)',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(0px, 0px);',
                     cls='uk-visible@s'
                 ),
                 Div(
-                    Div(style='height: 300px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef-naddam-iJ2IG8ckCpA-unsplash.jpg);',
+                    Div(style='height: 300px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                              '/youssef-naddam-iJ2IG8ckCpA-unsplash.jpg);',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(0px, 0px);',
                     cls='uk-visible@s'
                 ),
                 Div(
-                    Div(style='height: 120px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub-zerdzicki-eGI0aGwuE-A-unsplash.jpg);',
+                    Div(style='height: 120px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub'
+                              '-zerdzicki-eGI0aGwuE-A-unsplash.jpg);',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(0px, -200px);',
                     cls='uk-visible@s uk-grid-margin uk-first-column'
                 ),
                 Div(
-                    Div(style='height: 180px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/nandhu-kumar-5NGTf4oD8RA-unsplash.jpg)',
+                    Div(style='height: 180px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                              '/nandhu-kumar-5NGTf4oD8RA-unsplash.jpg)',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(0px, -150px);',
                     cls='uk-visible@s uk-grid-margin'
                 ),
                 Div(
-                    Div(style='height: 140px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/accuray-5VkNa1LrS8A-unsplash.jpg)',
+                    Div(style='height: 140px; background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                              '/accuray-5VkNa1LrS8A-unsplash.jpg)',
                         tabindex='0',
                         cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
                     style='transform: translate(-810px, -65px);',
@@ -462,7 +554,7 @@ def advisor_section():
                     Div(
                         H2(
                             Span('We Help', cls='uk-text-primary'),
-                            'financial',
+                            ' financial',
                             Br(),
                             Span('Advisors that'),
                             Br(),
@@ -503,7 +595,10 @@ def serve_section():
             Div(
                 Div(
                     Div(
-                        Div(style='height: 240px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ellicia-24HcJhf0u6M-unsplash.jpg);mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        Div(style='height: 240px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/ellicia-24HcJhf0u6M-unsplash.jpg);mask-image: linear-gradient(to bottom, rgba(0,0,'
+                                  '0,1), rgba(0,0,0,0));',
                             tabindex='0', cls='uk-card-media-top uk-background-cover'),
                         Div(
                             H3('Business Owners', cls='uk-text-bolder'),
@@ -515,7 +610,10 @@ def serve_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 240px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc-gellidon-j_5sxxspFtc-unsplash.jpg);mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        Div(style='height: 240px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/jc-gellidon-j_5sxxspFtc-unsplash.jpg);mask-image: linear-gradient(to bottom, '
+                                  'rgba(0,0,0,1), rgba(0,0,0,0));',
                             tabindex='0', cls='uk-card-media-top uk-background-cover'),
                         Div(
                             H3('Private Client', cls='uk-text-bolder'),
@@ -527,7 +625,10 @@ def serve_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 240px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/birmingham-museums-trust-T2AmpV9qWqw-unsplash.jpg);mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        Div(style='height: 240px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/birmingham-museums-trust-T2AmpV9qWqw-unsplash.jpg);mask-image: linear-gradient(to '
+                                  'bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
                             tabindex='0', cls='uk-card-media-top uk-background-cover'),
                         Div(
                             H3('Pre-Retirees', cls='uk-text-bolder'),
@@ -539,7 +640,10 @@ def serve_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 240px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy-phan-QCF2ykBsC2I-unsplash.jpg); mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        Div(style='height: 240px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/huy-phan-QCF2ykBsC2I-unsplash.jpg); mask-image: linear-gradient(to bottom, rgba(0,'
+                                  '0,0,1), rgba(0,0,0,0));',
                             tabindex='0', cls='uk-card-media-top uk-background-cover'),
                         Div(
                             H3('Retirees', cls='uk-text-bolder'),
@@ -551,7 +655,10 @@ def serve_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 240px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali-morshedlou-WMD64tMfc4k-unsplash.jpg); mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        Div(style='height: 240px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/ali-morshedlou-WMD64tMfc4k-unsplash.jpg); mask-image: linear-gradient(to bottom, '
+                                  'rgba(0,0,0,1), rgba(0,0,0,0));',
                             tabindex='0', cls='uk-card-media-top uk-background-cover'),
                         Div(
                             H3('Young Investor', cls='uk-text-bolder'),
@@ -615,10 +722,11 @@ def preserve_section():
         Div(
             Div(
                 H1('Preserve and Grow Your Financial Legacy', cls='uk-text-success uk-text-bolder'),
-                Button('Contact Us', cls='uk-button uk-button-secondary'),
+                Button('Contact Us', cls='uk-button uk-button-secondary', data_uk_toggle='target: #contact-us'),
                 cls='uk-card uk-card-body uk-width-1-2@s'
             ),
-            style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/scott-webb-hDyO6rr3kqk-unsplash.jpg)',
+            style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
+                  '/website_images/scott-webb-hDyO6rr3kqk-unsplash.jpg)',
             tabindex='0',
             cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
         ),
@@ -737,13 +845,17 @@ def testimonials_section():
                         P(
                             Span('Exceptional Guidance for Every Stage', cls='uk-text-bolder'),
                             Br(),
-                            "Working with this\r\n                                company has been a game-changer for my practice.\r\n                                Their expertise in financial and business planning helped me develop strategies tailored to my\r\n                                clients’ unique needs. The personalized support and dedication to excellence have elevated the\r\n                                service I offer, and my clients couldn't be happier.",
+                            '''Working with this company has been a game-changer for my practice. Their expertise in 
+                            financial and business planning helped me develop strategies tailored to my clients’ 
+                            unique needs. The personalized support and dedication to excellence have elevated the 
+                            service I offer, and my clients couldn't be happier.''',
                             cls='uk-text-italic'
                         ),
                         Div(
                             Div(
                                 Img(alt='Border pill', height='64',
-                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
+                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
+                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
                                     width='64', cls='uk-border-circle'),
                                 cls='uk-width-auto'
                             ),
@@ -770,13 +882,18 @@ def testimonials_section():
                         P(
                             Span('A True Partner in Growth', cls='uk-text-bolder'),
                             Br(),
-                            'From investment management to\r\n                                retirement planning, they’ve provided me with the tools\r\n                                and insights to serve my clients better. Their proactive approach to tax and insurance\r\n                                planning has saved my clients both time and money, allowing me to build stronger,\r\n                                long-term relationships. They’re not just a service provider; they’re a trusted partner\r\n                                in my success.',
+                            '''From investment management to retirement planning, they’ve provided me with the tools 
+                            and insights to serve my clients better. Their proactive approach to tax and insurance 
+                            planning has saved my clients both time and money, allowing me to build stronger, 
+                            long-term relationships. They’re not just a service provider; they’re a trusted partner 
+                            in my success.''',
                             cls='uk-text-italic'
                         ),
                         Div(
                             Div(
                                 Img(alt='Border pill', height='64',
-                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
+                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
+                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
                                     width='64', cls='uk-border-circle'),
                                 cls='uk-width-auto'
                             ),
@@ -803,13 +920,18 @@ def testimonials_section():
                         P(
                             Span('Unmatched Expertise and Support', cls='uk-text-bolder'),
                             Br(),
-                            'The business planning\r\n                                strategies offered by this team have been instrumental in\r\n                                helping me grow my advisory firm. Their in-depth understanding of financial planning,\r\n                                combined with their dedication to serving a niche clientele, has made all the difference.\r\n                                I highly recommend them to any financial advisor looking to take their business to the\r\n                                next level.',
+                            '''The business planning strategies offered by this team have been instrumental in 
+                            helping me grow my advisory firm. Their in-depth understanding of financial planning, 
+                            combined with their dedication to serving a niche clientele, has made all the difference. 
+                            I highly recommend them to any financial advisor looking to take their business to the 
+                            next level.''',
                             cls='uk-text-italic'
                         ),
                         Div(
                             Div(
                                 Img(alt='Border pill', height='64',
-                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
+                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
+                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash.jpg',
                                     width='64', cls='uk-border-circle'),
                                 cls='uk-width-auto'
                             ),
@@ -874,11 +996,15 @@ def guides_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 320px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/krzysztof-hepner-o_x11ORH9vQ-unsplash.jpg)',
+                        Div(style='height: 320px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/krzysztof-hepner-o_x11ORH9vQ-unsplash.jpg)',
                             tabindex='0', cls='uk-background-cover'),
                         Div(
                             H4('How to Achieve True Wealth', cls='uk-card-title, uk-text-bolder'),
-                            P('Unlocking true wealth involves strategic planning, smart investments,\r\n                                    and a holistic approach to managing your financial resources. Discover the steps to build and\r\n                                    sustain genuine financial prosperity.',
+                            P('''Unlocking true wealth involves strategic planning, smart investments, and a holistic 
+                            approach to managing your financial resources. Discover the steps to build and sustain 
+                            genuine financial prosperity.''',
                               cls='uk-text-small'),
                             cls='uk-card-body'
                         ),
@@ -887,11 +1013,14 @@ def guides_section():
                 ),
                 Div(
                     Div(
-                        Div(style='height: 320px; background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/pedro-miranda-3QzMBrvCeyQ-unsplash.jpg)',
+                        Div(style='height: 320px; background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/pedro-miranda-3QzMBrvCeyQ-unsplash.jpg)',
                             tabindex='0', cls='uk-background-cover'),
                         Div(
                             H4('Step Focused Planning', cls='uk-card-title, uk-text-bolder'),
-                            P('Achieve your financial goals with step-by-step, focused planning that\r\n                                    guides you through every stage of wealth building and preservation.',
+                            P('''Achieve your financial goals with step-by-step, focused planning that guides you 
+                            through every stage of wealth building and preservation.''',
                               cls='uk-text-small'),
                             cls='uk-card-body'
                         ),
@@ -971,9 +1100,10 @@ def footer():
                 Div(
                     Div(
                         Div("Let's Talk", cls='uk-text-bolder uk-text-success uk-text-large uk-margin-medium-bottom'),
-                        Div("We're Here to Help You Grow Your Wealth, Plan Your Future, and Achieve\r\n                                Your Financial Goals",
-                            cls='uk-text-small'),
-                        Button('Contact Us', cls='uk-button uk-button-primary uk-button-large uk-margin-top'),
+                        Div('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
+                            'Goals', cls='uk-text-small'),
+                        Button('Contact Us', cls='uk-button uk-button-primary uk-button-large uk-margin-top',
+                               data_uk_toggle='target: #contact-us'),
                         cls='uk-card uk-card-body'
                     )
                 ),
@@ -1075,6 +1205,7 @@ def home():
         nav(),
         potential_interest_calculators(),
         hero(),
+        contact_us(),
         subhero(),
         advisor_section(),
         serve_section(),
