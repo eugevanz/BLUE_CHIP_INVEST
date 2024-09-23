@@ -1,7 +1,6 @@
 from fasthtml.common import FastHTML, serve
 from fasthtml.components import Script, Link, Li, A, Body, Nav, Div, Ul, Span, Button, Input, Fieldset, Form, H4, \
-    Hr, H3, H1, Br, P, H2, H5, Img, Textarea, Title
-from fasthtml.xtend import Titled
+    Hr, H3, H1, Br, P, H2, H5, Img, Textarea, Title, Canvas
 
 app = FastHTML(
     hdrs=(
@@ -369,7 +368,8 @@ def contact_us():
     return Div(
         Div(
             Button(type='button', data_uk_close=True, cls='uk-offcanvas-close'),
-            H3('Chat to our team', cls='uk-text-bolder'),
+            H3(Span('Request', cls='uk-text-success'), ' an', Br(), 'Appointment', cls='uk-text-bolder'),
+            Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-success'),
             P('Need help with something? Want a demo? Reach out to our friendly team, and we\'ll get back to you in '
               'no time.'),
             Form(
@@ -412,9 +412,7 @@ def subhero():
         Div(
             Div(
                 H2(
-                    'Planning objective',
-                    Br(),
-                    Span('financial advice'),
+                    'Planning objective', Br(), Span('financial advice'),
                     cls='uk-text-bolder uk-margin-xlarge-left'
                 ),
                 Button('View All', cls='uk-button uk-button-text uk-margin-xlarge-left'),
@@ -423,42 +421,22 @@ def subhero():
             ),
             cls='uk-background-secondary uk-width-2-5@m'
         ),
-        Div(
+        *[Div(
             Div(
                 Span(data_uk_icon='icon: settings; ratio: 2', cls='uk-icon'),
                 Div(
-                    Span('Risk Management', cls='uk-text-success'),
+                    Span(title, cls='uk-text-success'),
                     cls='uk-text-bolder uk-margin-small-top'
                 ),
-                Div('Risk management is critical to long-term success and sustainability', cls='uk-text-small'),
+                Div(subtitle, cls='uk-text-small'),
                 cls='uk-margin-auto-vertical uk-card uk-card-body'
             ),
             cls='uk-background-primary'
-        ),
-        Div(
-            Div(
-                Span(data_uk_icon='icon: image; ratio: 2', cls='uk-icon'),
-                Div(
-                    Span('Investment Analytics', cls='uk-text-success'),
-                    cls='uk-text-bolder uk-margin-small-top'
-                ),
-                Div('Leveraging investment analytics and make more informed decisions', cls='uk-text-small'),
-                cls='uk-margin-auto-vertical uk-card uk-card-body'
-            ),
-            cls='uk-background-primary'
-        ),
-        Div(
-            Div(
-                Span(data_uk_icon='icon: credit-card; ratio: 2', cls='uk-icon'),
-                Div(
-                    Span('Cash Flow', cls='uk-text-success'),
-                    cls='uk-text-bolder uk-margin-small-top'
-                ),
-                Div('Effective cash flow management is crucial for business survival', cls='uk-text-small'),
-                cls='uk-margin-auto-vertical uk-card uk-card-body'
-            ),
-            cls='uk-background-primary'
-        ),
+        ) for title, subtitle in [
+            ('Risk Management', 'Risk management is critical to long-term success and sustainability'),
+            ('Investment Analytics', 'Leveraging investment analytics and make more informed decisions'),
+            ('Cash Flow', 'Effective cash flow management is crucial for business survival')
+        ]],
         data_uk_grid=True,
         cls='uk-child-width-expand@s uk-grid-collapse uk-grid-match uk-light'
     )
@@ -472,24 +450,46 @@ def services():
                     *[Div(
                         Div(
                             Div(
-                                Img(src='images/photo.jpg', width='1800', height='1200', alt=''),
+                                Img(src=img, width='1800', height='1200', alt=''),
                                 cls='uk-card-media-top'
                             ),
                             Div(
                                 H3(title, cls='uk-card-title'),
-                                P('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.'),
-                                cls='uk-card-body'
+                                P(subtitle),
+                                A('Find Out More', href='#', cls='uk-button uk-button-default',
+                                  data_uk_toggle='target: #contact-us'),
+                                cls='uk-card-body uk-padding-remove uk-margin-top'
                             ),
                             cls='uk-card'
                         )
-                    ) for title in [
-                        'Financial Planning',
-                        'Investment Management',
-                        'Retirement Planning',
-                        'Investment Analysis',
-                        'Insurance'
+                    ) for title, subtitle, img in [
+                        ('Financial Planning', 'Financial planning is a tailored strategy to help you achieve your '
+                                               'financial goals, make smart decisions, and secure your future with '
+                                               'confidence.',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/mehdi'
+                         '-mirzaie-3Hgqb3xHfbA-unsplash.jpg'),
+                        ('Investment Management', 'Investment management optimizes your investments to grow your '
+                                                  'wealth, with a strategy tailored to your goals and risk '
+                                                  'tolerance.',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/stephen'
+                         '-dawson-qwtCeJ5cLYs-unsplash.jpg'),
+                        ('Retirement Planning', 'Retirement planning ensures you can live comfortably after you stop '
+                                                'working by setting savings goals and managing your income, '
+                                                'giving you peace of mind for the future.',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/marc'
+                         '-najera-SwK6MSxTLDE-unsplash.jpg'),
+                        ('Investment Analysis', 'Investment analysis evaluates financial assets to inform your '
+                                                'investment decisions, assessing risk and returns to identify '
+                                                'opportunities that align with your goals. This helps maximize growth '
+                                                'while minimizing risk.',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/firmbee'
+                         '-com-jrh5lAq-mIs-unsplash.jpg'),
+                        ('Insurance', 'Insurance protects against unexpected events, preventing financial loss and '
+                                      'ensuring peace of mind for you and your family.',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub'
+                         '-zerdzicki-GQn9GnMkVQg-unsplash.jpg')
                     ]],
-                    cls='uk-slider-items uk-child-width-1-4@s uk-grid'
+                    cls='uk-slider-items uk-child-width-1-4@m uk-grid'
                 ),
                 A(href='#', data_uk_slidenav_previous=True, data_uk_slider_item='previous',
                   cls='uk-position-center-left uk-position-small uk-hidden-hover'),
@@ -502,193 +502,242 @@ def services():
             data_uk_slider=True,
             cls='uk-slider-container-offset'
         ),
-        data_uk_dropdown='boundary: !.uk-navbar; stretch: x; flip: false; mode: click',
-        cls='uk-navbar-dropdown uk-background-secondary'
+        data_uk_dropdown='boundary: !.uk-grid; stretch: x; flip: false; mode: click',
+        cls='uk-background-secondary'
     )
 
 
 def advisor_section():
     return Div(
         Div(
+            *[Div(
+                Div(style=f'height: {height}; background-image: url({img})', tabindex='0',
+                    cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
+                style='transform: translate(0px, 0px);',
+                cls='uk-visible@s uk-first-column'
+            ) for img, height in [
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd-f'
+                 '-5U_28ojjgms-unsplash.jpg', '100px'),
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi-vedri'
+                 '-O5EMzfdxedg-unsplash.jpg', '150px'),
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef-naddam'
+                 '-iJ2IG8ckCpA-unsplash.jpg', '300px'),
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub'
+                 '-zerdzicki-eGI0aGwuE-A-unsplash.jpg', '120px'),
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/nandhu-kumar'
+                 '-5NGTf4oD8RA-unsplash.jpg', '180px'),
+                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/accuray'
+                 '-5VkNa1LrS8A-unsplash.jpg', '140px')
+            ]],
             Div(
                 Div(
-                    Div(style='height: 100px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd'
-                              '-f-5U_28ojjgms-unsplash.jpg)',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(0px, 0px);',
-                    cls='uk-visible@s uk-first-column'
-                ),
-                Div(
-                    Div(style='height: 150px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi'
-                              '-vedri-O5EMzfdxedg-unsplash.jpg)',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(0px, 0px);',
-                    cls='uk-visible@s'
-                ),
-                Div(
-                    Div(style='height: 300px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                              '/youssef-naddam-iJ2IG8ckCpA-unsplash.jpg);',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(0px, 0px);',
-                    cls='uk-visible@s'
-                ),
-                Div(
-                    Div(style='height: 120px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub'
-                              '-zerdzicki-eGI0aGwuE-A-unsplash.jpg);',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(0px, -200px);',
-                    cls='uk-visible@s uk-grid-margin uk-first-column'
-                ),
-                Div(
-                    Div(style='height: 180px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                              '/nandhu-kumar-5NGTf4oD8RA-unsplash.jpg)',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(0px, -150px);',
-                    cls='uk-visible@s uk-grid-margin'
-                ),
-                Div(
-                    Div(style='height: 140px; background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                              '/accuray-5VkNa1LrS8A-unsplash.jpg)',
-                        tabindex='0',
-                        cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                    style='transform: translate(-810px, -65px);',
-                    cls='uk-visible@s uk-grid-margin'
-                ),
-                Div(
-                    Div(
-                        H2(
-                            Span('We Help', cls='uk-text-primary'),
-                            ' financial',
-                            Br(),
-                            Span('Advisors that'),
-                            Br(),
-                            Span('exclusively serve.'),
-                            cls='uk-text-bolder'
-                        ),
-                        P('We empower financial advisors dedicated to serving a select clientele',
-                          cls='uk-width-medium'),
-                        Button('Read More', cls='uk-button uk-button-text'),
-                        cls='uk-card uk-card-body uk-margin-auto-vertical'
+                    H2(
+                        Span('We Help', cls='uk-text-primary'),
+                        ' financial',
+                        Br(),
+                        Span('Advisors that'),
+                        Br(),
+                        Span('exclusively serve.'),
+                        cls='uk-text-bolder'
                     ),
-                    style='transform: translate(810px, -195px);',
-                    cls='uk-grid-margin uk-first-column'
+                    P('We empower financial advisors dedicated to serving a select clientele',
+                      cls='uk-width-medium'),
+                    Button('Read More', type='button', cls='uk-button uk-button-text'),
+                    advisor_section_read_more(),
+                    cls='uk-card uk-card-body uk-margin-auto-vertical'
                 ),
-                style='height: 627px;',
-                data_uk_grid='masonry: pack',
-                cls='uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-small uk-grid uk-flex-top uk-flex-wrap-top'
+                cls='uk-grid-margin uk-first-column'
             ),
-            cls='uk-container'
+            style='height: 627px;',
+            data_uk_grid='masonry: pack',
+            cls='uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-small uk-grid uk-flex-top uk-flex-wrap-top'
         ),
-        cls='uk-section uk-section-xlarge uk-padding-remove-bottom'
+        id='advisor-section',
+        cls='uk-container uk-margin-xlarge-top advisor-section'
+    )
+
+
+def advisor_section_read_more():
+    return Div(
+        Div(
+            Div(
+                Div(
+                    *[Div(
+                        Div(style=f'height: {height}; background-image: url({img})', tabindex='0',
+                            cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle')
+                    ) for height, img in [
+                        ('100px',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                         '/youssef-naddam-iJ2IG8ckCpA-unsplash.jpg'),
+                        ('150px',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                         '/absolutvision-uCMKx2H1Y38-unsplash.jpg'),
+                        ('120px',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/austin'
+                         '-distel-wD1LRb9OeEo-unsplash.jpg'),
+                        ('180px',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/austin'
+                         '-distel-_S7-KX8geL0-unsplash.jpg'),
+                        ('140px',
+                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/julia'
+                         '-taubitz-ZBGANqQqHZQ-unsplash.jpg')
+                    ]],
+                    data_uk_grid='masonry: pack',
+                    cls='uk-visible@s uk-child-width-1-2@s'
+                ),
+                cls='uk-flex-last@s uk-card-media-right uk-cover-container'
+            ),
+            Div(
+                Div(
+                    H2(
+                        Span('We Help', cls='uk-text-primary'), ' financial', Br(), Span('Advisors that'),
+                        Br(), Span('exclusively serve.'),
+                        cls='uk-text-bolder'
+                    ),
+                    P('Dedicated to the needs of financial advisors who serve clients exclusively, '
+                      'we offer customized solutions and resources that enhance their practices. Our mission is '
+                      'to equip advisors with the tools and support they need to foster meaningful client '
+                      'relationships, allowing them to focus on delivering top-notch financial guidance and '
+                      'personalized service.'),
+                    Button('Talk to us', cls='uk-button uk-button-secondary uk-button-large',
+                           data_uk_toggle='target: #contact-us'),
+                    cls='uk-card-body'
+                )
+            ),
+            data_uk_grid=True,
+            cls='uk-card uk-card-small uk-grid-collapse uk-child-width-1-2@s uk-margin'
+        ),
+        data_uk_dropdown='mode: click; stretch: x; pos: top-left; boundary: !.advisor-section; flip: false'
     )
 
 
 def serve_section():
     return Div(
         Div(
-            Div(
-                H2(
-                    Span('Who', cls='uk-text-success'),
-                    Span('We Serve'),
-                    Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-success'),
-                    cls='uk-text-bolder'
-                ),
-                P('Focused support for financial advisors with a unique clientele.', cls='uk-width-medium'),
-                cls='uk-card uk-card-body uk-margin-auto-vertical'
+            H2(
+                Span('Who', cls='uk-text-success'),
+                Span(' We Serve'),
+                Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-success'),
+                cls='uk-text-bolder'
             ),
-            Div(
-                Div(
-                    Div(
-                        Div(style='height: 240px; background-image: url('
-                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/ellicia-24HcJhf0u6M-unsplash.jpg);mask-image: linear-gradient(to bottom, rgba(0,0,'
-                                  '0,1), rgba(0,0,0,0));',
-                            tabindex='0', cls='uk-card-media-top uk-background-cover'),
-                        Div(
-                            H3('Business Owners', cls='uk-text-bolder'),
-                            Button('Read More', cls='uk-button uk-button-text'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div(style='height: 240px; background-image: url('
-                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/jc-gellidon-j_5sxxspFtc-unsplash.jpg);mask-image: linear-gradient(to bottom, '
-                                  'rgba(0,0,0,1), rgba(0,0,0,0));',
-                            tabindex='0', cls='uk-card-media-top uk-background-cover'),
-                        Div(
-                            H3('Private Client', cls='uk-text-bolder'),
-                            Button('Read More', cls='uk-button uk-button-text'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div(style='height: 240px; background-image: url('
-                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/birmingham-museums-trust-T2AmpV9qWqw-unsplash.jpg);mask-image: linear-gradient(to '
-                                  'bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
-                            tabindex='0', cls='uk-card-media-top uk-background-cover'),
-                        Div(
-                            H3('Pre-Retirees', cls='uk-text-bolder'),
-                            Button('Read More', cls='uk-button uk-button-text'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div(style='height: 240px; background-image: url('
-                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/huy-phan-QCF2ykBsC2I-unsplash.jpg); mask-image: linear-gradient(to bottom, rgba(0,'
-                                  '0,0,1), rgba(0,0,0,0));',
-                            tabindex='0', cls='uk-card-media-top uk-background-cover'),
-                        Div(
-                            H3('Retirees', cls='uk-text-bolder'),
-                            Button('Read More', cls='uk-button uk-button-text'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div(style='height: 240px; background-image: url('
-                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/ali-morshedlou-WMD64tMfc4k-unsplash.jpg); mask-image: linear-gradient(to bottom, '
-                                  'rgba(0,0,0,1), rgba(0,0,0,0));',
-                            tabindex='0', cls='uk-card-media-top uk-background-cover'),
-                        Div(
-                            H3('Young Investor', cls='uk-text-bolder'),
-                            Button('Read More', cls='uk-button uk-button-text'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small'
-                    )
-                ),
-                data_uk_grid=True,
-                cls='uk-child-width-1-5@m uk-child-width-1-3@s uk-child-width-1-2 uk-margin-medium-top'
-            ),
-            cls='uk-container'
+            P('Focused support for financial advisors with a unique clientele.', cls='uk-width-medium'),
+            cls='uk-card uk-card-body uk-margin-auto-vertical'
         ),
-        cls='uk-section uk-padding-remove-vertical'
+        Div(
+            *[Div(
+                Div(
+                    Div(style=f'height: 240px; background-image: url({img});mask-image: linear-gradient(to '
+                              f'bottom, rgba(0,0,0,1), rgba(0,0,0,0));',
+                        cls='uk-card-media-top uk-background-cover'),
+                    Div(
+                        H3(title, cls='uk-text-bolder'),
+                        Button('Read More', cls='uk-button uk-button-text'),
+                        serve_section_read_more(title),
+                        cls='uk-card-body'
+                    ),
+                    cls='uk-card uk-card-small'
+                )
+            ) for title, img in [
+                ('Business Owners',
+                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ellicia'
+                 '-24HcJhf0u6M-unsplash.jpg'),
+                ('Private Client',
+                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc-gellidon'
+                 '-j_5sxxspFtc-unsplash.jpg'),
+                ('Pre-Retirees', 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                 '/birmingham-museums-trust-T2AmpV9qWqw-unsplash.jpg'),
+                ('Retirees', 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy'
+                             '-phan-QCF2ykBsC2I-unsplash.jpg'),
+                ('Young Investor',
+                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali-morshedlou'
+                 '-WMD64tMfc4k-unsplash.jpg')
+            ]],
+            data_uk_grid=True,
+            cls='uk-child-width-1-5@m uk-child-width-1-3@s uk-child-width-1-2 uk-margin-medium-top'
+        ),
+        cls='uk-container serve-section'
+    )
+
+
+def serve_section_read_more(title):
+    clientele = dict(
+        business_owners=dict(name='Business Owners',
+                             img='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                 '/ellicia-24HcJhf0u6M-unsplash.jpg',
+                             desc='We offer tailored financial services for business owners, including comprehensive '
+                                  'financial planning, tax strategy and compliance, retirement planning, '
+                                  'and investment management. Our expertise extends to cash flow management, '
+                                  'insurance solutions, and succession planning, ensuring that your business is '
+                                  'protected and positioned for growth. Additionally, we provide employee benefits '
+                                  'consulting and debt management strategies to help you attract talent and manage '
+                                  'finances effectively. Let us partner with you to achieve your financial goals and '
+                                  'secure a prosperous future for your business.'),
+        private_client=dict(name='Private Client',
+                            img='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc'
+                                '-gellidon-j_5sxxspFtc-unsplash.jpg',
+                            desc='For private clients, we provide personalized financial services designed to meet '
+                                 'individual needs and goals. Our offerings include wealth management, '
+                                 'estate planning, tax optimization, and investment strategies tailored to your '
+                                 'financial situation. We focus on building long-term relationships, ensuring your '
+                                 'assets are managed effectively while aligning with your life goals. Additionally, '
+                                 'we offer retirement planning, insurance solutions, and philanthropic guidance, '
+                                 'helping you create a legacy that reflects your values. Trust us to navigate your '
+                                 'financial journey with expertise and care.'),
+        pre_retirees=dict(name='Pre-Retirees',
+                          img='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                              '/birmingham-museums-trust-T2AmpV9qWqw-unsplash.jpg',
+                          desc='We specialize in helping you prepare for a financially secure retirement. Our '
+                               'services include retirement planning, investment strategy development, and income '
+                               'distribution planning to ensure your savings last throughout your retirement years. '
+                               'We provide personalized assessments of your financial situation, tax optimization '
+                               'strategies, and guidance on Social Security benefits. Additionally, we focus on '
+                               'healthcare planning and long-term care options, helping you navigate the complexities '
+                               'of retirement. Let us partner with you to create a comprehensive plan that aligns '
+                               'with your retirement goals and lifestyle.'),
+        retirees=dict(name='Retirees',
+                      img='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy-phan'
+                          '-QCF2ykBsC2I-unsplash.jpg',
+                      desc='We provide comprehensive financial services to retirees, ensuring a fulfilling and secure '
+                           'retirement. Our expertise includes income planning, investment management, '
+                           'and tax optimization to maximize retirement savings. We focus on creating a sustainable '
+                           'withdrawal strategy that allows assets to last while supporting your desired lifestyle. '
+                           'Additionally, we assist with estate planning and healthcare considerations, navigating the '
+                           'complexities of long-term care and Medicare. Trust us for personalized support and '
+                           'guidance as you embrace this exciting new chapter in your life.'),
+        young_investor=dict(name='Young Investor',
+                            img='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali'
+                                '-morshedlou-WMD64tMfc4k-unsplash.jpg',
+                            desc='We empower young investors with tailored financial services designed to build a '
+                                 'solid foundation for future wealth. Our offerings include investment education, '
+                                 'portfolio management, and personalized financial planning to help you set and '
+                                 'achieve your financial goals. We focus on strategies for saving, budgeting, '
+                                 'and understanding market dynamics, ensuring you feel confident in your investment '
+                                 'choices. Additionally, we provide guidance on retirement accounts and long-term '
+                                 'investment strategies, helping you cultivate a path toward financial independence. '
+                                 'Let us support you on your journey to becoming a successful investor.')
+    )
+    arg = next((value for value in clientele.values() if value['name'] == title), 'Business Owners')
+    return Div(
+        Div(
+            Div(
+                Img(src=arg['img'], alt='', data_uk_cover=True),
+                Canvas(width='600', height='400'),
+                cls='uk-card-media-left uk-cover-container'
+            ),
+            Div(
+                Div(
+                    H3(arg['name'], cls='uk-text-bolder'),
+                    P(arg['desc'], cls='uk-width-2-3@s'),
+                    Button('Talk to us', cls='uk-button uk-button-default uk-button-large',
+                           data_uk_toggle='target: #contact-us'),
+                    cls='uk-card-body'
+                )
+            ),
+            data_uk_grid=True,
+            cls='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin'
+        ),
+        data_uk_dropdown='mode: click; stretch: x; pos: top-left; boundary: !.serve-section; flip: false',
+        cls='uk-background-secondary'
     )
 
 
@@ -757,7 +806,7 @@ def whatwedo_section():
                     Div(
                         H2(
                             Span('What', cls='uk-text-success'),
-                            'We Do',
+                            ' We Do',
                             Hr(style='height: 0px; border: none; border-top: 2px solid;',
                                cls='uk-width-small uk-text-success'),
                             cls='uk-text-bolder'
@@ -842,7 +891,7 @@ def testimonials_section():
                 Div('WHAT OUR CUSTOMERS SAY', cls='uk-text-small uk-text-bolder'),
                 H2(
                     Span('Our', cls='uk-text-success'),
-                    'Testimonials',
+                    ' Testimonials',
                     cls='uk-text-bolder uk-margin-remove-top'
                 ),
                 cls='uk-card uk-card-body uk-text-center'
@@ -978,7 +1027,7 @@ def guides_section():
                     Div(
                         H2(
                             Span('Personal', cls='uk-text-success'),
-                            'Finance Guides',
+                            ' Finance Guides',
                             Hr(style='height: 0px; border: none; border-top: 2px solid;',
                                cls='uk-width-small uk-text-success'),
                             cls='uk-text-bolder'
@@ -1186,6 +1235,7 @@ def footer():
                 ),
                 Div(
                     Div(
+                        Div('Social', cls='uk-text-large uk-text-bolder uk-margin-small'),
                         Div(
                             Div(
                                 Span(uk_icon='icon: facebook', cls='uk-icon-button uk-icon')
