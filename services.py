@@ -1,4 +1,4 @@
-from fasthtml.components import Div, Img, H3, P, A, H2, Br, Span
+from fasthtml.components import Div, H2, Br, Span, H3, Button, P
 
 from interface import return_button
 
@@ -16,17 +16,23 @@ page = Div(
             *[Div(
                 Div(
                     Div(
-                        Img(src=img, width='1800', height='1200', alt=''),
-                        cls='uk-card-media-top'
+                        style=f'background-image: url({img}); filter: grayscale(90%); opacity: 0.6;',
+                        cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
                     ),
                     Div(
-                        H3(title, cls='uk-card-title'),
-                        P(subtitle),
-                        A('Find Out More', hx_get='/contact-us/', hx_target='#page', hx_push_url='true',
-                          hx_swap='innerHTML', cls='uk-button uk-button-default'),
-                        cls='uk-card-body uk-padding-remove uk-margin-top'
+                        H3(title, cls='uk-text-bolder uk-width-1-2', style='color: white;'),
+                        Button('Find Out More', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
+                               hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
+                        cls='uk-padding',
+                        style='position: absolute; bottom: 0px;'
                     ),
-                    cls='uk-card'
+                    style='position: relative;'
+                ),
+                Div(
+                    Div(
+                        P(subtitle),
+                        cls='uk-card uk-card-body'
+                    )
                 )
             ) for title, subtitle, img in [
                 ('Financial Planning', 'Financial planning is a tailored strategy to help you achieve your '

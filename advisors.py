@@ -1,4 +1,4 @@
-from fasthtml.components import Div, H2, Span, Br, P, Button, Hr, Img, H3
+from fasthtml.components import Div, H2, Span, Br, P, Button, Hr, H3
 
 from interface import return_button
 
@@ -18,7 +18,7 @@ page = Div(
             Div(
                 Div(
                     H2(
-                        Span('We Help', cls='uk-text-primary'), ' financial', Br(), Span('Advisors that'),
+                        Span('We Help', style='color: #45ACFF'), ' financial', Br(), Span('Advisors that'),
                         Br(), Span('exclusively serve.'),
                         cls='uk-text-bolder'
                     ),
@@ -27,9 +27,9 @@ page = Div(
                       'to equip advisors with the tools and support they need to foster meaningful client '
                       'relationships, allowing them to focus on delivering top-notch financial guidance and '
                       'personalized service.'),
-                    Button('Talk to us', cls='uk-button uk-button-large uk-light', hx_get='/contact-us/',
+                    Button('Talk to us', cls='uk-button uk-button-large', hx_get='/contact-us/',
                            hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
-                           style='background-color: #00213B'),
+                           style='background-color: white; color: #00213B'),
                     cls='uk-card-body'
                 )
             ),
@@ -38,7 +38,7 @@ page = Div(
         ),
         Div(
             H2(
-                Span('Meet', cls='uk-text-primary'), Span(' Our Team'),
+                Span('Meet', style='color: #45ACFF'), Span(' Our Team'),
                 Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-primary'),
                 cls='uk-text-bolder'
             ),
@@ -48,16 +48,17 @@ page = Div(
             *[Div(
                 Div(
                     Div(
-                        Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                '/jurica-koletic-7YVZYZeITc8-unsplash.webp', width='1800', height='1200', alt=''),
-                        cls='uk-card-media-top'
+                        style='background-image: url('
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                              '/jurica-koletic-7YVZYZeITc8-unsplash.webp); filter: grayscale(90%);',
+                        cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
                     ),
                     Div(
-                        H3(name, cls='uk-card-title'),
-                        P(pos),
-                        cls='uk-card-body'
+                        Div(name, cls='uk-text-large uk-text-bolder'),
+                        Div(pos, cls='uk-text-small uk-text-bolder', style='padding: 8px; background-color: #00213B'),
+                        cls='uk-card uk-card-small uk-card-body uk-overlay', style='position: absolute; bottom: 0px;'
                     ),
-                    cls='uk-card uk-card-default'
+                    style='position: relative; color: white;'
                 )
             ) for name, pos in [
                 ('Aidan Mercer', 'Senior Investment Strategist'),
@@ -65,7 +66,7 @@ page = Div(
                 ('Liam Caldwell', 'Wealth Management Advisor'),
                 ('Chloe Rutherford', 'Portfolio Manager'),
                 ('Ethan Carrington', 'Head of Corporate Finance'),
-                ('Isabelle Thornton', 'Private Client Relationship Manager'),
+                ('Isabelle Thornton', 'Private Relationship Manager'),
                 ('Marcus Ellison', 'Director of Risk Management'),
                 ('Sophia Bennett', 'Chief Compliance Officer (CCO)')
             ]],
@@ -74,5 +75,5 @@ page = Div(
         ),
         cls='uk-container'
     ),
-    cls='uk-section'
+    cls='uk-section uk-light', style='background-color: #00213B'
 )

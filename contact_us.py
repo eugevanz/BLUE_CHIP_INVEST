@@ -8,7 +8,7 @@ page = Div(
         Div(
             Div(
                 Div(
-                    H3(Span('Request', cls='uk-text-muted'), ' an', Br(), 'Appointment', cls='uk-text-bolder'),
+                    H3(Span('Request', style='color: #45ACFF'), ' an', Br(), 'Appointment', cls='uk-text-bolder'),
                     Hr(style='height: 0px; border: none; border-top: 2px solid;',
                        cls='uk-width-small uk-text-primary'),
                     P('Need help with something? Want a demo? Reach out to our friendly team, and we\'ll get back to you in '
@@ -109,5 +109,5 @@ page = Div(
         ),
         cls='uk-container'
     ),
-    cls='uk-section'
+    cls='uk-section uk-light', style='background-color: #00213B'
 )

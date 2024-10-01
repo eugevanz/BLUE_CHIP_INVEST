@@ -359,9 +359,9 @@ def subhero():
             Div(
                 H2(
                     'Planning objective', Br(), Span('financial advice'),
-                    cls='uk-text-bolder uk-margin-xlarge-left'
+                    cls='uk-text-bolder uk-margin-xlarge-left@s'
                 ),
-                Button('View All', cls='uk-button uk-button-text uk-margin-xlarge-left', hx_get='/services/',
+                Button('View All', cls='uk-button uk-button-text uk-margin-xlarge-left@s', hx_get='/services/',
                        hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
                 cls='uk-margin-auto-vertical uk-card uk-card-body uk-card-large'
             ),
@@ -375,7 +375,7 @@ def subhero():
                     cls='uk-text-bolder uk-margin-small-top'
                 ),
                 Div(subtitle, cls='uk-text-small'),
-                cls='uk-margin-auto-vertical uk-card uk-card-body'
+                cls='uk-card uk-card-body'
             ),
             cls='uk-background-primary'
         ) for title, subtitle in [
@@ -394,7 +394,7 @@ def advisor_section():
             *[Div(
                 Div(style=f'height: {height}; background-image: url({img}); filter: grayscale(90%);',
                     cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                cls='uk-visible@s uk-first-column'
+                cls='uk-visible@s'
             ) for img, height in [
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd-f-5U_28ojjgms'
                  '-unsplash.webp', '100px'),
@@ -424,9 +424,8 @@ def advisor_section():
                       cls='uk-width-medium'),
                     Button('Read More', type='button', cls='uk-button uk-button-text', hx_get='/advisors/',
                            hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
-                    cls='uk-card uk-card-body uk-margin-auto-vertical'
-                ),
-                cls='uk-grid-margin uk-first-column'
+                    cls='uk-card uk-card-body'
+                )
             ),
             style='height: 627px;',
             data_uk_grid='masonry: pack',
@@ -574,7 +573,7 @@ def preserve_section():
             H1('Preserve and Grow Your Financial Legacy', cls='uk-text-success uk-text-bolder'),
             Button('Contact Us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
                    hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
-            cls='uk-card uk-card-body uk-width-1-2@s uk-overlay', style='position: absolute; top: 60px;'
+            cls='uk-card uk-card-body uk-width-1-2 uk-overlay', style='position: absolute; bottom: 0px;'
         ),
         cls='uk-container', style='position: relative;'
     )
