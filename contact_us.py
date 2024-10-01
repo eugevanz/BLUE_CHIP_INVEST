@@ -15,58 +15,27 @@ page = Div(
                       'no time.'),
                     Div(
                         Div(
-                            Div(
-                                Div(
-                                    Span(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
-                                    cls='uk-width-auto'
-                                ),
-                                Div(
-                                    Div('Location', cls='uk-text-large uk-text-bolder'),
-                                    Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small')
-                                ),
-                                cls='uk-child-width-expand@s uk-grid-small'
-                            )
+                            Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
+                            Div('Location', cls='uk-text-large uk-text-bolder'),
+                            Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small')
                         ),
                         Div(
-                            Div(
-                                Div(
-                                    Span(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
-                                    cls='uk-width-auto'
-                                ),
-                                Div(
-                                    Div('Phone', cls='uk-text-large uk-text-bolder'),
-                                    Div('0860 258 2447', cls='uk-text-small')
-                                ),
-                                cls='uk-child-width-expand@s uk-grid-small'
-                            )
+                            Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
+                            Div('Phone', cls='uk-text-large uk-text-bolder'),
+                            Div('0860 258 2447', cls='uk-text-small')
                         ),
                         Div(
-                            Div(
-                                Div(
-                                    Span(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
-                                    cls='uk-width-auto'
-                                ),
-                                Div(
-                                    Div('Email', cls='uk-text-large uk-text-bolder'),
-                                    Div('admin@bluechipinvest.co.za', cls='uk-text-small')
-                                ),
-                                cls='uk-child-width-expand@s uk-grid-small'
-                            )
+                            Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
+                            Div('Email', cls='uk-text-large uk-text-bolder'),
+                            Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small')
                         ),
                         Div(
-                            Div(
-                                Div(
-                                    Span(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'), cls='uk-width-auto'
-                                ),
-                                Div(
-                                    Div('Open hours', cls='uk-text-large uk-text-bolder'),
-                                    Div('Mon - Sat, 08:00 - 16:00', cls='uk-text-small')
-                                ),
-                                cls='uk-child-width-expand@s uk-grid-small'
-                            )
+                            Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
+                            Div('Open hours', cls='uk-text-large uk-text-bolder'),
+                            Div('Mon - Sat, 08:00 - 16:00', cls='uk-text-small')
                         ),
                         data_uk_grid=True,
-                        cls='uk-grid-match uk-child-width-1-2@m'
+                        cls='uk-grid-match uk-child-width-1-2'
                     ),
                     cls='uk-card uk-card-body'
                 )
@@ -105,7 +74,7 @@ page = Div(
                     cls='uk-card uk-card-primary uk-card-body'
                 )
             ),
-            data_uk_grid=True, cls='uk-child-width-expand@s'
+            data_uk_grid=True, cls='uk-child-width-1-2@m'
         ),
         cls='uk-container'
     ),

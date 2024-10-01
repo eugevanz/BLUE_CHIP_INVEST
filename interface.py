@@ -567,13 +567,13 @@ def preserve_section():
         Div(
             style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
                   '/website_images/scott-webb-hDyO6rr3kqk-unsplash.webp); filter: grayscale(90%);',
-            cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
+            cls='uk-height-large uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
         ),
         Div(
-            H1('Preserve and Grow Your Financial Legacy', cls='uk-text-success uk-text-bolder'),
+            H1('Preserve and Grow Your Financial Legacy', cls='uk-text-primary uk-text-bolder uk-width-1-2'),
             Button('Contact Us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
                    hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
-            cls='uk-card uk-card-body uk-width-1-2 uk-overlay', style='position: absolute; bottom: 0px;'
+            cls='uk-card uk-card-body uk-overlay', style='position: absolute; bottom: 0px;'
         ),
         cls='uk-container', style='position: relative;'
     )
@@ -776,158 +776,83 @@ def footer():
         Div(
             Div(
                 Div(
-                    Div(
-                        Div('Blue Chip Invest', aria_label='Back to Home',
-                            style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                            cls='uk-heading-small uk-margin-small-bottom'),
-                        Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div('Blue Chip Invest', aria_label='Back to Home',
+                        style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                        cls='uk-heading-small uk-margin-small-bottom uk-width-small'),
+                    Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
+                    cls='uk-padding'
                 ),
                 Div(
-                    Div(
-                        Div('Our Services', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-medium-bottom'),
-                        Ul(
-                            Li(
-                                A('Financial Planning', href='#')
-                            ),
-                            Li(
-                                A('Investment Management', href='#')
-                            ),
-                            Li(
-                                A('Retirement Planning', href='#')
-                            ),
-                            Li(
-                                A('Investment Analysis', href='#')
-                            ),
-                            Li(
-                                A('Insurance', href='#')
-                            ),
-                            cls='uk-list uk-text-small'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div('Our Services',
+                        cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-medium-bottom'),
+                    Ul(
+                        Li(A('Financial Planning', href='#')),
+                        Li(A('Investment Management', href='#')),
+                        Li(A('Retirement Planning', href='#')),
+                        Li(A('Investment Analysis', href='#')),
+                        Li(A('Insurance', href='#')),
+                        cls='uk-list uk-text-small'
+                    ),
+                    cls='uk-padding'
                 ),
                 Div(
-                    Div(
-                        Div('Explore', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-medium-bottom'),
-                        Ul(
-                            Li(
-                                A('About', href='#')
-                            ),
-                            Li(
-                                A('Services', href='#')
-                            ),
-                            Li(
-                                A('Careers', href='#')
-                            ),
-                            Li(
-                                A("FAQ's", href='#')
-                            ),
-                            Li(
-                                A('Partner', href='#')
-                            ),
-                            cls='uk-list uk-text-small'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div('Explore', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                    Ul(
+                        Li(A('About', href='#')),
+                        Li(A('Services', href='#')),
+                        Li(A('Careers', href='#')),
+                        Li(A("FAQ's", href='#')),
+                        Li(A('Partner', href='#')),
+                        cls='uk-list uk-text-small'
+                    ),
+                    cls='uk-padding'
                 ),
                 Div(
-                    Div(
-                        Div("Let's Talk", cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-medium-bottom'),
-                        Div('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
-                            'Goals', cls='uk-text-small'),
-                        Button('Contact Us', cls='uk-button uk-button-primary uk-button-large uk-margin-top',
-                               hx_get='/contact-us/', hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div("Let's Talk",
+                        cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                    P('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
+                      'Goals', cls='uk-text-small'),
+                    Button('Start', cls='uk-button uk-button-primary',
+                           hx_get='/contact-us/', hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
+                    cls='uk-padding'
                 ),
                 data_uk_grid=True,
-                cls='uk-grid-match uk-child-width-1-3@s uk-child-width-1-4@l'
+                cls='uk-child-width-1-2 uk-child-width-1-4@l'
             ),
             Div(
                 Div(
-                    Div(
-                        Div(
-                            Div(
-                                Span(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
-                                cls='uk-width-auto'
-                            ),
-                            Div(
-                                Div('Location', cls='uk-text-large uk-text-bolder'),
-                                Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small'),
-                                cls='uk-margin-auto-vertical'
-                            ),
-                            cls='uk-child-width-1-2 uk-grid-small'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
+                    Div('Location', cls='uk-text-large uk-text-bolder'),
+                    Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small'),
+                    cls='uk-padding'
                 ),
                 Div(
-                    Div(
-                        Div(
-                            Div(
-                                Span(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
-                                cls='uk-width-auto'
-                            ),
-                            Div(
-                                Div('Phone', cls='uk-text-large uk-text-bolder'),
-                                Div('0860 258 2447', cls='uk-text-small'),
-                                cls='uk-margin-auto-vertical'
-                            ),
-                            cls='uk-child-width-1-2 uk-grid-small'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
+                    Div('Phone', cls='uk-text-large uk-text-bolder'),
+                    Div('0860 258 2447', cls='uk-text-small'),
+                    cls='uk-padding'
                 ),
                 Div(
-                    Div(
-                        Div(
-                            Div(
-                                Span(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
-                                cls='uk-width-auto'
-                            ),
-                            Div(
-                                Div('Email', cls='uk-text-large uk-text-bolder'),
-                                Div(
-                                    'admin',
-                                    Br(),
-                                    '@bluechipinvest',
-                                    Br(),
-                                    '.co.za',
-                                    cls='uk-text-small'
-                                ),
-                                cls='uk-margin-auto-vertical'
-                            ),
-                            cls='uk-child-width-1-2 uk-grid-small'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                    Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
+                    Div('Email', cls='uk-text-large uk-text-bolder'),
+                    Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small'),
+                    cls='uk-padding'
                 ),
                 Div(
+                    Div(data_uk_icon='icon: social; ratio: 1.8', cls='uk-icon'),
+                    Div('Social', cls='uk-text-large uk-text-bolder'),
                     Div(
-                        Div('Social', cls='uk-text-large uk-text-bolder uk-margin-small'),
-                        Div(
-                            Div(
-                                Span(data_uk_icon='icon: facebook', cls='uk-icon-button uk-icon')
-                            ),
-                            Div(
-                                Span(data_uk_icon='icon: linkedin', cls='uk-icon-button uk-icon')
-                            ),
-                            Div(
-                                Span(data_uk_icon='icon: instagram', cls='uk-icon-button uk-icon')
-                            ),
-                            Div(
-                                Span(data_uk_icon='icon: x', cls='uk-icon-button uk-icon')
-                            ),
-                            data_uk_grid=True,
-                            cls='uk-grid-small uk-child-width-auto'
-                        ),
-                        cls='uk-card uk-card-body'
-                    )
+                        Div(Span(data_uk_icon='icon: facebook', cls='uk-icon-button uk-icon')),
+                        Div(Span(data_uk_icon='icon: linkedin', cls='uk-icon-button uk-icon')),
+                        Div(Span(data_uk_icon='icon: instagram', cls='uk-icon-button uk-icon')),
+                        Div(Span(data_uk_icon='icon: x', cls='uk-icon-button uk-icon')),
+                        data_uk_grid=True,
+                        cls='uk-grid-small uk-child-width-auto'
+                    ),
+                    cls='uk-padding'
                 ),
                 data_uk_grid=True,
-                cls='uk-grid-match uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@l'
+                cls='uk-child-width-1-2 uk-child-width-1-4@l'
             ),
             cls='uk-container'
         ),
