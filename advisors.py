@@ -9,7 +9,7 @@ page = Div(
             Div(
                 Div(
                     data_src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef'
-                             '-naddam-iJ2IG8ckCpA-unsplash.webp',
+                             '-naddam-iJ2IG8ckCpA-unsplash_15_11zon.webp',
                     data_uk_img=True,
                     cls='uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover'
                 ),
@@ -49,8 +49,8 @@ page = Div(
                 Div(
                     Div(
                         style='background-image: url('
-                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                              '/jurica-koletic-7YVZYZeITc8-unsplash.webp); filter: grayscale(90%);',
+                              'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jurica'
+                              '-koletic-7YVZYZeITc8-unsplash_3_11zon.webp); filter: grayscale(90%);',
                         cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
                     ),
                     Div(

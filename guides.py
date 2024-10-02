@@ -97,7 +97,7 @@ page = Div(
         Div(
             Div(
                 Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/tingey'
-                        '-injury-law-firm-9SKhDFnw4c4-unsplash.webp', alt='', data_uk_cover=True),
+                        '-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon.webp', alt='', data_uk_cover=True),
                 Canvas(width='600', height='400'),
                 cls='uk-card-media-left uk-cover-container'
             ),

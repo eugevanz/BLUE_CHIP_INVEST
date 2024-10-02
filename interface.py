@@ -60,12 +60,8 @@ def nav():
                       cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
                     Div(
                         Ul(
-                            Li(
-                                A('Culture', href='#')
-                            ),
-                            Li(
-                                A('Tailored Wealth Solutions', href='#')
-                            ),
+                            Li(A('Culture', href='#')),
+                            Li(A('Tailored Wealth Solutions', href='#')),
                             Li(
                                 A(
                                     'Precision Financial Tools',
@@ -348,7 +344,7 @@ def hero():
             cls='uk-container'
         ),
         style=f'background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-              f'/marten-bjork-6dW3xyQvcYE-unsplash.webp); filter: grayscale(90%);',
+              f'/marten-bjork-6dW3xyQvcYE-unsplash_6_11zon.webp); filter: grayscale(90%);',
         cls='uk-background-bottom-right uk-background-cover'
     )
 
@@ -397,17 +393,17 @@ def advisor_section():
                 cls='uk-visible@s'
             ) for img, height in [
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd-f-5U_28ojjgms'
-                 '-unsplash.webp', '100px'),
+                 '-unsplash_10_11zon.webp', '100px'),
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi-vedri'
-                 '-O5EMzfdxedg-unsplash.webp', '150px'),
+                 '-O5EMzfdxedg-unsplash_11_11zon.webp', '150px'),
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef-naddam'
-                 '-iJ2IG8ckCpA-unsplash.webp', '300px'),
+                 '-iJ2IG8ckCpA-unsplash_15_11zon.webp', '300px'),
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub-zerdzicki'
-                 '-eGI0aGwuE-A-unsplash.webp', '120px'),
+                 '-eGI0aGwuE-A-unsplash_29_11zon.webp', '120px'),
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/nandhu-kumar'
-                 '-5NGTf4oD8RA-unsplash.webp', '180px'),
+                 '-5NGTf4oD8RA-unsplash_8_11zon.webp', '180px'),
                 ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/charlesdeluvio'
-                 '-Lks7vei-eAg-unsplash.webp', '140px')
+                 '-Lks7vei-eAg-unsplash_24_11zon.webp', '140px')
             ]],
             Div(
                 Div(
@@ -442,7 +438,7 @@ def advisor_section_read_more():
             Div(
                 Div(
                     data_src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef'
-                             '-naddam-iJ2IG8ckCpA-unsplash.webp',
+                             '-naddam-iJ2IG8ckCpA-unsplash_15_11zon.webp',
                     data_uk_img=True,
                     cls='uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover'
                 ),
@@ -501,19 +497,19 @@ def serve_section():
             ) for title, img in [
                 ('Business Owners',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ellicia-24HcJhf0u6M'
-                 '-unsplash.webp'),
+                 '-unsplash_26_11zon.webp'),
                 ('Private Client',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc-gellidon'
-                 '-j_5sxxspFtc-unsplash.webp'),
+                 '-j_5sxxspFtc-unsplash_1_11zon.webp'),
                 ('Pre-Retirees',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/birmingham-museums'
-                 '-trust-T2AmpV9qWqw-unsplash.webp'),
+                 '-trust-T2AmpV9qWqw-unsplash_23_11zon.webp'),
                 ('Retirees',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy-phan'
-                 '-QCF2ykBsC2I-unsplash.webp'),
+                 '-QCF2ykBsC2I-unsplash_28_11zon.webp'),
                 ('Young Investor',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali-morshedlou'
-                 '-WMD64tMfc4k-unsplash.webp')
+                 '-WMD64tMfc4k-unsplash_19_11zon.webp')
             ]],
             data_uk_grid=True,
             cls='uk-child-width-1-5@m uk-child-width-1-3@s uk-child-width-1-2 uk-margin-medium-top'
@@ -566,7 +562,7 @@ def preserve_section():
     return Div(
         Div(
             style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
-                  '/website_images/scott-webb-hDyO6rr3kqk-unsplash.webp); filter: grayscale(90%);',
+                  '/website_images/scott-webb-hDyO6rr3kqk-unsplash_12_11zon.webp); filter: grayscale(90%);',
             cls='uk-height-large uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
         ),
         Div(
@@ -657,7 +653,7 @@ def testimonials_section():
                             Div(
                                 Img(alt='Border pill', height='64',
                                     src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
-                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash.webp',
+                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp',
                                     style='filter: grayscale(90%);',
                                     width='64', cls='uk-border-circle'),
                                 cls='uk-width-auto'
@@ -750,14 +746,14 @@ def guides_section():
                 ) for img, title, desc in [
                     (
                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/krzysztof'
-                        '-hepner-o_x11ORH9vQ-unsplash.webp',
+                        '-hepner-o_x11ORH9vQ-unsplash_4_11zon.webp',
                         'How to Achieve True Wealth',
                         'Unlocking true wealth involves strategic planning, smart investments, and a holistic approach to '
                         'managing your financial resources. Discover the steps to build and sustain genuine financial '
                         'prosperity.'),
                     (
                         'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/pedro'
-                        '-miranda-3QzMBrvCeyQ-unsplash.webp',
+                        '-miranda-3QzMBrvCeyQ-unsplash_9_11zon.webp',
                         'Step Focused Planning',
                         'Achieve your financial goals with step-by-step, focused planning that guides you through every '
                         'stage of wealth building and preservation.')
@@ -776,80 +772,94 @@ def footer():
         Div(
             Div(
                 Div(
-                    Div('Blue Chip Invest', aria_label='Back to Home',
-                        style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                        cls='uk-heading-small uk-margin-small-bottom uk-width-small'),
-                    Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
-                    cls='uk-padding'
+                    Div(
+                        Div('Blue Chip Invest', aria_label='Back to Home',
+                            style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                            cls='uk-heading-small uk-margin-small-bottom uk-width-small'),
+                        Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
+                        cls='uk-card uk-card-body'
+                    )
                 ),
                 Div(
-                    Div('Our Services',
-                        cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-medium-bottom'),
-                    Ul(
-                        Li(A('Financial Planning', href='#')),
-                        Li(A('Investment Management', href='#')),
-                        Li(A('Retirement Planning', href='#')),
-                        Li(A('Investment Analysis', href='#')),
-                        Li(A('Insurance', href='#')),
-                        cls='uk-list uk-text-small'
-                    ),
-                    cls='uk-padding'
+                    Div(
+                        Div('Our Services', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        Ul(
+                            Li(A('Financial Planning', href='#')),
+                            Li(A('Investment Management', href='#')),
+                            Li(A('Retirement Planning', href='#')),
+                            Li(A('Investment Analysis', href='#')),
+                            Li(A('Insurance', href='#')),
+                            cls='uk-list uk-text-small'
+                        ),
+                        cls='uk-card uk-card-body'
+                    )
                 ),
                 Div(
-                    Div('Explore', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
-                    Ul(
-                        Li(A('About', href='#')),
-                        Li(A('Services', href='#')),
-                        Li(A('Careers', href='#')),
-                        Li(A("FAQ's", href='#')),
-                        Li(A('Partner', href='#')),
-                        cls='uk-list uk-text-small'
-                    ),
-                    cls='uk-padding'
+                    Div(
+                        Div('Explore', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        Ul(
+                            Li(A('About', href='#')),
+                            Li(A('Services', href='#')),
+                            Li(A('Careers', href='#')),
+                            Li(A("FAQ's", href='#')),
+                            Li(A('Partner', href='#')),
+                            cls='uk-list uk-text-small'
+                        ),
+                        cls='uk-card uk-card-body'
+                    )
                 ),
                 Div(
-                    Div("Let's Talk",
-                        cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
-                    P('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
-                      'Goals', cls='uk-text-small'),
-                    Button('Start', cls='uk-button uk-button-primary',
-                           hx_get='/contact-us/', hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
-                    cls='uk-padding'
+                    Div(
+                        Div("Let's Talk", cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        P('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
+                          'Goals', cls='uk-text-small'),
+                        Button('Start', cls='uk-button uk-button-primary',
+                               hx_get='/contact-us/', hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
+                        cls='uk-card uk-card-body'
+                    )
                 ),
                 data_uk_grid=True,
                 cls='uk-child-width-1-2 uk-child-width-1-4@l'
             ),
             Div(
                 Div(
-                    Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
-                    Div('Location', cls='uk-text-large uk-text-bolder'),
-                    Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small'),
-                    cls='uk-padding'
-                ),
-                Div(
-                    Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
-                    Div('Phone', cls='uk-text-large uk-text-bolder'),
-                    Div('0860 258 2447', cls='uk-text-small'),
-                    cls='uk-padding'
-                ),
-                Div(
-                    Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
-                    Div('Email', cls='uk-text-large uk-text-bolder'),
-                    Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small'),
-                    cls='uk-padding'
-                ),
-                Div(
-                    Div(data_uk_icon='icon: social; ratio: 1.8', cls='uk-icon'),
-                    Div('Social', cls='uk-text-large uk-text-bolder'),
                     Div(
-                        Div(Span(data_uk_icon='icon: facebook', cls='uk-icon-button uk-icon')),
-                        Div(Span(data_uk_icon='icon: linkedin', cls='uk-icon-button uk-icon')),
-                        Div(Span(data_uk_icon='icon: instagram', cls='uk-icon-button uk-icon')),
-                        Div(Span(data_uk_icon='icon: x', cls='uk-icon-button uk-icon')),
-                        data_uk_grid=True,
-                        cls='uk-grid-small uk-child-width-auto'
-                    ),
-                    cls='uk-padding'
+                        Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
+                        Div('Location', cls='uk-text-large uk-text-bolder'),
+                        Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small'),
+                        cls='uk-card uk-card-body'
+                    )
+                ),
+                Div(
+                    Div(
+                        Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
+                        Div('Phone', cls='uk-text-large uk-text-bolder'),
+                        Div('0860 258 2447', cls='uk-text-small'),
+                        cls='uk-card uk-card-body'
+                    )
+                ),
+                Div(
+                    Div(
+                        Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
+                        Div('Email', cls='uk-text-large uk-text-bolder'),
+                        Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small'),
+                        cls='uk-card uk-card-body'
+                    )
+                ),
+                Div(
+                    Div(
+                        Div(data_uk_icon='icon: social; ratio: 1.8', cls='uk-icon'),
+                        Div('Social', cls='uk-text-large uk-text-bolder', style='margin-bottom: 4px;'),
+                        Div(
+                            Div(Span(data_uk_icon='icon: facebook', cls='uk-icon-button uk-icon')),
+                            Div(Span(data_uk_icon='icon: linkedin', cls='uk-icon-button uk-icon')),
+                            Div(Span(data_uk_icon='icon: instagram', cls='uk-icon-button uk-icon')),
+                            Div(Span(data_uk_icon='icon: x', cls='uk-icon-button uk-icon')),
+                            data_uk_grid=True,
+                            cls='uk-grid-small uk-child-width-auto'
+                        ),
+                        cls='uk-card uk-card-body'
+                    )
                 ),
                 data_uk_grid=True,
                 cls='uk-child-width-1-2 uk-child-width-1-4@l'

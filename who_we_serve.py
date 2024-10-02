@@ -10,7 +10,7 @@ def shorten_text(text: str):
 clientele = [
     ('Business Owners',
      'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ellicia-24HcJhf0u6M'
-     '-unsplash.webp',
+     '-unsplash_26_11zon.webp',
      'We provide tailored financial services for business owners, including financial planning, tax strategy, '
      'retirement planning, and investment management.',
      'Our expertise extends to cash flow management, '
@@ -21,7 +21,7 @@ clientele = [
      'secure a prosperous future for your business.'),
     ('Private Client',
      'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc-gellidon-j_5sxxspFtc'
-     '-unsplash.webp',
+     '-unsplash_1_11zon.webp',
      'For private clients, we provide personalized financial services designed to meet individual needs and goals.',
      'Our offerings include wealth management, estate planning, tax optimization, and investment strategies tailored '
      'to your financial situation. We focus on building long-term relationships, ensuring your '
@@ -31,7 +31,7 @@ clientele = [
      'financial journey with expertise and care.'),
     ('Pre-Retirees',
      'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/birmingham-museums-trust'
-     '-T2AmpV9qWqw-unsplash.webp',
+     '-T2AmpV9qWqw-unsplash_23_11zon.webp',
      'We specialize in helping you prepare for a financially secure retirement. ',
      'Our services include retirement planning, investment strategy development, and income '
      'distribution planning to ensure your savings last throughout your retirement years. '
@@ -41,7 +41,7 @@ clientele = [
      'a comprehensive plan that aligns with your retirement goals and lifestyle.'),
     ('Retirees',
      'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy-phan-QCF2ykBsC2I'
-     '-unsplash.webp',
+     '-unsplash_28_11zon.webp',
      'We provide comprehensive financial services to retirees, ensuring a fulfilling and secure '
      'retirement.',
      ' Our expertise includes income planning, investment management, '
@@ -52,7 +52,7 @@ clientele = [
      'guidance as you embrace this exciting new chapter in your life.'),
     ('Young Investor',
      'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali-morshedlou-WMD64tMfc4k'
-     '-unsplash.webp',
+     '-unsplash_19_11zon.webp',
      'We empower young investors with tailored financial services designed to build a solid foundation for future '
      'wealth.',
      'Our offerings include investment education, '
