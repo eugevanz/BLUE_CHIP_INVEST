@@ -1,5 +1,12 @@
+from os import environ
+
 from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, H1, Br, P, Input, \
-    H2, Img, H5
+    H2, Img, H5, Label
+from supabase import create_client
+
+SUPABASE_URL = environ.get('SUPABASE_URL')
+SUPABASE_KEY = environ.get('SUPABASE_KEY')
+supabase = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_KEY)
 
 
 def calc_input(label, icon, description):
@@ -12,6 +19,13 @@ def calc_input(label, icon, description):
         Div(description, cls='uk-text-small uk-padding-small uk-padding-remove-top'),
         cls='uk-margin'
     )
+
+
+def is_user_logged_in():
+    response = supabase.auth.get_session()
+    if response:
+        return supabase.auth.get_user(response.access_token)
+    return response
 
 
 nav_link = lambda href, title: Li(
@@ -50,6 +64,35 @@ calculator_group4 = [nav_link(href, title) for href, title in [
 ]]
 
 
+def precision_financial_tools():
+    return Li(
+        A(
+            'Financial Tools',
+            Span(data_uk_navbar_parent_icon=True),
+            aria_haspopup='true',
+            href='#',
+            role='button'
+        ),
+        Div(
+            Ul(
+                Li('Potential Interest Calculators', cls='uk-nav-header'),
+                *calculator_group1,
+                Li(cls='uk-nav-divider'),
+                Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
+                *calculator_group2,
+                Li(cls='uk-nav-divider'),
+                Li('Loan Amortisation Calculators', cls='uk-nav-header'),
+                *calculator_group3,
+                Li(cls='uk-nav-divider'),
+                Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
+                *calculator_group4,
+                cls='uk-nav uk-navbar-dropdown-nav'
+            ),
+            cls='uk-navbar-dropdown uk-width-large'
+        )
+    )
+
+
 def nav():
     return Nav(
         Div(
@@ -62,32 +105,7 @@ def nav():
                         Ul(
                             Li(A('Culture', href='#')),
                             Li(A('Tailored Wealth Solutions', href='#')),
-                            Li(
-                                A(
-                                    'Precision Financial Tools',
-                                    Span(data_uk_navbar_parent_icon=True),
-                                    aria_haspopup='true',
-                                    href='#',
-                                    role='button'
-                                ),
-                                Div(
-                                    Ul(
-                                        Li('Potential Interest Calculators', cls='uk-nav-header'),
-                                        *calculator_group1,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
-                                        *calculator_group2,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Loan Amortisation Calculators', cls='uk-nav-header'),
-                                        *calculator_group3,
-                                        Li(cls='uk-nav-divider'),
-                                        Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
-                                        *calculator_group4,
-                                        cls='uk-nav uk-navbar-dropdown-nav'
-                                    ),
-                                    cls='uk-navbar-dropdown uk-drop uk-width-large'
-                                )
-                            ),
+                            precision_financial_tools(),
                             Li(
                                 A('Research & Insights', href='#')
                             ),
@@ -97,7 +115,7 @@ def nav():
                             ),
                             cls='uk-nav uk-navbar-dropdown-nav'
                         ),
-                        cls='uk-navbar-dropdown uk-drop'
+                        cls='uk-navbar-dropdown uk-width-large'
                     ),
                     A('Blue Chip Invest', aria_label='Back to Home', href='#',
                       style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
@@ -109,32 +127,7 @@ def nav():
                         Li(
                             A('Tailored Wealth Solutions', href='#')
                         ),
-                        Li(
-                            A(
-                                'Financial Tools',
-                                Span(data_uk_navbar_parent_icon=True),
-                                aria_haspopup='true',
-                                href='#',
-                                role='button'
-                            ),
-                            Div(
-                                Ul(
-                                    Li('Potential Interest Calculators', cls='uk-nav-header'),
-                                    *calculator_group1,
-                                    Li(cls='uk-nav-divider'),
-                                    Li('Return on Investment (ROI) Calculators', cls='uk-nav-header'),
-                                    *calculator_group2,
-                                    Li(cls='uk-nav-divider'),
-                                    Li('Loan Amortisation Calculators', cls='uk-nav-header'),
-                                    *calculator_group3,
-                                    Li(cls='uk-nav-divider'),
-                                    Li('Other Relevant Financial Metrics Calculators', cls='uk-nav-header'),
-                                    *calculator_group4,
-                                    cls='uk-nav uk-navbar-dropdown-nav'
-                                ),
-                                cls='uk-navbar-dropdown uk-drop uk-width-large'
-                            )
-                        ),
+                        precision_financial_tools(),
                         Li(
                             A('Research & Insights', href='#')
                         ),
@@ -146,11 +139,56 @@ def nav():
                     Button("Let's Talk", cls='uk-button uk-button-small uk-visible@l uk-light', hx_get='/contact-us/',
                            hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
                            style='background-color: #00213B'),
-                    A(data_uk_icon='user', cls='uk-icon-button uk-icon uk-light', style='background-color: #00213B'),
+                    A(data_uk_icon='user', cls='uk-icon-button uk-icon uk-light', hx_get='/admin/', hx_target='#page',
+                      hx_swap='innerHTML', hx_push_url='true') if
+                    is_user_logged_in() else Ul(
+                        Li(
+                            A(data_uk_icon='user', cls='uk-icon-button uk-icon',
+                              style='background-color: #00213B'),
+                            Form(
+                                Div(
+                                    Div('Welcome Back', cls='uk-heading-small uk-text-bolder uk-margin-remove-bottom'),
+                                    Div('Please Enter your Account details'),
+                                    cls='uk-margin-medium-bottom'
+                                ),
+                                Ul(
+                                    Li(
+                                        Label('Email', cls='uk-form-label'),
+                                        Div(
+                                            Span(cls='uk-form-icon', data_uk_icon='icon: user'),
+                                            Input(cls='uk-input uk-form-width-large', type='text',
+                                                  aria_label='Username', id='form-username'),
+                                            cls='uk-inline'
+                                        ),
+                                        cls='uk-margin'
+                                    ),
+                                    Li(
+                                        Label('Password', cls='uk-form-label'),
+                                        Div(
+                                            Span(cls='uk-form-icon uk-form-icon-flip', data_uk_icon='icon: lock'),
+                                            Input(cls='uk-input uk-form-width-large', type='password',
+                                                  aria_label='Password'),
+                                            cls='uk-inline'
+                                        ),
+                                        A('Forgot password?', href='#', cls='uk-link-text uk-text-meta uk-float-right'),
+                                        cls='uk-margin'
+                                    ),
+                                    Li(
+                                        Button("Sign In",
+                                               cls='uk-button uk-button-large uk-width-1-1 uk-light '
+                                                   'uk-margin-medium-top',
+                                               style='background-color: #00213B')
+                                    ),
+                                    cls='uk-nav uk-navbar-dropdown-nav'
+                                ),
+                                cls='uk-navbar-dropdown uk-width-large'
+                            )
+                        ),
+                        cls='uk-iconnav'
+                    ),
                     cls='uk-navbar-right'
                 ),
-                data_uk_navbar='mode: click; target: !.uk-navbar; align: center',
-                cls='uk-navbar'
+                data_uk_navbar='mode: click;', cls='uk-navbar'
             ),
             cls='uk-container'
         ),

@@ -1,6 +1,7 @@
 from fasthtml.common import FastHTML, serve
 from fasthtml.components import Script, Link, Body, Div, Title
 
+import admin
 import advisors
 import contact_us
 import guides
@@ -71,6 +72,11 @@ def get():
 @app.route('/guides/')
 def get():
     return Title('Guides'), nav(), guides.page
+
+
+@app.route('/admin/')
+def get():
+    return Title('Admin'), nav(), admin.page
 
 
 serve()

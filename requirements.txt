@@ -1,1 +1,2 @@
 python-fasthtml
+supabase~=2.8.1
