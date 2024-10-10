@@ -80,7 +80,7 @@ page = Div(
                     ),
                     Div(
                         H3(name, cls='uk-text-bolder'),
-                        Button('Talk to us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
+                        Button('Talk to us', cls='uk-button uk-text-bolder uk-light', hx_get='/contact-us/', hx_target='#page',
                                hx_push_url='/who-we-serve/',
                                style='background-color: #88A9C3; color: #091235'),
                         cls='uk-card uk-card-body uk-width-1-2@s uk-overlay', style='position: absolute; bottom: 0px;'

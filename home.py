@@ -53,7 +53,7 @@ page = Div(
                     cls='uk-text-bolder uk-margin-small-top'
                 ),
                 Div(subtitle, cls='uk-text-small'),
-                cls='uk-card uk-card-body', style='color: #091235;'
+                cls='uk-card uk-card-body', style='color: #36454F;'
             ),
             style='background-color: #88A9C3;'
         ) for title, subtitle in [
@@ -62,7 +62,7 @@ page = Div(
             ('Cash Flow', 'Effective cash flow management is crucial for business survival')
         ]],
         data_uk_grid=True,
-        cls='uk-child-width-expand@s uk-grid-collapse uk-grid-match'
+        cls='uk-child-width-expand@s uk-grid-collapse uk-grid-match uk-flex-middle', style='background-color: #88A9C3;'
     ),
     Div(
         Div(
@@ -122,11 +122,15 @@ page = Div(
         Div(
             *[Div(
                 Div(
-                    Div(style=f'height: 240px; background-image: url({img});mask-image: linear-gradient(to '
-                              f'bottom, rgba(0,0,0,1), rgba(0,0,0,0)); filter: grayscale(90%);',
-                        cls='uk-card-media-top uk-background-cover'),
                     Div(
-                        H3(title, cls='uk-text-bolder'),
+                        Div(
+                            style=f'height: 240px; background-image: url({img});mask-image: linear-gradient(to '
+                                  f'bottom, rgba(0,0,0,1), rgba(0,0,0,0)); filter: grayscale(90%);',
+                            cls='uk-background-cover'),
+                        H3(title, cls='uk-text-bolder uk-position-bottom', style='padding: 20px; padding-bottom: 38px; '
+                                                                                 'line-height: 24px; color: #88A9C3;'),
+                    ),
+                    Div(
                         Button('Read More', cls='uk-button uk-button-text', hx_get=f'/who-we-serve/{title}',
                                hx_target='#page', hx_push_url='/home/'),
                         cls='uk-card-body'
@@ -196,7 +200,7 @@ page = Div(
         Div(
             style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
                   '/website_images/scott-webb-hDyO6rr3kqk-unsplash_12_11zon.webp); filter: grayscale(90%);',
-            cls='uk-height-large uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
+            cls='uk-height-large uk-background-cover uk-background-center-center'
         ),
         Div(
             H1('Preserve and Grow Your Financial Legacy', cls='uk-text-bolder uk-width-1-2', style='color: #2A3A58;'),

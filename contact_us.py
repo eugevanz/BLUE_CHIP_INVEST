@@ -66,7 +66,7 @@ page = Div(
                         Div('No worries, your info stays with us. We don’t do the oversharing thing.',
                             cls='uk-text-small uk-margin'),
                         Button('Send your message',
-                               cls='uk-button uk-button-large uk-width-1-1 uk-margin-top',
+                               cls='uk-button uk-button-large uk-width-1-1 uk-margin-top uk-text-bolder',
                                style='color: #88A9C3; background-color: #091235')
                     ),
                     cls='uk-card uk-card-body uk-card-default'

@@ -24,7 +24,7 @@ page = Div(
                       'to equip advisors with the tools and support they need to foster meaningful client '
                       'relationships, allowing them to focus on delivering top-notch financial guidance and '
                       'personalized service.'),
-                    Button('Talk to us', cls='uk-button uk-button-large', hx_get='/contact-us/',
+                    Button('Talk to us', cls='uk-button uk-button-large uk-text-bolder', hx_get='/contact-us/',
                            hx_target='#page', hx_push_url='/advisors/',
                            style='background-color: #88A9C3; color: #091235'),
                     cls='uk-card-body'
