@@ -1,12 +1,18 @@
+import base64
+import calendar
+from datetime import datetime
+from io import BytesIO
 from os import environ
 
-from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, H1, Br, P, Input, \
-    H2, Img, H5, Label
+from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, Br, P, Input, Strong, \
+    Label
+from matplotlib.figure import Figure
 from supabase import create_client
 
 SUPABASE_URL = environ.get('SUPABASE_URL')
 SUPABASE_KEY = environ.get('SUPABASE_KEY')
 supabase = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_KEY)
+session_data = supabase.auth.get_session()
 
 
 def calc_input(label, icon, description):
@@ -21,20 +27,14 @@ def calc_input(label, icon, description):
     )
 
 
-def is_user_logged_in():
-    response = supabase.auth.get_session()
-    if response:
-        return supabase.auth.get_user(response.access_token)
-    return response
-
-
 nav_link = lambda href, title: Li(
     A(title, href=href, data_uk_toggle=True)
 )
 
-return_button = Button(type='button', aria_label='Close', data_uk_icon='icon: chevron-left; ratio: 1.5',
-                       data_uk_sticky='end: !.uk-section; offset: 80', cls='uk-icon-button',
-                       _='on click go back')
+return_button = A(
+    Span(data_uk_icon='icon: chevron-left; ratio: 1.5', _='on click go back'),
+    href='#'
+)
 
 calculator_group1 = [nav_link(href, title) for href, title in [
     ("#potential-interest-calculators", "Simple Interest Calculator"),
@@ -62,6 +62,53 @@ calculator_group4 = [nav_link(href, title) for href, title in [
     ("#other-relevant-financial-metrics-calculators", "Payback Period Calculator"),
     ("#other-relevant-financial-metrics-calculators", "Profit Margin Calculator")
 ]]
+
+
+def create_graph():
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    ax.xaxis.set_tick_params(labelsize=20, labelcolor='white')
+
+    months = ['Jul', 'Aug', 'Sep', 'Oct']
+    counts = [40, 100, 30, 55]
+    bar_labels = ['red', 'blue', '_red', 'orange']
+    bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
+
+    ax.bar(months, counts, label=bar_labels, color=bar_colors)
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.tight_layout(pad=3.3)
+    fig.savefig(buf, format='png', transparent=True)
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode('ascii')
+    return f'data:image/png;base64,{data}'
+
+
+def calendar_view():
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+    days_in_month = calendar.monthrange(current_year, current_month)[1]
+    days_list = list(range(1, days_in_month + 1))
+    first_day_of_month = calendar.monthrange(current_year, current_month)[0] + 1
+    days_list = [''] * first_day_of_month + days_list
+
+    days = Div(
+        *[Div(Span(day, cls='uk-text-muted uk-text-small'), style='width: 44px;') for day in
+          ['S', 'M', 'T', 'W', 'T', 'F', 'S']],
+        cls='uk-grid-small uk-child-width-auto uk-text-center', data_uk_grid=True
+    )
+    dates = Div(
+        *[Div(Span(day, cls='uk-text-bolder'), style='width: 44px;') for day in days_list],
+        cls='uk-grid-small uk-child-width-auto uk-text-center', data_uk_grid=True
+    )
+    return Div(days, dates)
 
 
 def precision_financial_tools():
@@ -93,106 +140,109 @@ def precision_financial_tools():
     )
 
 
-def nav():
-    return Nav(
-        Div(
+def nav(user=None, history='/home/'):
+    return Div(
+        Nav(
             Div(
                 Div(
-                    A(aria_haspopup='true', aria_label='Open menu', href='#', role='button',
-                      data_uk_navbar_toggle_icon=True,
-                      cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
                     Div(
+                        Div(
+                            A(
+                                href='#', cls='uk-icon-link', data_uk_icon='icon: chevron-left; ratio: 3',
+                                _='on click go back'
+                            ) if history not in ['/home/', '/admin/'] else A(
+                                href='#', cls='uk-icon-link uk-text-middle', data_uk_icon='icon: quote-right; ratio: 3'
+                            ),
+                            A(
+                                Div('Blue Chip Investments', aria_label='Back to Home',
+                                    style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: '
+                                          'normal; line-height: 22px; color: #091235; width: 164px;',
+                                    cls='uk-link-text', hx_get='/home/',
+                                    hx_target='#page')
+                            ),
+                            cls='uk-navbar-item uk-logo'
+                        ),
+                        cls='uk-navbar-left'
+                    ),
+                    Div(
+                        A(aria_haspopup='true', aria_label='Open menu', href='#', role='button',
+                          data_uk_navbar_toggle_icon=True,
+                          cls='uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon'),
+                        Div(
+                            Ul(
+                                Li(
+                                    A('Culture', href='#')
+                                ),
+                                precision_financial_tools(),
+                                Li(
+                                    A('Research & Insights', href='#')
+                                ),
+                                Li(
+                                    Button("Let's Talk", cls='uk-button uk-button-small uk-light',
+                                           style='background-color: #091235'),
+                                    cls='uk-margin'
+                                ),
+                                cls='uk-nav uk-navbar-dropdown-nav'
+                            ),
+                            cls='uk-navbar-dropdown uk-width-large'
+                        ),
                         Ul(
-                            Li(A('Culture', href='#')),
-                            Li(A('Tailored Wealth Solutions', href='#')),
+                            Li(
+                                A('Culture', href='#')
+                            ),
                             precision_financial_tools(),
                             Li(
                                 A('Research & Insights', href='#')
                             ),
-                            Li(
-                                Button("Let's Talk", cls='uk-button uk-button-small uk-light',
-                                       style='background-color: #00213B')
-                            ),
-                            cls='uk-nav uk-navbar-dropdown-nav'
+                            cls='uk-navbar-nav uk-visible@l'
                         ),
-                        cls='uk-navbar-dropdown uk-width-large'
-                    ),
-                    A('Blue Chip Invest', aria_label='Back to Home', href='#',
-                      style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                      cls='uk-navbar-item uk-logo', hx_get='/home/', hx_target='#page', hx_swap='innerHTML'),
-                    Ul(
-                        Li(
-                            A('Culture', href='#')
-                        ),
-                        Li(
-                            A('Tailored Wealth Solutions', href='#')
-                        ),
-                        precision_financial_tools(),
-                        Li(
-                            A('Research & Insights', href='#')
-                        ),
-                        cls='uk-navbar-nav uk-visible@l'
-                    ),
-                    cls='uk-navbar-left'
-                ),
-                Div(
-                    Button("Let's Talk", cls='uk-button uk-button-small uk-visible@l uk-light', hx_get='/contact-us/',
-                           hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
-                           style='background-color: #00213B'),
-                    A(data_uk_icon='user', cls='uk-icon-button uk-icon uk-light', hx_get='/admin/', hx_target='#page',
-                      hx_swap='innerHTML', hx_push_url='true') if
-                    is_user_logged_in() else Ul(
-                        Li(
+                        Button("Let's Talk", cls='uk-button uk-button-small uk-visible@l uk-light',
+                               hx_get='/contact-us/',
+                               hx_target='#page', hx_push_url='/home/',
+                               style='background-color: #091235'),
+                        Button(data_uk_icon='close', cls='uk-icon-button uk-icon uk-light', hx_post='/admin/',
+                               hx_target='#page') if user else
+                        Div(
                             A(data_uk_icon='user', cls='uk-icon-button uk-icon',
-                              style='background-color: #00213B'),
-                            Form(
+                              style='background-color: #091235'),
+                            Div(
+                                H3('Welcome Back', cls='uk-card-title uk-text-bolder uk-margin-remove-bottom'),
+                                P('Please enter your ', Strong('email address'),
+                                  ' to log in. A magic link will be sent to your email, allowing you to securely '
+                                  'access your account.',
+                                  cls='uk-text-small uk-margin-remove-top', style='color: #091235'),
                                 Div(
-                                    Div('Welcome Back', cls='uk-heading-small uk-text-bolder uk-margin-remove-bottom'),
-                                    Div('Please Enter your Account details'),
-                                    cls='uk-margin-medium-bottom'
+                                    Label('Email', cls='uk-form-label'),
+                                    Div(
+                                        Span(cls='uk-form-icon', data_uk_icon='icon: mail'),
+                                        Input(cls='uk-input uk-form-width-large', type='email',
+                                              aria_label='Username', name='form-username'),
+                                        cls='uk-inline'
+                                    ),
+                                    cls='uk-margin'
                                 ),
-                                Ul(
-                                    Li(
-                                        Label('Email', cls='uk-form-label'),
-                                        Div(
-                                            Span(cls='uk-form-icon', data_uk_icon='icon: user'),
-                                            Input(cls='uk-input uk-form-width-large', type='text',
-                                                  aria_label='Username', id='form-username'),
-                                            cls='uk-inline'
-                                        ),
-                                        cls='uk-margin'
-                                    ),
-                                    Li(
-                                        Label('Password', cls='uk-form-label'),
-                                        Div(
-                                            Span(cls='uk-form-icon uk-form-icon-flip', data_uk_icon='icon: lock'),
-                                            Input(cls='uk-input uk-form-width-large', type='password',
-                                                  aria_label='Password'),
-                                            cls='uk-inline'
-                                        ),
-                                        A('Forgot password?', href='#', cls='uk-link-text uk-text-meta uk-float-right'),
-                                        cls='uk-margin'
-                                    ),
-                                    Li(
-                                        Button("Sign In",
-                                               cls='uk-button uk-button-large uk-width-1-1 uk-light '
-                                                   'uk-margin-medium-top',
-                                               style='background-color: #00213B')
-                                    ),
-                                    cls='uk-nav uk-navbar-dropdown-nav'
+                                Div(
+                                    Button("Send Code",
+                                           cls='uk-button uk-button-large uk-width-1-1 uk-light',
+                                           style='background-color: #091235', hx_post=f'/request-code/',
+                                           hx_target='#code-notifications',
+                                           hx_include="[name='form-username']"),
+                                    cls='uk-margin'
                                 ),
-                                cls='uk-navbar-dropdown uk-width-large'
-                            )
+                                P(id='code-notifications'),
+                                cls='uk-card uk-card-body uk-width-large uk-card-default', data_uk_drop=True
+                            ),
+                            cls='uk-inline'
                         ),
-                        cls='uk-iconnav'
+                        cls='uk-navbar-right'
                     ),
-                    cls='uk-navbar-right'
+                    data_uk_navbar='mode: click;', cls='uk-navbar'
                 ),
-                data_uk_navbar='mode: click;', cls='uk-navbar'
+                cls='uk-container'
             ),
-            cls='uk-container'
+            cls='uk-navbar-container'
         ),
-        cls='uk-navbar-container'
+        data_uk_sticky='sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky;'
     )
 
 
@@ -238,7 +288,8 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body uk-light', style='background-color: #00213B'
+                                cls='uk-card uk-card-default uk-card-body uk-light',
+                                style='background-color: #091235'
                             )
                         ),
                         Div(
@@ -285,7 +336,8 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body uk-light', style='background-color: #00213B'
+                                cls='uk-card uk-card-default uk-card-body uk-light',
+                                style='background-color: #091235'
                             )
                         ),
                         Div(
@@ -335,7 +387,8 @@ def potential_interest_calculators():
                                         cls='uk-fieldset'
                                     )
                                 ),
-                                cls='uk-card uk-card-default uk-card-body uk-light', style='background-color: #00213B'
+                                cls='uk-card uk-card-default uk-card-body uk-light',
+                                style='background-color: #091235'
                             )
                         ),
                         data_uk_grid='masonry: pack',
@@ -353,474 +406,23 @@ def potential_interest_calculators():
     )
 
 
-def hero():
-    return Div(
-        Div(
-            Div(
-                Div(cls='uk-card uk-card-body'),
-                Div(
-                    Div(
-                        H1(
-                            'Get a clear path to',
-                            Br(),
-                            Span('your financial goals.'),
-                            cls='uk-text-bolder'
-                        ),
-                        P('Our Wealth Activating team can help you'),
-                        Button('Get Started', cls='uk-button uk-button-small uk-light', hx_get='/contact-us/',
-                               hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
-                               style='background-color: #00213B'),
-                        cls='uk-card uk-card-body uk-margin-auto-vertical'
-                    ),
-                    style='min-height: max(0px, 60vh);',
-                    data_uk_height_viewport='offset-bottom: 40',
-                    cls='uk-flex'
-                ),
-                data_uk_grid=True,
-                cls='uk-child-width-1-2@s'
-            ),
-            cls='uk-container'
-        ),
-        style=f'background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-              f'/marten-bjork-6dW3xyQvcYE-unsplash_6_11zon.webp); filter: grayscale(90%);',
-        cls='uk-background-bottom-right uk-background-cover'
-    )
-
-
-def subhero():
-    return Div(
-        Div(
-            Div(
-                H2(
-                    'Planning objective', Br(), Span('financial advice'),
-                    cls='uk-text-bolder uk-margin-xlarge-left@s'
-                ),
-                Button('View All', cls='uk-button uk-button-text uk-margin-xlarge-left@s', hx_get='/services/',
-                       hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
-                cls='uk-margin-auto-vertical uk-card uk-card-body uk-card-large'
-            ),
-            cls='uk-width-2-5@m uk-light', style='background-color: #00213B'
-        ),
-        *[Div(
-            Div(
-                Span(data_uk_icon='icon: settings; ratio: 2', cls='uk-icon'),
-                Div(
-                    Span(title, cls='uk-text-primary'),
-                    cls='uk-text-bolder uk-margin-small-top'
-                ),
-                Div(subtitle, cls='uk-text-small'),
-                cls='uk-card uk-card-body'
-            ),
-            cls='uk-background-primary'
-        ) for title, subtitle in [
-            ('Risk Management', 'Risk management is critical to long-term success and sustainability'),
-            ('Investment Analytics', 'Leveraging investment analytics and make more informed decisions'),
-            ('Cash Flow', 'Effective cash flow management is crucial for business survival')
-        ]],
-        data_uk_grid=True,
-        cls='uk-child-width-expand@s uk-grid-collapse uk-grid-match uk-light'
-    )
-
-
-def advisor_section():
-    return Div(
-        Div(
-            *[Div(
-                Div(style=f'height: {height}; background-image: url({img}); filter: grayscale(90%);',
-                    cls='uk-background-cover uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle'),
-                cls='uk-visible@s'
-            ) for img, height in [
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/redd-f-5U_28ojjgms'
-                 '-unsplash_10_11zon.webp', '100px'),
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/santi-vedri'
-                 '-O5EMzfdxedg-unsplash_11_11zon.webp', '150px'),
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef-naddam'
-                 '-iJ2IG8ckCpA-unsplash_15_11zon.webp', '300px'),
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub-zerdzicki'
-                 '-eGI0aGwuE-A-unsplash_29_11zon.webp', '120px'),
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/nandhu-kumar'
-                 '-5NGTf4oD8RA-unsplash_8_11zon.webp', '180px'),
-                ('https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/charlesdeluvio'
-                 '-Lks7vei-eAg-unsplash_24_11zon.webp', '140px')
-            ]],
-            Div(
-                Div(
-                    H2(
-                        Span('We Help', cls='uk-text-primary'),
-                        ' financial',
-                        Br(),
-                        Span('Advisors that'),
-                        Br(),
-                        Span('exclusively serve.'),
-                        cls='uk-text-bolder'
-                    ),
-                    P('We empower financial advisors dedicated to serving a select clientele',
-                      cls='uk-width-medium'),
-                    Button('Read More', type='button', cls='uk-button uk-button-text', hx_get='/advisors/',
-                           hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
-                    cls='uk-card uk-card-body'
-                )
-            ),
-            style='height: 627px;',
-            data_uk_grid='masonry: pack',
-            cls='uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-small uk-grid uk-flex-top uk-flex-wrap-top'
-        ),
-        id='advisor-section',
-        cls='uk-container uk-margin-xlarge-top advisor-section'
-    )
-
-
-def advisor_section_read_more():
-    return Div(
-        Div(
-            Div(
-                Div(
-                    data_src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/youssef'
-                             '-naddam-iJ2IG8ckCpA-unsplash_15_11zon.webp',
-                    data_uk_img=True,
-                    cls='uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover'
-                ),
-                cls='uk-flex-last@s uk-card-media-right uk-cover-container'
-            ),
-            Div(
-                Div(
-                    H2(
-                        Span('We Help', cls='uk-text-primary'), ' financial', Br(), Span('Advisors that'),
-                        Br(), Span('exclusively serve.'),
-                        cls='uk-text-bolder'
-                    ),
-                    P('Dedicated to the needs of financial advisors who serve clients exclusively, '
-                      'we offer customized solutions and resources that enhance their practices. Our mission is '
-                      'to equip advisors with the tools and support they need to foster meaningful client '
-                      'relationships, allowing them to focus on delivering top-notch financial guidance and '
-                      'personalized service.'),
-                    Button('Talk to us', cls='uk-button uk-button-large uk-light', hx_get='/contact-us/',
-                           hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
-                           style='background-color: #00213B'),
-                    cls='uk-card-body'
-                )
-            ),
-            data_uk_grid=True,
-            cls='uk-card uk-card-small uk-grid-collapse uk-child-width-1-2@s uk-margin'
-        ),
-        data_uk_dropdown='mode: click; stretch: x; pos: top-left; boundary: !.advisor-section; flip: false'
-    )
-
-
-def serve_section():
-    return Div(
-        Div(
-            H2(
-                Span('Who', cls='uk-text-primary'), Span(' We Serve'),
-                Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-primary'),
-                cls='uk-text-bolder'
-            ),
-            P('Focused support for financial advisors with a unique clientele.', cls='uk-width-medium'),
-            cls='uk-card uk-card-body uk-margin-auto-vertical'
-        ),
-        Div(
-            *[Div(
-                Div(
-                    Div(style=f'height: 240px; background-image: url({img});mask-image: linear-gradient(to '
-                              f'bottom, rgba(0,0,0,1), rgba(0,0,0,0)); filter: grayscale(90%);',
-                        cls='uk-card-media-top uk-background-cover'),
-                    Div(
-                        H3(title, cls='uk-text-bolder'),
-                        Button('Read More', cls='uk-button uk-button-text', hx_get=f'/who-we-serve/{title}',
-                               hx_swap='innerHTML', hx_target='#page', hx_push_url='true'),
-                        cls='uk-card-body'
-                    ),
-                    cls='uk-card uk-card-small'
-                )
-            ) for title, img in [
-                ('Business Owners',
-                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ellicia-24HcJhf0u6M'
-                 '-unsplash_26_11zon.webp'),
-                ('Private Client',
-                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jc-gellidon'
-                 '-j_5sxxspFtc-unsplash_1_11zon.webp'),
-                ('Pre-Retirees',
-                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/birmingham-museums'
-                 '-trust-T2AmpV9qWqw-unsplash_23_11zon.webp'),
-                ('Retirees',
-                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/huy-phan'
-                 '-QCF2ykBsC2I-unsplash_28_11zon.webp'),
-                ('Young Investor',
-                 'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/ali-morshedlou'
-                 '-WMD64tMfc4k-unsplash_19_11zon.webp')
-            ]],
-            data_uk_grid=True,
-            cls='uk-child-width-1-5@m uk-child-width-1-3@s uk-child-width-1-2 uk-margin-medium-top'
-        ),
-        cls='uk-container serve-section'
-    )
-
-
-def metric_section():
-    return Div(
-        Div(
-            Div(
-                Div(
-                    Div('$15B',
-                        style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                        cls='uk-heading-small'),
-                    Div('Assets Under Management', cls='uk-text-small'),
-                    cls='uk-text-center'
-                ),
-                Div(
-                    Div('56', style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                        cls='uk-heading-small'),
-                    Div('Office Locations in RSA', cls='uk-text-small'),
-                    cls='uk-text-center'
-                ),
-                Div(
-                    Div('1995',
-                        style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                        cls='uk-heading-small'),
-                    Div('Year founded company', cls='uk-text-small'),
-                    cls='uk-text-center'
-                ),
-                Div(
-                    Div('2,541',
-                        style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                        cls='uk-heading-small'),
-                    Div('Clients represented through our firm', cls='uk-text-small'),
-                    cls='uk-text-center'
-                ),
-                data_uk_grid=True,
-                cls='uk-grid-divider uk-child-width-expand@s'
-            ),
-            cls='uk-container'
-        ),
-        cls='uk-section uk-section-large'
-    )
-
-
-def preserve_section():
-    return Div(
-        Div(
-            style='background-image: url(https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
-                  '/website_images/scott-webb-hDyO6rr3kqk-unsplash_12_11zon.webp); filter: grayscale(90%);',
-            cls='uk-height-large uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
-        ),
-        Div(
-            H1('Preserve and Grow Your Financial Legacy', cls='uk-text-primary uk-text-bolder uk-width-1-2'),
-            Button('Contact Us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
-                   hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
-            cls='uk-card uk-card-body uk-overlay', style='position: absolute; bottom: 0px;'
-        ),
-        cls='uk-container', style='position: relative;'
-    )
-
-
-def whatwedo_section():
-    return Div(
-        Div(
-            Div(
-                Div(
-                    Div(
-                        H2(
-                            Span('What', cls='uk-text-primary'),
-                            ' We Do',
-                            Hr(style='height: 0px; border: none; border-top: 2px solid;',
-                               cls='uk-width-small uk-text-primary'),
-                            cls='uk-text-bolder'
-                        ),
-                        P('Providing tailored solutions for financial advisors to elevate client success.',
-                          cls='uk-width-medium'),
-                        Button('View All', cls='uk-button uk-button-text', hx_get='/services/', hx_target='#page',
-                               hx_swap='innerHTML', hx_push_url='true'),
-                        cls='uk-card uk-card-body uk-margin-auto-vertical uk-text-left uk-light',
-                        style='background-color: #00213B'
-                    ),
-                    cls='uk-width-1-2@m'
-                ),
-                *[Div(
-                    Div(
-                        Span(data_uk_icon=f'icon: {icon}; ratio: 2.5', cls='uk-text-primary uk-icon'),
-                        P(title, cls='uk-text-bolder'),
-                        Div(subtitle, cls='uk-text-small'),
-                        cls='uk-card uk-card-default uk-card-body'
-                    ),
-                    cls='uk-width-1-4@m uk-width-1-2@s'
-                ) for icon, title, subtitle in [
-                    ('crosshairs', 'Financial Planning', 'Comprehensive strategies to secure your financial future.'),
-                    ('unlock', 'Retirement Planning', 'Creating personalized pathways to a secure and fulfilling '
-                                                      'retirement.'),
-                    ('file-text', 'Insurance', 'Protecting what matters most with tailored insurance solutions.'),
-                    ('cart', 'Investment Management', 'Maximizing growth through strategic and personalized '
-                                                      'investment.'),
-                    ('search', 'Tax Planning', 'Optimizing your financial strategy with proactive tax planning '
-                                               'solutions.'),
-                    ('bag', 'Business Planning',
-                     'Building robust strategies for sustainable business growth and success.')
-                ]],
-                data_uk_grid=True,
-                cls='uk-grid-match uk-text-center'
-            ),
-            cls='uk-container'
-        ),
-        cls='uk-section uk-section-xlarge'
-    )
-
-
-def testimonials_section():
-    return Div(
-        Div(
-            Div(
-                Div('WHAT OUR CUSTOMERS SAY', cls='uk-text-small uk-text-bolder'),
-                H2(
-                    Span('Our', cls='uk-text-primary'),
-                    ' Testimonials',
-                    cls='uk-text-bolder uk-margin-remove-top'
-                ),
-                cls='uk-card uk-card-body uk-text-center'
-            ),
-            Div(
-                *[Div(
-                    Div(
-                        Div(
-                            *[Span(data_uk_icon='star', cls='uk-text-warning uk-icon') for _ in range(5)],
-                        ),
-                        P(
-                            Span(title, cls='uk-text-bolder'),
-                            Br(), subtext,
-                            cls='uk-text-italic'
-                        ),
-                        Div(
-                            Div(
-                                Img(alt='Border pill', height='64',
-                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public'
-                                        '/website_images/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp',
-                                    style='filter: grayscale(90%);',
-                                    width='64', cls='uk-border-circle'),
-                                cls='uk-width-auto'
-                            ),
-                            Div(
-                                Div(f'— {name}', cls='uk-text-bolder'),
-                                Div(pos, cls='uk-text-small'),
-                                cls='uk-margin-auto-vertical'
-                            ),
-                            data_uk_grid=True,
-                            cls='uk-grid-small'
-                        ),
-                        cls='uk-card uk-card-default uk-card-body'
-                    )
-                ) for title, subtext, name, pos in [
-                    ('Exceptional Guidance for Every Stage',
-                     'Working with this company has been a game-changer for my practice. Their expertise in financial '
-                     'and business planning helped me develop strategies tailored to my clients\' unique needs. The '
-                     'personalized support and dedication to excellence have elevated the service I offer, '
-                     'and my clients couldn\'t be happier.',
-                     'Sarah T.', 'Financial Advisor'),
-                    ('A True Partner in Growth',
-                     'From investment management to retirement planning, they’ve provided me with the tools and '
-                     'insights to serve my clients better.Their proactive approach to tax and insurance planning has '
-                     'saved my clients both time and money, allowing me to build stronger, long-term '
-                     'relationships.They’re not just a service provider; they’re a trusted partner in my success.',
-                     'John M.', 'Certified Financial Planner'),
-                    ('Unmatched Expertise and Support',
-                     'The business planning strategies offered by this team have been instrumental in helping me grow'
-                     ' my advisory firm.Their in -depth understanding of financial planning, combined with their '
-                     'dedication to serving a niche clientele, has made all the difference. I highly recommend them '
-                     'to any financial advisor looking to take their business to the next level.',
-                     'Alex P.', 'Wealth Management Advisor')
-                ]],
-                data_uk_grid=True,
-                cls='uk-grid-match uk-child-width-expand@m'
-            ),
-            cls='uk-container'
-        ),
-        cls='uk-section uk-light', style='background-color: #00213B'
-    )
-
-
-def guides_section():
-    return Div(
-        Div(
-            Div(
-                Div(
-                    Div(
-                        H2(
-                            Span('Personal', cls='uk-text-primary'),
-                            ' Finance Guides',
-                            Hr(style='height: 0px; border: none; border-top: 2px solid;',
-                               cls='uk-width-small uk-text-primary'),
-                            cls='uk-text-bolder'
-                        ),
-                        Button('Read Our Blog', cls='uk-button uk-button-text', hx_get='/guides/', hx_target='#page',
-                               hx_swap='innerHTML', hx_push_url='true'),
-                        cls='uk-card uk-card-body'
-                    ),
-                    Div(
-                        H5('Most Popular', cls='uk-text-bolder'),
-                        Ul(
-                            *[Li(
-                                A(title, href=f'#{title}', cls='uk-link-muted', hx_get='/guides/', hx_target='#page',
-                                  hx_swap='innerHTML', hx_push_url='true')
-                            ) for title, href in [
-                                ('What are Portfolio Accounting Systems', '#'),
-                                ('Investing Basics for New Grads', '#'),
-                                ('What is the Average Net Worth by Age', '#'),
-                                ('Wealth Management vs. Investment Banking', '#'),
-                                ('2024\'s Best Provinces to Retire in South Africa', '#')
-                            ]],
-                            cls='uk-list uk-list-disc uk-list-primary uk-text-small'
-                        ),
-                        cls='uk-card uk-card-body uk-margin-auto-vertical'
-                    )
-                ),
-                *[Div(
-                    Div(
-                        Div(style=f'height: 320px; background-image: url({img}); filter: grayscale(90%);',
-                            tabindex='0', cls='uk-background-cover'),
-                        Div(
-                            H4(title, cls='uk-card-title, uk-text-bolder'),
-                            P(desc, cls='uk-text-small'),
-                            cls='uk-card-body'
-                        ),
-                        cls='uk-card uk-card-small uk-card-body'
-                    )
-                ) for img, title, desc in [
-                    (
-                        'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/krzysztof'
-                        '-hepner-o_x11ORH9vQ-unsplash_4_11zon.webp',
-                        'How to Achieve True Wealth',
-                        'Unlocking true wealth involves strategic planning, smart investments, and a holistic approach to '
-                        'managing your financial resources. Discover the steps to build and sustain genuine financial '
-                        'prosperity.'),
-                    (
-                        'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/pedro'
-                        '-miranda-3QzMBrvCeyQ-unsplash_9_11zon.webp',
-                        'Step Focused Planning',
-                        'Achieve your financial goals with step-by-step, focused planning that guides you through every '
-                        'stage of wealth building and preservation.')
-                ]],
-                data_uk_grid=True,
-                cls='uk-grid-match uk-child-width-expand@s'
-            ),
-            cls='uk-container'
-        ),
-        cls='uk-section uk-section-xlarge'
-    )
-
-
 def footer():
     return Div(
         Div(
+            Hr(),
+            Div(
+                Div('Blue Chip Investments', aria_label='Back to Home',
+                    style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                    cls='uk-heading-small uk-margin-small-bottom uk-width-small', hx_get='/home/',
+                    hx_target='#page'),
+                Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
+                cls='uk-card uk-card-body'
+            ),
             Div(
                 Div(
                     Div(
-                        Div('Blue Chip Invest', aria_label='Back to Home',
-                            style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                            cls='uk-heading-small uk-margin-small-bottom uk-width-small'),
-                        Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
-                        cls='uk-card uk-card-body'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div('Our Services', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        Div('Our Services',
+                            cls='uk-text-bolder uk-text-large uk-margin-small-bottom', style='color: #88A9C3;'),
                         Ul(
                             Li(A('Financial Planning', href='#')),
                             Li(A('Investment Management', href='#')),
@@ -830,11 +432,13 @@ def footer():
                             cls='uk-list uk-text-small'
                         ),
                         cls='uk-card uk-card-body'
-                    )
+                    ),
+                    cls='uk-width-auto'
                 ),
                 Div(
                     Div(
-                        Div('Explore', cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        Div('Explore', cls='uk-text-bolder uk-text-large uk-margin-small-bottom',
+                            style='color: #88A9C3;'),
                         Ul(
                             Li(A('About', href='#')),
                             Li(A('Services', href='#')),
@@ -844,35 +448,38 @@ def footer():
                             cls='uk-list uk-text-small'
                         ),
                         cls='uk-card uk-card-body'
-                    )
+                    ),
+                    cls='uk-width-auto'
                 ),
                 Div(
                     Div(
-                        Div("Let's Talk", cls='uk-text-bolder uk-text-primary uk-text-large uk-margin-small-bottom'),
+                        Div("Let's Talk",
+                            cls='uk-text-bolder uk-text-large uk-margin-small-bottom', style='color: #88A9C3;'),
                         P('We\'re Here to Help You Grow Your Wealth, Plan Your Future, and Achieve Your Financial '
-                          'Goals', cls='uk-text-small'),
-                        Button('Start', cls='uk-button uk-button-primary',
-                               hx_get='/contact-us/', hx_target='#page', hx_swap='innerHTML', hx_push_url='true'),
+                          'Goals', cls='uk-text-small uk-light'),
+                        Button('Start', cls='uk-button uk-light uk-text-bolder',
+                               style='background-color: #88A9C3; color: #091235',
+                               hx_get='/contact-us/', hx_target='#page', hx_push_url='/home/'),
                         cls='uk-card uk-card-body'
                     )
                 ),
                 data_uk_grid=True,
-                cls='uk-child-width-1-2 uk-child-width-1-4@l'
+                cls='uk-child-width-1-2 uk-child-width-1-3@l'
             ),
             Div(
                 Div(
                     Div(
-                        Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
-                        Div('Location', cls='uk-text-large uk-text-bolder'),
-                        Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small'),
+                        Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon', style='color: #88A9C3'),
+                        Div('Location', cls='uk-text-large uk-text-bolder uk-light'),
+                        Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small uk-light'),
                         cls='uk-card uk-card-body'
                     )
                 ),
                 Div(
                     Div(
                         Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
-                        Div('Phone', cls='uk-text-large uk-text-bolder'),
-                        Div('0860 258 2447', cls='uk-text-small'),
+                        Div('Phone', cls='uk-text-large uk-text-bolder uk-light'),
+                        Div('0860 258 2447', cls='uk-text-small uk-light'),
                         cls='uk-card uk-card-body'
                     )
                 ),
@@ -904,5 +511,5 @@ def footer():
             ),
             cls='uk-container'
         ),
-        cls='uk-section uk-section-medium uk-light', style='background-color: #00213B'
+        cls='uk-section uk-section-large uk-light', style='background-color: #091235'
     )

@@ -1,7 +1,5 @@
 from fasthtml.components import H2, Span, Hr, H3, P, Div, Button
 
-from interface import return_button
-
 
 def shorten_text(text: str):
     return f'{text[:70]}...' if len(text) > 70 else text
@@ -65,11 +63,10 @@ clientele = [
 
 page = Div(
     Div(
-        return_button,
         Div(
             H2(
-                Span('Who', style='color: #45ACFF'), Span(' We Serve'),
-                Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-primary'),
+                Span('Who', style='color: #88A9C3'), Span(' We Serve'),
+                Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;', cls='uk-width-small'),
                 cls='uk-text-bolder'
             ),
             cls='uk-card uk-card-body'
@@ -78,13 +75,14 @@ page = Div(
             *[Div(
                 Div(
                     Div(
-                        style=f'background-image: url({img}); filter: grayscale(90%); opacity: 0.5;',
+                        style=f'background-image: url({img}); filter: grayscale(90%); opacity: 0.7;',
                         cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
                     ),
                     Div(
                         H3(name, cls='uk-text-bolder'),
                         Button('Talk to us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
-                               hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
+                               hx_push_url='/who-we-serve/',
+                               style='background-color: #88A9C3; color: #091235'),
                         cls='uk-card uk-card-body uk-width-1-2@s uk-overlay', style='position: absolute; bottom: 0px;'
                     ),
                     style='position: relative;'
@@ -92,41 +90,15 @@ page = Div(
                 Div(
                     Div(
                         P(desc, cls='uk-text-bolder'),
-                        P(subdesc),
+                        P(subdesc, style='color: white;'),
                         cls='uk-card uk-card-body'
                     )
                 ),
                 data_uk_grid=True,
                 cls='uk-grid-collapse uk-child-width-1-2@m uk-margin uk-flex-middle'
-                # Div(
-                #     Div(
-                #         Div(
-                #             style=f'background-image: url({img}); filter: grayscale(90%); opacity: 0.5;',
-                #             cls='uk-height-large uk-flex uk-flex-start uk-flex-middle uk-background-cover '
-                #                 'uk-background-center-center'
-                #         ),
-                #         Div(
-                #             H3(name, cls='uk-text-bolder'),
-                #             Button('Talk to us', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
-                #                    hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
-                #             cls='uk-card uk-card-body uk-width-1-2@s uk-overlay', style='position: absolute; top: 60px;'
-                #         ),
-                #         cls='uk-panel', style='position: relative;'
-                #     )
-                # ),
-                # Div(
-                #     Div(
-                #         P(desc),
-                #         P(subdesc),
-                #         cls='uk-card uk-card-body'
-                #     )
-                # ),
-                # data_uk_grid=True,
-                # cls='uk-grid-collapse uk-grid-match'
-            ) for name, img, desc, subdesc in clientele],
-            # data_uk_grid=True
+            ) for name, img, desc, subdesc in clientele]
         ),
         cls='uk-container'
     ),
-    cls='uk-section uk-light', style='background-color: #00213B'
+    cls='uk-section uk-light', style='background-color: #091235'
 )

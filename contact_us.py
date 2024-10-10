@@ -1,16 +1,13 @@
 from fasthtml.components import Button, Div, H3, Span, Br, Hr, P, Form, Input, Textarea
 
-from interface import return_button
-
 page = Div(
     Div(
-        return_button,
         Div(
             Div(
                 Div(
-                    H3(Span('Request', style='color: #45ACFF'), ' an', Br(), 'Appointment', cls='uk-text-bolder'),
-                    Hr(style='height: 0px; border: none; border-top: 2px solid;',
-                       cls='uk-width-small uk-text-primary'),
+                    H3(Span('Request', style='color: #88A9C3'), ' an', Br(), 'Appointment', cls='uk-text-bolder'),
+                    Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;',
+                       cls='uk-width-small'),
                     P('Need help with something? Want a demo? Reach out to our friendly team, and we\'ll get back to you in '
                       'no time.'),
                     Div(
@@ -37,7 +34,7 @@ page = Div(
                         data_uk_grid=True,
                         cls='uk-grid-match uk-child-width-1-2'
                     ),
-                    cls='uk-card uk-card-body'
+                    cls='uk-card uk-card-body uk-light'
                 )
             ),
             Div(
@@ -69,14 +66,15 @@ page = Div(
                         Div('No worries, your info stays with us. We don’t do the oversharing thing.',
                             cls='uk-text-small uk-margin'),
                         Button('Send your message',
-                               cls='uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top')
+                               cls='uk-button uk-button-large uk-width-1-1 uk-margin-top',
+                               style='color: #88A9C3; background-color: #091235')
                     ),
-                    cls='uk-card uk-card-primary uk-card-body'
+                    cls='uk-card uk-card-body uk-card-default'
                 )
             ),
             data_uk_grid=True, cls='uk-child-width-1-2@m'
         ),
         cls='uk-container'
     ),
-    cls='uk-section uk-light', style='background-color: #00213B'
+    cls='uk-section', style='background-color: #091235'
 )

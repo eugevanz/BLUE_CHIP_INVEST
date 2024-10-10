@@ -1,10 +1,7 @@
-from fasthtml.components import Div, H2, Span, Br, P, Button, Hr, H3
-
-from interface import return_button
+from fasthtml.components import Div, H2, Span, Br, P, Button, Hr
 
 page = Div(
     Div(
-        return_button,
         Div(
             Div(
                 Div(
@@ -18,7 +15,7 @@ page = Div(
             Div(
                 Div(
                     H2(
-                        Span('We Help', style='color: #45ACFF'), ' financial', Br(), Span('Advisors that'),
+                        Span('We Help', style='color: #88A9C3'), ' financial', Br(), Span('Advisors that'),
                         Br(), Span('exclusively serve.'),
                         cls='uk-text-bolder'
                     ),
@@ -28,8 +25,8 @@ page = Div(
                       'relationships, allowing them to focus on delivering top-notch financial guidance and '
                       'personalized service.'),
                     Button('Talk to us', cls='uk-button uk-button-large', hx_get='/contact-us/',
-                           hx_target='#page', hx_swap='innerHTML', hx_push_url='true',
-                           style='background-color: white; color: #00213B'),
+                           hx_target='#page', hx_push_url='/advisors/',
+                           style='background-color: #88A9C3; color: #091235'),
                     cls='uk-card-body'
                 )
             ),
@@ -38,8 +35,8 @@ page = Div(
         ),
         Div(
             H2(
-                Span('Meet', style='color: #45ACFF'), Span(' Our Team'),
-                Hr(style='height: 0px; border: none; border-top: 2px solid;', cls='uk-width-small uk-text-primary'),
+                Span('Meet', style='color: #88A9C3'), Span(' Our Team'),
+                Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3', cls='uk-width-small'),
                 cls='uk-text-bolder'
             ),
             cls='uk-card uk-card-body'
@@ -55,7 +52,8 @@ page = Div(
                     ),
                     Div(
                         Div(name, cls='uk-text-large uk-text-bolder'),
-                        Div(pos, cls='uk-text-small uk-text-bolder', style='padding: 8px; background-color: #00213B'),
+                        Div(pos, cls='uk-text-small uk-text-bolder',
+                            style='padding: 8px; background-color: #88A9C3; color: #091235'),
                         cls='uk-card uk-card-small uk-card-body uk-overlay', style='position: absolute; bottom: 0px;'
                     ),
                     style='position: relative; color: white;'
@@ -75,5 +73,5 @@ page = Div(
         ),
         cls='uk-container'
     ),
-    cls='uk-section uk-light', style='background-color: #00213B'
+    cls='uk-section uk-light', style='background-color: #091235'
 )

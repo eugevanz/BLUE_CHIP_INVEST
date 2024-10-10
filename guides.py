@@ -1,7 +1,5 @@
 from fasthtml.components import Div, Img, Canvas, P, H2, Span, Hr, Ul, Li, A, H3
 
-from interface import return_button
-
 items = [
     ('Why don\'t you change as much as other financial planners?',
      'Unlike many financial planners who frequently adjust strategies in response to '
@@ -83,16 +81,15 @@ items = [
 
 page = Div(
     Div(
-        return_button,
         Div(
             H2(
-                Span('Personal', cls='uk-text-primary'),
+                Span('Personal', style='color: #88A9C3'),
                 ' Finance Guides',
-                Hr(style='height: 0px; border: none; border-top: 2px solid;',
-                   cls='uk-width-small uk-text-primary'),
+                Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;',
+                   cls='uk-width-small'),
                 cls='uk-text-bolder'
             ),
-            cls='uk-card uk-card-body'
+            cls='uk-card uk-card-body uk-light'
         ),
         Div(
             Div(
@@ -104,9 +101,9 @@ page = Div(
             Div(
                 Div(
                     H3(
-                        Span('Frequently', cls='uk-text-primary'), Span(' Asked Questions'),
-                        Hr(style='height: 0px; border: none; border-top: 2px solid;',
-                           cls='uk-width-small uk-text-primary'),
+                        Span('Frequently', style='color: #88A9C3;'), Span(' Asked Questions'),
+                        Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;',
+                           cls='uk-width-small'),
                         cls='uk-text-bolder'
                     ),
                     Ul(
@@ -125,7 +122,8 @@ page = Div(
                 )
             ),
             data_uk_grid=True,
-            cls='uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin'
+            cls='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin',
+            style='background-color: #091235'
         ),
         Div(
             *[Div(
@@ -135,7 +133,7 @@ page = Div(
                         Span(question), data_uk_grid=True,
                         cls='uk-child-width-expand@s uk-grid-small uk-flex-middle uk-text-bolder'),
                     P(answer),
-                    cls='uk-card uk-card-default uk-card-body'
+                    cls='uk-card uk-card-body uk-light'
                 )
             ) for question, answer, icon in items[4:]],
             data_uk_grid='masonry: pack',
@@ -143,5 +141,5 @@ page = Div(
         ),
         cls='uk-container'
     ),
-    cls='uk-section'
+    cls='uk-section', style='background-color: #2A3A58'
 )

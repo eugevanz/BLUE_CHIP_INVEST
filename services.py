@@ -1,14 +1,11 @@
 from fasthtml.components import Div, H2, Br, Span, H3, Button, P
 
-from interface import return_button
-
 page = Div(
     Div(
-        return_button,
         Div(
             H2(
-                'Planning objective', Br(), Span('financial advice'),
-                cls='uk-text-bolder'
+                'Planning objective', Br(), Span('financial advice', cls='uk-light'),
+                cls='uk-text-bolder', style='color: white;'
             ),
             cls='uk-card uk-card-body'
         ),
@@ -21,8 +18,10 @@ page = Div(
                     ),
                     Div(
                         H3(title, cls='uk-text-bolder uk-width-1-2', style='color: white;'),
-                        Button('Find Out More', cls='uk-button uk-light', hx_get='/contact-us/', hx_target='#page',
-                               hx_swap='innerHTML', hx_push_url='true', style='background-color: #00213B'),
+                        Button('Find Out More', cls='uk-button uk-text-bolder', hx_get='/contact-us/',
+                               hx_target='#page',
+                               hx_push_url='/services/',
+                               style='background-color: #88A9C3'),
                         cls='uk-padding',
                         style='position: absolute; bottom: 0px;'
                     ),
@@ -30,7 +29,7 @@ page = Div(
                 ),
                 Div(
                     Div(
-                        P(subtitle),
+                        P(subtitle, style='color: white;'),
                         cls='uk-card uk-card-body'
                     )
                 )
@@ -65,5 +64,5 @@ page = Div(
         ),
         cls='uk-container'
     ),
-    cls='uk-section uk-light', style='background-color: #00213B'
+    cls='uk-section', style='background-color: #091235'
 )
