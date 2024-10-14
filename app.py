@@ -4,12 +4,13 @@ from starlette.requests import Request
 
 import admin
 import advisors
+import client_portal
 import contact_us
 import guides
 import home
 import services
 import who_we_serve
-from interface import nav, footer, supabase
+from interface import nav, footer, supabase, supabase_admin
 
 app = FastHTML(
     hdrs=(
@@ -175,7 +176,12 @@ def post(data: dict, req: Request, sess):
             response = supabase.auth.get_user(jwt=sess['access_token'])
 
         if response and response.user:
-            return Title('Admin'), nav(user=response.user, history=req.url.path), admin.page
+            admin_users = ['travis@bluechipinvest.co.za', 'eugevanz@gmail.com', 'raymondanthony.m@gmail.com']
+            print()
+            if response.user.email in admin_users:
+                return Title('Admin'), nav(user=response.user, history=req.url.path), admin.page
+            else:
+                return Title('Client'), nav(user=response.user, history=req.url.path), client_portal.page
         else:
             print(response)
     except Exception as e:
@@ -185,11 +191,8 @@ def post(data: dict, req: Request, sess):
 @app.route('/send-invite/')
 def post(data: dict):
     try:
-        response = supabase.auth.sign_in_with_otp({
-            'email': data['form-invite-name'],
-            'options': {'should_create_user': True}
-        })
-        if response and response.user is None:
+        response = supabase_admin.auth.admin.invite_user_by_email(data['form-invite-name'])
+        if response and response.user:
             return P(f'Invite sent to {data["form-invite-name"]}', cls='uk-text-success uk-text-bolder')
         else:
             return P(f'Error sending invite: response[\'error\'][\'message\']', cls='uk-text-danger uk-text-bolder')

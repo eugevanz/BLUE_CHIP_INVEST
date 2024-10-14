@@ -8,7 +8,9 @@ from supabase import create_client
 
 SUPABASE_URL = environ.get('SUPABASE_URL')
 SUPABASE_KEY = environ.get('SUPABASE_KEY')
+SUPABASE_SERVICE_ROLE_KEY = environ.get('SUPABASE_SERVICE_ROLE_KEY')
 supabase = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_KEY)
+supabase_admin = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_SERVICE_ROLE_KEY)
 session_data = supabase.auth.get_session()
 
 
@@ -122,7 +124,7 @@ def nav(user=None, history='/home/'):
                                 _='on click go back'
                             ) if history not in ['/home/', '/admin/'] else Img(
                                 src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                    '/Blue%20Chip%20Invest%20Logo.001.png',width='60',height='60'
+                                    '/Blue%20Chip%20Invest%20Logo.001.png', width='60', height='60'
                             ),
                             A(
                                 Div('BLUE CHIP INVESTMENTS', aria_label='Back to Home',
