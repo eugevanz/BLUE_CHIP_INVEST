@@ -16,14 +16,14 @@ app = FastHTML(
         Script(src='https://cdn.jsdelivr.net/npm/uikit@3.21.12/dist/js/uikit.min.js'),
         Script(src='https://cdn.jsdelivr.net/npm/uikit@3.21.12/dist/js/uikit-icons.min.js'),
         Script(src='https://unpkg.com/hyperscript.org@0.9.12'),
-        Script(src='https://cdn.plot.ly/plotly-latest.min.js'),
+        Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css'),
         Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/uikit@3.21.12/dist/css/uikit.min.css'),
         Link(rel='preconnect', href='https://fonts.googleapis.com'),
         Link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin=''),
         Link(rel='stylesheet',
-             href='https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,700;0,900;1,'
-                  '700&display=swap'),
-        Style('input::placeholder {color: #091235;}')
+             href='https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'),
+        Style('.charts-css {--color-1: #89CFF0; --color-2: #CD5B45; --color-3: #5F9EA0; --color-4: #FF7F50; '
+              '--color-5: #CCCCFF; margin: 0 auto;} .area td {opacity: 0.5}')
     ), surreal=False, pico=False, secret_key='theraininspain'
 )
 

@@ -163,27 +163,27 @@ page = Div(
         Div(
             Div(
                 Div(
-                    Div('$15B',
+                    Div('R142M',
                         style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
                         cls='uk-heading-small'),
                     Div('Assets Under Management', cls='uk-text-small'),
                     cls='uk-text-center'
                 ),
                 Div(
-                    Div('56', style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
+                    Div('6', style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
                         cls='uk-heading-small'),
                     Div('Office Locations in RSA', cls='uk-text-small'),
                     cls='uk-text-center'
                 ),
                 Div(
-                    Div('1995',
+                    Div('2019',
                         style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
                         cls='uk-heading-small'),
                     Div('Year founded company', cls='uk-text-small'),
                     cls='uk-text-center'
                 ),
                 Div(
-                    Div('2,541',
+                    Div('1,097',
                         style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
                         cls='uk-heading-small'),
                     Div('Clients represented through our firm', cls='uk-text-small'),

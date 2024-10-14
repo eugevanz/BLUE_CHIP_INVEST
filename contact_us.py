@@ -14,7 +14,7 @@ page = Div(
                         Div(
                             Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon'),
                             Div('Location', cls='uk-text-large uk-text-bolder'),
-                            Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small')
+                            Div('Unit 17, No.30 Surprise Road, Pinetown, 3610', cls='uk-text-small')
                         ),
                         Div(
                             Div(data_uk_icon='icon: receiver; ratio: 1.8', cls='uk-icon'),
@@ -24,7 +24,7 @@ page = Div(
                         Div(
                             Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
                             Div('Email', cls='uk-text-large uk-text-bolder'),
-                            Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small')
+                            Div('info@', Br(), 'bluechipinvest.co.za', cls='uk-text-small')
                         ),
                         Div(
                             Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),

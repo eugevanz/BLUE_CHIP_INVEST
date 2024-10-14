@@ -4,7 +4,7 @@ page = Div(
     Div(
         Div(
             H2(
-                'Planning objective', Br(), Span('financial advice', cls='uk-light'),
+                'Planning objective', Br(), Span('financial advice (Services)', cls='uk-light'),
                 cls='uk-text-bolder', style='color: white;'
             ),
             cls='uk-card uk-card-body'

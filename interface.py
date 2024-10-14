@@ -1,12 +1,9 @@
-import base64
 import calendar
 from datetime import datetime
-from io import BytesIO
 from os import environ
 
 from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, Br, P, Input, Strong, \
-    Label
-from matplotlib.figure import Figure
+    Label, Img
 from supabase import create_client
 
 SUPABASE_URL = environ.get('SUPABASE_URL')
@@ -64,33 +61,6 @@ calculator_group4 = [nav_link(href, title) for href, title in [
 ]]
 
 
-def create_graph():
-    # Generate the figure **without using pyplot**.
-    fig = Figure()
-    ax = fig.subplots()
-
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    ax.spines['left'].set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    ax.xaxis.set_tick_params(labelsize=20, labelcolor='white')
-
-    months = ['Jul', 'Aug', 'Sep', 'Oct']
-    counts = [40, 100, 30, 55]
-    bar_labels = ['red', 'blue', '_red', 'orange']
-    bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
-
-    ax.bar(months, counts, label=bar_labels, color=bar_colors)
-    # Save it to a temporary buffer.
-    buf = BytesIO()
-    fig.tight_layout(pad=3.3)
-    fig.savefig(buf, format='png', transparent=True)
-    # Embed the result in the html output.
-    data = base64.b64encode(buf.getbuffer()).decode('ascii')
-    return f'data:image/png;base64,{data}'
-
-
 def calendar_view():
     current_year = datetime.now().year
     current_month = datetime.now().month
@@ -100,15 +70,15 @@ def calendar_view():
     days_list = [''] * first_day_of_month + days_list
 
     days = Div(
-        *[Div(Span(day, cls='uk-text-muted uk-text-small'), style='width: 44px;') for day in
+        *[Div(Span(day, cls='uk-text-muted uk-text-small')) for day in
           ['S', 'M', 'T', 'W', 'T', 'F', 'S']],
-        cls='uk-grid-small uk-child-width-auto uk-text-center', data_uk_grid=True
+        cls='uk-grid-small uk-child-width-expand uk-text-center', data_uk_grid=True
     )
-    dates = Div(
-        *[Div(Span(day, cls='uk-text-bolder'), style='width: 44px;') for day in days_list],
-        cls='uk-grid-small uk-child-width-auto uk-text-center', data_uk_grid=True
-    )
-    return Div(days, dates)
+    weeks = [Div(
+        *[Div(Span(day, cls='uk-text-bolder')) for day in (days_list[i:i + 7] + [''] * (7 - len(days_list[i:i + 7])))],
+        cls='uk-grid-small uk-child-width-expand uk-text-center', data_uk_grid=True
+    ) for i in range(0, len(days_list), 7)]
+    return Div(days, *weeks)
 
 
 def precision_financial_tools():
@@ -150,13 +120,15 @@ def nav(user=None, history='/home/'):
                             A(
                                 href='#', cls='uk-icon-link', data_uk_icon='icon: chevron-left; ratio: 3',
                                 _='on click go back'
-                            ) if history not in ['/home/', '/admin/'] else A(
-                                href='#', cls='uk-icon-link uk-text-middle', data_uk_icon='icon: quote-right; ratio: 3'
+                            ) if history not in ['/home/', '/admin/'] else Img(
+                                src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                    '/Blue%20Chip%20Invest%20Logo.001.png',width='60',height='60'
                             ),
                             A(
-                                Div('Blue Chip Investments', aria_label='Back to Home',
-                                    style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: '
-                                          'normal; line-height: 22px; color: #091235; width: 164px;',
+                                Div('BLUE CHIP INVESTMENTS', aria_label='Back to Home',
+                                    style='font-family: "Noto Sans", sans-serif; font-optical-sizing: auto; '
+                                          'font-weight: 400; font-style: normal; line-height: 22px; color: #091235; '
+                                          'width: 164px;',
                                     cls='uk-link-text', hx_get='/home/',
                                     hx_target='#page')
                             ),
@@ -411,9 +383,10 @@ def footer():
         Div(
             Hr(),
             Div(
-                Div('Blue Chip Investments', aria_label='Back to Home',
-                    style='font-family: "Playfair Display SC", serif; font-weight: 700; font-style: normal;',
-                    cls='uk-heading-small uk-margin-small-bottom uk-width-small', hx_get='/home/',
+                Div('BLUE CHIP INVESTMENTS', aria_label='Back to Home',
+                    style='font-family: "Noto Sans", sans-serif; font-optical-sizing: auto; font-weight: 400; '
+                          'font-style: normal;',
+                    cls='uk-heading-small uk-margin-small-bottom uk-width-medium', hx_get='/home/',
                     hx_target='#page'),
                 Div('Building Your Legacy with Trusted Growth', cls='uk-text-small'),
                 cls='uk-card uk-card-body'
@@ -471,7 +444,7 @@ def footer():
                     Div(
                         Div(data_uk_icon='icon: location; ratio: 1.8', cls='uk-icon', style='color: #88A9C3'),
                         Div('Location', cls='uk-text-large uk-text-bolder uk-light'),
-                        Div('No. 30 Pinetown, Durban 3610', cls='uk-text-small uk-light'),
+                        Div('Unit 17, No.30 Surprise Road, Pinetown, 3610', cls='uk-text-small uk-light'),
                         cls='uk-card uk-card-body'
                     )
                 ),
@@ -487,7 +460,7 @@ def footer():
                     Div(
                         Div(data_uk_icon='icon: mail; ratio: 1.8', cls='uk-icon'),
                         Div('Email', cls='uk-text-large uk-text-bolder'),
-                        Div('admin@', Br(), 'bluechipinvest.co.za', cls='uk-text-small'),
+                        Div('info@', Br(), 'bluechipinvest.co.za', cls='uk-text-small'),
                         cls='uk-card uk-card-body'
                     )
                 ),
