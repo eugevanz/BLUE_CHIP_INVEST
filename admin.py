@@ -4,7 +4,7 @@ from datetime import datetime
 from fasthtml.components import Div, Ul, Li, A, Span, Img, H3, P, Label, Button, Input, H2, Table, Thead, Tr, Th, \
     Caption, Tbody, Td, Br, Hr, Nav
 
-from interface import calendar_view
+from interface import calendar_view, sign_out_button
 
 
 def menu_card():
@@ -74,6 +74,7 @@ def menu_card():
             Li(A('Audit Logs')),
             Li(A('Investment Reporting')),
             Li(A('Admin Support Hub')),
+            sign_out_button(),
             cls='uk-nav uk-nav-default'
         ),
         cls='uk-card uk-card-body uk-card-default', style='background-color: #2A3A58'

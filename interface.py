@@ -87,6 +87,12 @@ def calendar_view():
     return Div(days, *weeks)
 
 
+def sign_out_button():
+    return Li(A(Span(data_uk_icon='icon:  sign-out', cls='uk-margin-small-right'), 'Sign Out',
+                cls='uk-flex uk-flex-middle uk-text-danger uk-margin-top', hx_get='/home/signed-out',
+                hx_target='#page'))
+
+
 def precision_financial_tools():
     return Li(
         A(

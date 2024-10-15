@@ -40,7 +40,7 @@ def user_login(email):
             print(response)
             return 'OTP sent successfully'
         else:
-            return f'Error sending OTP: response[\'error\'][\'message\']'
+            return f'Error sending OTP: {response["error"]["message"]}'
     except Exception as e:
         return f'Authentication error: {e}'
 
@@ -56,14 +56,20 @@ def get():
     )
 
 
-@app.route('/home/')
-def get(req: Request, sess):
-    try:
-        response = supabase.auth.get_user(sess['access_token'])
-        user = response.user
-    except Exception as e:
-        print(f'Authentication error: {e}')
-        user = None
+@app.route('/home/{sign_out}')
+def get(req: Request, sess, sign_out: str = None):
+    user = None
+    if sign_out:
+        response = supabase.auth.sign_out()
+        print(response)
+        if response is None: sess['access_token'] = None
+    else:
+        try:
+            response = supabase.auth.get_user(sess['access_token'])
+            user = response.user
+        except Exception as e:
+            print(f'Authentication error: {e}')
+            user = None
 
     return Title('Blue Chip Invest'), nav(user=user, history=req.url.path), home.page
 
