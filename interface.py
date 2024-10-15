@@ -71,13 +71,17 @@ def calendar_view():
     first_day_of_month = calendar.monthrange(current_year, current_month)[0] + 1
     days_list = [''] * first_day_of_month + days_list
 
+    def highlight_date(day):
+        return 'color: #89CFF0;' if day == datetime.now().day else None
+
     days = Div(
         *[Div(Span(day, cls='uk-text-muted uk-text-small')) for day in
           ['S', 'M', 'T', 'W', 'T', 'F', 'S']],
         cls='uk-grid-small uk-child-width-expand uk-text-center', data_uk_grid=True
     )
     weeks = [Div(
-        *[Div(Span(day, cls='uk-text-bolder')) for day in (days_list[i:i + 7] + [''] * (7 - len(days_list[i:i + 7])))],
+        *[Div(A(day, cls='uk-text-bolder', style=highlight_date(day))) for day in (days_list[i:i + 7] + [''] * (7 - len(
+            days_list[i:i + 7])))],
         cls='uk-grid-small uk-child-width-expand uk-text-center', data_uk_grid=True
     ) for i in range(0, len(days_list), 7)]
     return Div(days, *weeks)

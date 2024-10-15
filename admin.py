@@ -191,6 +191,17 @@ def overview_card():
                 ),
                 cls='uk-margin-medium-top'
             ),
+            A(
+                Div(
+                    Span(data_uk_icon='icon: mail', cls='uk-margin-small-right', style='color: #89CFF0;'),
+                    cls='uk-width-auto'
+                ),
+                Div(
+                    Div('Top 5 Portfolio Holdings: Tech Giants Lead with Apple, Tesla, and Amazon Driving Strong '
+                        'Returns'[:80] + '...', style='color: #89CFF0;',cls='uk-text-bolder')
+                ),
+                data_uk_grid=True, cls='uk-child-width-expand uk-grid-small uk-margin-medium-top uk-text-muted'
+            ),
             cls='uk-card-footer'
         ),
         cls='uk-card uk-card-default uk-light', style='background-color: #172031;'

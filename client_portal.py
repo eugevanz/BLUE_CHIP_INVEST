@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 
 from fasthtml.components import Div, Nav, Ul, Li, A, Span, P, H3, Img, Tr, Td, Tbody, Th, Thead, \
-    Table, H2, Caption
+    Table, H2, Caption, Button
 
 from interface import calendar_view
 
@@ -15,7 +15,7 @@ def menu_card():
                  cls='uk-flex uk-flex-middle')),
             Li(A(Span(data_uk_icon='icon: credit-card', cls='uk-margin-small-right'), 'Transactions',
                  cls='uk-flex uk-flex-middle')),
-            Li(A(Span(data_uk_icon='icon: star', cls='uk-margin-small-right'), 'My Goals',
+            Li(A(Span(data_uk_icon='icon: mail', cls='uk-margin-small-right'), 'Messages',
                  cls='uk-flex uk-flex-middle')),
             Li(A(Span(data_uk_icon='icon: nut', cls='uk-margin-small-right'), 'Investment',
                  cls='uk-flex uk-flex-middle')),
@@ -90,6 +90,17 @@ def overview_card():
                     cls='uk-pagination', data_uk_margin=True
                 ),
                 cls='uk-margin-medium-top'
+            ),
+            A(
+                Div(
+                    Span(data_uk_icon='icon: mail', cls='uk-margin-small-right', style='color: #89CFF0;'),
+                    cls='uk-width-auto'
+                ),
+                Div(
+                    Div('Top 5 Portfolio Holdings: Tech Giants Lead with Apple, Tesla, and Amazon Driving Strong '
+                        'Returns'[:80] + '...', style='color: #89CFF0;',cls='uk-text-bolder')
+                ),
+                data_uk_grid=True, cls='uk-child-width-expand uk-grid-small uk-margin-medium-top uk-text-muted'
             ),
             cls='uk-card-footer'
         ),
@@ -211,7 +222,8 @@ def transactions():
                         ('Company', ('Sent', 'Aug 24 2024'), (1500.00, 1371.81), ('Credit Card', '**** 3560')),
                         ('Revenue', ('Received', 'Aug 24 2024'), (1500.00, 1371.81), ('Bank Transfer', '**** 3560')),
                         ('Bonus', ('Received', 'Aug 24 2024'), (1500.00, 1371.81), ('Credit Card', '**** 3560')),
-                        ('Dog food', ('Sent', 'Aug 24 2024'), (1500.00, 1371.81), ('Bank Transfer', '**** 3560'))
+                        ('Dog food', ('Sent', 'Aug 24 2024'), (1500.00, 1371.81), ('Bank Transfer', '**** 3560')),
+                        ('Company', ('Sent', 'Aug 24 2024'), (1500.00, 1371.81), ('Bank Transfer', '**** 3560'))
                     ]]
                 ),
                 cls='uk-table uk-table-divider'
@@ -250,16 +262,27 @@ def holdings():
         Div(
             Div(
                 Div('Holdings', cls='uk-text-default uk-text-bolder'),
-                Div(
-                    Span(data_uk_icon='icon: table;'),
-                    Span('Filter', cls='uk-margin-small-left'),
-                    cls='uk-text-small uk-flex uk-flex-middle'
-                ),
+                # Div(
+                #     Span(data_uk_icon='icon: table;'),
+                #     Span('Filter', cls='uk-margin-small-left'),
+                #     cls='uk-text-small uk-flex uk-flex-middle'
+                # ),
                 cls='uk-flex uk-flex-between'
             ),
             cls='uk-card-header'
         ),
         Div(
+            Div(
+                Div(
+                    Div('Stocks (Equities)', cls='uk-text-small'),
+                    H2('R8,167,514.57',
+                       cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
+                    Div('Compared to last month ', Span('+24.17%', cls='uk-text-success'),
+                        cls='uk-text-small uk-margin-remove-top')
+                ),
+                Button('View All', style='background-color: #88A9C3; color: #091235', cls='uk-button uk-button-small'),
+                cls='uk-flex uk-flex-between uk-flex-middle'
+            ),
             Div(
                 Div(
                     Table(
@@ -290,9 +313,32 @@ def holdings():
                     )
                 ),
                 data_uk_grid=True,
-                cls='uk-grid-divider uk-child-width-expand uk-grid-match uk-grid-small uk-margin-medium-top'
+                cls='uk-grid-divider uk-child-width-expand@m uk-grid-match uk-grid-small uk-margin-medium-top'
             ),
             cls='uk-card-body'
+        ),
+        Div(
+            Nav(
+                Ul(
+                    Li(
+                        A(
+                            Span(data_uk_pagination_previous=True, cls='uk-margin-small-right'),
+                            'Bonds (Fixed Income Securities)',
+                            href='#'
+                        )
+                    ),
+                    Li(
+                        A(
+                            'Real Estate',
+                            Span(data_uk_pagination_next=True, cls='uk-margin-small-left'),
+                            href='#'
+                        ),
+                        cls='uk-margin-auto-left'
+                    ),
+                    cls='uk-pagination', data_uk_margin=True
+                )
+            ),
+            cls='uk-card-footer'
         ),
         cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
     )
