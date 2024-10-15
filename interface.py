@@ -89,8 +89,8 @@ def calendar_view():
 
 def sign_out_button():
     return Li(A(Span(data_uk_icon='icon:  sign-out', cls='uk-margin-small-right'), 'Sign Out',
-                cls='uk-flex uk-flex-middle uk-text-danger uk-margin-top', hx_get='/home/signed-out',
-                hx_target='#page'))
+                cls='uk-flex uk-flex-middle uk-text-danger uk-margin-top', hx_post='/home/',
+                hx_target='#page',hx_vals='{"sign_out": "signed-out"}'))
 
 
 def precision_financial_tools():

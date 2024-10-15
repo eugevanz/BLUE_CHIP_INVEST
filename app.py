@@ -25,7 +25,7 @@ app = FastHTML(
              href='https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'),
         Style('.charts-css {--color-1: #89CFF0; --color-2: #CD5B45; --color-3: #5F9EA0; --color-4: #FF7F50; '
               '--color-5: #CCCCFF; margin: 0 auto;} .area td {opacity: 0.5;} .column {--aspect-ratio: 4 / 4;} '
-              '.bar {--aspect-ratio: 4 / 1;} .area {--aspect-ratio: 4 / 3;}')
+              '.bar {--aspect-ratio: 4 / 1;} .area {--aspect-ratio: 4 / 3;} .line {--aspect-ratio: 4 / 4;}')
     ), surreal=False, pico=False, secret_key='theraininspain'
 )
 
@@ -56,22 +56,31 @@ def get():
     )
 
 
-@app.route('/home/{sign_out}')
-def get(req: Request, sess, sign_out: str = None):
+@app.route('/home/')
+def get(req: Request, sess):
     user = None
-    if sign_out:
-        response = supabase.auth.sign_out()
-        print(response)
-        if response is None: sess['access_token'] = None
-    else:
-        try:
+    try:
+        if sess['access_token']:
             response = supabase.auth.get_user(sess['access_token'])
             user = response.user
-        except Exception as e:
-            print(f'Authentication error: {e}')
-            user = None
+    except Exception as e:
+        print(f'Authentication error: {e}')
+        user = None
 
     return Title('Blue Chip Invest'), nav(user=user, history=req.url.path), home.page
+
+
+@app.route('/home/')
+def post(sess, data: dict):
+    if data['sign_out'] and data['sign_out'] == 'signed-out':
+        try:
+            response = supabase.auth.sign_out()
+            print(response)
+            if response is None: sess['access_token'] = None
+        except Exception as e:
+            print(f'Signing out error: {e}')
+
+    return Title('Blue Chip Invest'), nav(), home.page
 
 
 @app.route('/who-we-serve/{title}')

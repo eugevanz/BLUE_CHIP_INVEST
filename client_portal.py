@@ -13,10 +13,27 @@ def menu_card():
             Li('Menu', cls='uk-nav-header', style='color: white;'),
             Li(A(Span(data_uk_icon='icon: home', cls='uk-margin-small-right'), 'Dashboard',
                  cls='uk-flex uk-flex-middle')),
-            Li(A(Span(data_uk_icon='icon: credit-card', cls='uk-margin-small-right'), 'Transactions',
-                 cls='uk-flex uk-flex-middle')),
-            Li(A(Span(data_uk_icon='icon: mail', cls='uk-margin-small-right'), 'Messages',
-                 cls='uk-flex uk-flex-middle')),
+            Li(
+                A(
+                    Span(data_uk_icon='icon: credit-card', cls='uk-margin-small-right'), 'Transactions',
+                    cls='uk-flex uk-flex-middle',
+                    _='on click js const element = document.getElementById("transactions"); if (element) { '
+                      'window.scrollTo({top: element.offsetTop - 96, behavior: "smooth"}); }'
+                )
+            ),
+            Li(
+                A(Span(data_uk_icon='icon: mail', cls='uk-margin-small-right'), 'Messages',
+                  cls='uk-flex uk-flex-middle'),
+                Div(
+                    Ul(
+                        Li('List item 1'),
+                        Li('List item 2'),
+                        Li('List item 3'),
+                        cls='uk-list uk-list-divider'
+                    ),
+                    data_uk_drop='mode: click', cls='uk-card uk-card-body uk-card-default'),
+                cls='uk-inline'
+            ),
             Li(A(Span(data_uk_icon='icon: nut', cls='uk-margin-small-right'), 'Investment',
                  cls='uk-flex uk-flex-middle')),
             Li(A(Span(data_uk_icon='icon: file-text', cls='uk-margin-small-right'), 'Bills and Payment',
@@ -104,7 +121,7 @@ def overview_card():
                 ),
                 Div(
                     Div('Top 5 Portfolio Holdings: Tech Giants Lead with Apple, Tesla, and Amazon Driving Strong '
-                        'Returns'[:80] + '...', style='color: #89CFF0;',cls='uk-text-bolder')
+                        'Returns'[:80] + '...', style='color: #89CFF0;', cls='uk-text-bolder')
                 ),
                 data_uk_grid=True, cls='uk-child-width-expand uk-grid-small uk-margin-medium-top uk-text-muted'
             ),
@@ -164,14 +181,17 @@ def portfolio_value_card():
                                 dict(month='Oct', data=[random.randint(1, 142), random.randint(1, 142)])
                             ]]
                         ),
-                        cls='charts-css column multiple show-data-on-hover show-3-secondary-axes data-spacing-10'
+                        cls='charts-css column multiple show-data-on-hover show-3-secondary-axes data-spacing-10 '
+                            'show-labels',
+                        style='--aspect-ratio: 4 / 2;'
                     )
                 ),
-                data_uk_grid=True, cls='uk-grid-divider uk-child-width-expand uk-grid-match uk-grid-small '
-                                       'uk-margin-medium-top'
+                data_uk_grid=True,
+                cls='uk-grid-divider uk-child-width-expand uk-grid-match uk-grid-small uk-margin-medium-top'
             ),
-            Div(Div('Jul'), Div('Aug'), Div('Sep'), Div('Oct'),
-                cls='uk-flex uk-flex-around uk-text-bolder uk-text-small uk-margin-small', style='padding-left: 54px;'),
+            # Div(Div('Jul'), Div('Aug'), Div('Sep'), Div('Oct'),
+            #     cls='uk-flex uk-flex-around uk-text-bolder uk-text-small uk-margin-small uk-width-large',
+            #     style='padding-left: 54px; padding-right: 128px;'),
             cls='uk-card-body'
         ),
         Div(
@@ -259,7 +279,7 @@ def transactions():
             ),
             cls='uk-card-footer'
         ),
-        cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
+        cls='uk-card uk-card-default uk-light', style='background-color: #172031;', id='transactions'
     )
 
 
