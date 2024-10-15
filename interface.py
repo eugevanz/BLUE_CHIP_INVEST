@@ -72,7 +72,7 @@ def calendar_view():
     days_list = [''] * first_day_of_month + days_list
 
     def highlight_date(day):
-        return 'color: #89CFF0;' if day == datetime.now().day else None
+        return 'color: #CD5B45;' if day == datetime.now().day else None
 
     days = Div(
         *[Div(Span(day, cls='uk-text-muted uk-text-small')) for day in

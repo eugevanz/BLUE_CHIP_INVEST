@@ -7,76 +7,6 @@ from fasthtml.components import Div, Ul, Li, A, Span, Img, H3, P, Label, Button,
 from interface import calendar_view
 
 
-def portfolio_value_card():
-    return Div(
-        Div(
-            Div(
-                Div('Portfolio Value', cls='uk-text-default uk-text-bolder'),
-                A('US Dollar', Span(data_uk_drop_parent_icon=True), cls='uk-link-muted uk-text-small'),
-                Div(
-                    Ul(
-                        Li(A('US Dollar', cls='uk-link-muted uk-text-small')),
-                        Li(A('ZA Rand', cls='uk-link-muted uk-text-small')),
-                        Li(A('EURO', cls='uk-link-muted uk-text-small')),
-                        Li(A('British Pound', cls='uk-link-muted uk-text-small')),
-                        cls='uk-list uk-list-divider'
-                    ),
-                    cls='uk-card uk-card-body', style='background-color: #2A3A58;', data_uk_dropdown=True
-                ),
-                cls='uk-flex uk-flex-between'
-            ),
-            cls='uk-card-header'
-        ),
-        Div(
-            Div('Balance', cls='uk-text-small'),
-            H2('R8,167,514.57', cls='uk-text-bolder uk-margin-remove-top uk-text-truncate'),
-            Div('Compared to last month ', Span('+24.17%', cls='uk-text-success'), cls='uk-text-small'),
-            cls='uk-card-body'
-        ),
-        Div(
-            Ul(
-                *[Li(title, Span(amount, cls='uk-text-bolder uk-margin-small-left'))
-                  for title, amount in [('Income', '$31,885'), ('Expenses', '$8,994')]],
-                cls='charts-css legend legend-inline legend-square uk-margin-bottom', style='border: 0'
-            ),
-            Div(
-                Div(
-                    Div(Div('142M'), Div('71M', cls='uk-margin-auto-vertical'), Div('0M'),
-                        cls='uk-flex uk-flex-column uk-flex-between uk-text-bolder', style='font-size: 8px;'),
-                    cls='uk-width-auto'
-                ),
-                Div(
-                    Table(
-                        Caption('2024 Revenue Table'),
-                        Thead(
-                            Tr(
-                                *[Th(title, scope='col') for title in ['Month', 'Income', 'Expenses']]
-                            )
-                        ),
-                        Tbody(
-                            *[Tr(
-                                Th(x['month'], scope='row'),
-                                *[Td(style=f'--size: 0.{amount * 2}') for amount in x['data']]
-                            ) for x in [
-                                dict(month='Jul', data=[random.randint(1, 142), random.randint(1, 142)]),
-                                dict(month='Aug', data=[random.randint(1, 142), random.randint(1, 142)]),
-                                dict(month='Sep', data=[random.randint(1, 142), random.randint(1, 142)]),
-                                dict(month='Oct', data=[random.randint(1, 142), random.randint(1, 142)])
-                            ]]
-                        ),
-                        cls='charts-css column multiple show-data-on-hover show-3-secondary-axes data-spacing-10'
-                    )
-                ),
-                data_uk_grid=True, cls='uk-grid-divider uk-child-width-expand uk-grid-match uk-grid-small'
-            ),
-            Div(Div('Jul'), Div('Aug'), Div('Sep'), Div('Oct'),
-                cls='uk-flex uk-flex-around uk-text-bolder uk-text-small uk-margin-small', style='padding-left: 54px;'),
-            cls='uk-card-footer'
-        ),
-        cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
-    )
-
-
 def menu_card():
     return Div(
         Ul(
@@ -140,6 +70,10 @@ def menu_card():
                 ),
                 cls='uk-inline'
             ),
+            Li(A('Client Management')),
+            Li(A('Audit Logs')),
+            Li(A('Investment Reporting')),
+            Li(A('Admin Support Hub')),
             cls='uk-nav uk-nav-default'
         ),
         cls='uk-card uk-card-body uk-card-default', style='background-color: #2A3A58'
@@ -198,10 +132,81 @@ def overview_card():
                 ),
                 Div(
                     Div('Top 5 Portfolio Holdings: Tech Giants Lead with Apple, Tesla, and Amazon Driving Strong '
-                        'Returns'[:80] + '...', style='color: #89CFF0;',cls='uk-text-bolder')
+                        'Returns'[:80] + '...', style='color: #89CFF0;', cls='uk-text-bolder')
                 ),
                 data_uk_grid=True, cls='uk-child-width-expand uk-grid-small uk-margin-medium-top uk-text-muted'
             ),
+            cls='uk-card-footer'
+        ),
+        cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
+    )
+
+
+def portfolio_value_card():
+    return Div(
+        Div(
+            Div(
+                Div('Portfolio Value', cls='uk-text-default uk-text-bolder'),
+                A('US Dollar', Span(data_uk_drop_parent_icon=True), cls='uk-link-muted uk-text-small'),
+                Div(
+                    Ul(
+                        Li(A('US Dollar', cls='uk-link-muted uk-text-small')),
+                        Li(A('ZA Rand', cls='uk-link-muted uk-text-small')),
+                        Li(A('EURO', cls='uk-link-muted uk-text-small')),
+                        Li(A('British Pound', cls='uk-link-muted uk-text-small')),
+                        cls='uk-list uk-list-divider'
+                    ),
+                    cls='uk-card uk-card-body', style='background-color: #2A3A58;', data_uk_dropdown=True
+                ),
+                cls='uk-flex uk-flex-between'
+            ),
+            cls='uk-card-header'
+        ),
+        Div(
+            Div('Balance', cls='uk-text-small'),
+            H2('R8,167,514.57', cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
+            Div('Compared to last month ', Span('+24.17%', cls='uk-text-success'),
+                cls='uk-text-small uk-margin-remove-top'),
+            cls='uk-card-body'
+        ),
+        Div(
+            Ul(
+                *[Li(title, Span(amount, cls='uk-text-bolder uk-margin-small-left'))
+                  for title, amount in [('Income', '$31,885'), ('Expenses', '$8,994')]],
+                cls='charts-css legend legend-inline legend-square uk-margin-bottom', style='border: 0'
+            ),
+            Div(
+                Div(
+                    Div(Div('142M'), Div('71M', cls='uk-margin-auto-vertical'), Div('0M'),
+                        cls='uk-flex uk-flex-column uk-flex-between uk-text-bolder', style='font-size: 8px;'),
+                    cls='uk-width-auto'
+                ),
+                Div(
+                    Table(
+                        Caption('2024 Revenue Table'),
+                        Thead(
+                            Tr(
+                                *[Th(title, scope='col') for title in ['Month', 'Income', 'Expenses']]
+                            )
+                        ),
+                        Tbody(
+                            *[Tr(
+                                Th(x['month'], scope='row'),
+                                *[Td(style=f'--size: 0.{amount * 2}') for amount in x['data']]
+                            ) for x in [
+                                dict(month='Jul', data=[random.randint(1, 142), random.randint(1, 142)]),
+                                dict(month='Aug', data=[random.randint(1, 142), random.randint(1, 142)]),
+                                dict(month='Sep', data=[random.randint(1, 142), random.randint(1, 142)]),
+                                dict(month='Oct', data=[random.randint(1, 142), random.randint(1, 142)])
+                            ]]
+                        ),
+                        cls='charts-css column multiple show-data-on-hover show-3-secondary-axes data-spacing-10'
+                    )
+                ),
+                data_uk_grid=True, cls='uk-grid-divider uk-child-width-expand uk-grid-match uk-grid-small'
+            ),
+            Div(Div('Jul'), Div('Aug'), Div('Sep'), Div('Oct'),
+                cls='uk-flex uk-flex-around uk-text-bolder uk-text-small uk-margin-small', style='padding-left: 54px;'),
             cls='uk-card-footer'
         ),
         cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
@@ -278,6 +283,24 @@ def performance_summary_card():
         Div(
             Div(
                 Div(
+                    Div('Top Performer: Stocks (Equities)', cls='uk-text-small'),
+                    H2('R8,167,514.57',
+                       cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
+                    Div('Compared to last month ', Span('+24.17%', cls='uk-text-success'),
+                        cls='uk-text-small uk-margin-remove-top')
+                ),
+                Button('View All', style='background-color: #88A9C3; color: #091235', cls='uk-button uk-button-small'),
+                cls='uk-flex uk-flex-between uk-flex-middle'
+            ),
+            Ul(
+                *[Li(title) for title in [
+                    'Stocks (Equities)', 'Bonds (Fixed Income Securities)', 'Real Estate', 'Commodities',
+                    'Cash and Cash Equivalents'
+                ]],
+                cls='charts-css legend legend-inline legend-square uk-margin', style='border: 0'
+            ),
+            Div(
+                Div(
                     Div(Div('142M'), Div('71M', cls='uk-margin-auto-vertical'), Div('0M'),
                         cls='uk-flex uk-flex-column uk-flex-between uk-text-bolder', style='font-size: 8px;'),
                     cls='uk-width-auto'
@@ -310,16 +333,6 @@ def performance_summary_card():
             Div(Div('Jul'), Div('Aug'), Div('Sep'), Div('Oct'),
                 cls='uk-flex uk-flex-between uk-text-bolder uk-text-small uk-margin', style='padding-left: 54px;'),
             cls='uk-card-body'
-        ),
-        Div(
-            Ul(
-                *[Li(title) for title in [
-                    'Stocks (Equities)', 'Bonds (Fixed Income Securities)', 'Real Estate', 'Commodities',
-                    'Cash and Cash Equivalents'
-                ]],
-                cls='charts-css legend legend-inline legend-square', style='border: 0'
-            ),
-            cls='uk-card-footer'
         ),
         cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
     )
@@ -374,6 +387,7 @@ def client_insights_card():
                         ('Kaelan Virell', 'April 01, 2016', '-7.89%'),
                         ('Seraphine Marlowe', 'December 23, 2019', '+5.67%'),
                         ('Tyren Galwick', 'June 07, 2014', '-19.45%'),
+                        ('Elira Quinlan', 'February 28, 2021', '+8.22%'),
                         ('Elira Quinlan', 'February 28, 2021', '+8.22%')
                     ]]
                 ),

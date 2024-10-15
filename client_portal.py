@@ -40,6 +40,11 @@ def menu_card():
             ),
             Li(cls='uk-nav-divider uk-margin'),
             Li('Support', cls='uk-nav-header', style='color: white;'),
+            Li(A('Contact Support')),
+            Li(A('FAQs')),
+            Li(A('Account Help')),
+            Li(A('Investment FAQs')),
+            Li(A('Service Status')),
             cls='uk-nav uk-nav-default'
         ),
         cls='uk-card uk-card-body uk-card-default', style='background-color: #2A3A58'
