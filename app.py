@@ -23,7 +23,7 @@ app = FastHTML(
         Link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin=''),
         Link(rel='stylesheet',
              href='https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'),
-        Style('.charts-css {--color-1: #89CFF0; --color-2: #CD5B45; --color-3: #5F9EA0; --color-4: #FF7F50; '
+        Style('.charts-css {--color-1: #88A9C3; --color-2: #CD5B45; --color-3: #5F9EA0; --color-4: #FF7F50; '
               '--color-5: #CCCCFF; margin: 0 auto;} .area td {opacity: 0.5;} .column {--aspect-ratio: 4 / 4;} '
               '.bar {--aspect-ratio: 4 / 1;} .area {--aspect-ratio: 4 / 3;} .line {--aspect-ratio: 4 / 4;}')
     ), surreal=False, pico=False, secret_key='theraininspain'
