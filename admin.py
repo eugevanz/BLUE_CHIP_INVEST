@@ -5,6 +5,7 @@ from fasthtml.components import Div, Ul, Li, A, Span, Img, H3, P, Label, Button,
     Caption, Tbody, Td, Br, Hr, Nav
 
 from interface import calendar_view, sign_out_button
+from utility_functions import get_clients
 
 
 def menu_card():
@@ -427,7 +428,7 @@ page = Div(
     Div(
         Div(menu_card()), Div(overview_card()), Div(portfolio_value_card()),
         Div(assets_card()), Div(performance_summary_card(), cls='uk-width-1-2@m'),
-        Div(client_insights_card(), cls='uk-width-1-2@m'),
+        Div(client_insights_card(), cls='uk-width-1-2@m'),Div(get_clients()),
         data_uk_grid=True, cls='uk-padding uk-child-width-1-4@m uk-grid-small uk-grid-match uk-flex-right'
     ),
     style='background-color: #091235'
