@@ -63,6 +63,14 @@ calculator_group4 = [nav_link(href, title) for href, title in [
 ]]
 
 
+def add_save_button():
+    return Div(
+        A(href='', data_uk_icon='icon: plus', cls='uk-icon-button'),
+        Button('Save', cls='uk-button uk-button-small uk-text-bolder uk-button-secondary'),
+        cls='uk-margin-medium-top uk-flex uk-flex-between'
+    )
+
+
 def calendar_view():
     current_year = datetime.now().year
     current_month = datetime.now().month

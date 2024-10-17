@@ -2,10 +2,13 @@ import random
 from datetime import datetime
 
 from fasthtml.components import Div, Ul, Li, A, Span, Img, H3, P, Label, Button, Input, H2, Table, Thead, Tr, Th, \
-    Caption, Tbody, Td, Br, Hr, Nav
+    Caption, Tbody, Td, Br, Hr, Nav, H1, Form, Select, Option
 
-from interface import calendar_view, sign_out_button
-from utility_functions import get_clients
+from interface import calendar_view, sign_out_button, add_save_button
+from utility_functions import get_clients, get_profile_picture_url, get_profile_first_name, get_profile_last_name, \
+    get_account_updated_at, \
+    get_account_balance, get_portfolio_performance_return_on_investment, get_profile_client_id, \
+    get_profile_client_email, get_account_account_type, get_profile_created_at
 
 
 def menu_card():
@@ -52,7 +55,7 @@ def menu_card():
                         Label('Email', cls='uk-form-label'),
                         Div(
                             Span(cls='uk-form-icon', data_uk_icon='icon: mail'),
-                            Input(cls='uk-input', type='email',
+                            Input(cls='uk-input uk-form-blank', type='email',
                                   aria_label='form-invite-name', name='form-invite-name'),
                             cls='uk-inline'
                         ),
@@ -340,6 +343,192 @@ def performance_summary_card():
     )
 
 
+def client_modal(client):
+    account_type = get_account_account_type(client)
+    account_options = [
+        'Savings Account', 'Investment Account', 'Retirement Account',
+        'Brokerage Account', 'Trust Account', 'Custodial Account',
+        'Taxable Account', 'Tax-Deferred Account', 'Tax-Exempt Account',
+        'Money Market Account', 'Certificate of Deposit (CD) Account',
+        'Mutual Fund Account', 'Pension Account',
+        'Self-Directed Investment Account', 'High-Yield Savings Account',
+        'Fixed-Income Account', 'Annuity Account', 'Forex Trading Account',
+        'Commodities Trading Account'
+    ]
+    if account_type not in account_options: account_options.insert(0, account_type)
+
+    def slider_item_account():
+        return Div(
+            Div(
+                Div(
+                    Div(
+                        A(href='', data_uk_icon='icon: pencil; ratio: 1.5;', cls='uk-invisible-hover'),
+                        data_src=get_profile_picture_url(client),
+                        data_uk_img=True, style='width: 200px; height: 200px;',
+                        cls='uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light '
+                            'uk-border-circle uk-visible-toggle'
+                    ),
+                    cls='uk-width-auto'
+                ),
+                Div(
+                    Div(get_profile_client_email(client), cls='uk-text-small', style='margin-left: 14px;'),
+                    H1(
+                        Input(type='text', placeholder=get_profile_first_name(client),
+                              aria_label=get_profile_first_name(client),
+                              cls='uk-input uk-form-blank uk-text-bolder', style='height: 54px;'),
+                        Input(type='text', placeholder=get_profile_last_name(client),
+                              aria_label=get_profile_last_name(client),
+                              cls='uk-input uk-form-blank', style='height: 54px;'),
+                        cls='uk-margin-remove-top uk-margin-remove-bottom'
+                    ),
+                    Div(f'Member since {get_profile_created_at(client)}', cls='uk-text-small', style='margin-left: '
+                                                                                                     '14px;')
+                ),
+                data_uk_grid=True,
+                cls='uk-grid-divider uk-child-width-expand@m'
+            ),
+            # Div(
+            #     Label('Home Address', cls='uk-form-label'),
+            #     Textarea(placeholder=get_address(client), aria_label=get_address(client),
+            #              cls='uk-textarea uk-form-blank',
+            #              _='on input set my height to "auto" then set my height to my scrollHeight + "px"'),
+            #     cls='uk-margin'
+            # ),
+            Div(
+                Div(
+                    Div('Account Balance', cls='uk-text-small'),
+                    H2(f'R {get_account_balance(client)}',
+                       cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
+                    Div('Compared to last month ',
+                        Span(f'{get_portfolio_performance_return_on_investment(client)}%', cls='uk-text-success'),
+                        cls='uk-text-small uk-margin-remove-top'),
+                    cls='uk-margin'
+                ),
+                Div(
+                    Div(
+                        Div(
+                            Div('Account Type', cls='uk-text-small'),
+                            H3(
+                                Select(
+                                    *[Option(title) for title in account_options],
+                                    aria_label='Custom controls',
+                                    cls='uk-select uk-text-center'
+                                ),
+                                Span(
+                                    Span(),
+                                    Span(data_uk_icon='icon: pencil')
+                                ),
+                                cls='uk-text-bolder uk-margin-remove-top',
+                                data_uk_form_custom='target: > * > span:first-child'
+                            ),
+                            cls='uk-card uk-card-body', style='background-color: #88A9C3;'
+                        )
+                    ),
+                    Div(
+                        Div(
+                            Div('Last Updated', cls='uk-text-small'),
+                            H3(get_account_updated_at(client),
+                               cls='uk-text-bolder uk-margin-remove-top uk-text-truncate'),
+                            cls='uk-card uk-card-body', style='background-color: #88A9C3;'
+                        )
+                    ),
+                    data_uk_grid=True,
+                    cls='uk-child-width-1-2@m uk-grid-match uk-margin'
+                ),
+                cls='uk-card uk-card-body uk-card-default uk-margin'
+            ),
+            add_save_button()
+        )
+
+    def slider_item_investments():
+        return Div(
+            Div(
+                Div(
+                    Div('Investment Amount', cls='uk-text-small'),
+                    H2(f'R {get_account_balance(client)}',
+                       cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
+                    Div('Compared to last month ',
+                        Span(f'{get_portfolio_performance_return_on_investment(client)}%', cls='uk-text-success'),
+                        cls='uk-text-small uk-margin-remove-top'),
+                    cls='uk-margin'
+                ),
+                *[Div(
+                    Div(
+                        Div(
+                            Div('Investment Type', cls='uk-text-small'),
+                            H3(
+                                Select(
+                                    *[Option(title) for title in account_options],
+                                    aria_label='Custom controls',
+                                    cls='uk-select uk-text-center'
+                                ),
+                                Span(
+                                    Span(),
+                                    Span(data_uk_icon='icon: pencil')
+                                ),
+                                cls='uk-text-bolder uk-margin-remove-top',
+                                data_uk_form_custom='target: > * > span:first-child'
+                            ),
+                            cls='uk-card uk-card-body', style='background-color: #88A9C3;'
+                        )
+                    ),
+                    Div(
+                        Div(
+                            Div('Last Updated', cls='uk-text-small'),
+                            H3(get_account_updated_at(client),
+                               cls='uk-text-bolder uk-margin-remove-top uk-text-truncate'),
+                            cls='uk-card uk-card-body', style='background-color: #88A9C3;'
+                        )
+                    ),
+                    data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider uk-grid-match uk-margin',
+                    style='background-color: #88A9C3;'
+                ) for _ in range(3)],
+                cls='uk-card uk-card-body uk-card-default uk-margin'
+            ),
+            add_save_button()
+        )
+
+    return Form(
+        Div(
+            Button(type='button', data_uk_close=True, cls='uk-modal-close-full uk-close-large'),
+            Div(
+                Div(style='background-image: url('
+                          'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/marten'
+                          '-bjork-6dW3xyQvcYE-unsplash_6_11zon.webp);',
+                    data_uk_height_viewport=True,
+                    cls='uk-background-cover uk-visible@m'),
+                Div(
+                    Ul(
+                        *[Li(A(title, href='#')) for title in [
+                            'Account', 'Investments', 'Transactions', 'Portfolio Performance', 'Client Goals',
+                            'Dividends/Payouts', 'Advisors', 'Investment Products'
+                        ]],
+                        data_uk_tab='animation: uk-animation-slide-left-medium, uk-animation-slide-right-medium',
+                        cls='uk-margin-large-bottom'
+                    ),
+
+                    Div(
+                        slider_item_account(),
+                        slider_item_investments(),
+                        slider_item_account(),
+                        slider_item_account(),
+                        slider_item_account(),
+                        slider_item_account(),
+                        slider_item_account(),
+                        slider_item_account(),
+                        cls='uk-switcher uk-margin'
+                    ),
+                    cls='uk-padding-large'
+                ),
+                data_uk_grid=True,
+                cls='uk-grid-collapse uk-child-width-1-2@m'
+            ),
+            cls='uk-modal-dialog'
+        ),
+        id=f'modal-{get_profile_client_id(client)}', data_uk_modal=True, cls='uk-modal-full'
+    )
+
+
 def client_insights_card():
     return Div(
         Div(
@@ -355,45 +544,41 @@ def client_insights_card():
             cls='uk-card-header'
         ),
         Div(
-            Table(
-                Thead(
-                    Tr(
-                        Th('Client List'), Th('')
-                    )
-                ),
-                Tbody(
-                    *[Tr(
-                        Td(
+            Ul(
+                *[Li(
+                    A(
+                        Div(
                             Div(
-                                Img(cls='uk-border-circle', width='44', height='44',
-                                    src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                        '/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp', alt='profile-pic'),
+                                Img(cls='uk-border-circle', width='48', height='48',
+                                    src=get_profile_picture_url(client),
+                                    alt='profile-pic'),
                                 cls='uk-width-auto'
                             ),
                             Div(
-                                H3(title, cls='uk-card-title uk-margin-remove-bottom', style='color: white;'),
+                                H3(Span(get_profile_first_name(client), cls='uk-text-bolder'), Span(' '),
+                                   get_profile_last_name(client), cls='uk-card-title uk-margin-remove-bottom',
+                                   style='color:white;'),
+                                Div(get_profile_client_email(client), style='font-size: 11px;'),
                                 P('Last active',
-                                  Span(date, cls='uk-text-default uk-text-bolder uk-margin-small-left'),
+                                  Span(get_account_updated_at(client),
+                                       cls='uk-text-default uk-text-bolder uk-margin-small-left'),
                                   cls='uk-text-meta uk-margin-remove-top'),
                                 cls='uk-width-expand'
                             ),
                             cls='uk-grid-small uk-flex-middle', data_uk_grid=True
                         ),
-                        Td(
-                            Div('R45,000', cls='uk-text-lead uk-text-bolder'),
-                            Span(rate, cls='uk-text-bolder uk-text-small uk-border-pill',
-                                 style=f'background-color: #{"5F9EA0" if rate[0] == "+" else "CD5B45"}; padding: 3px;')
-                        )
-                    ) for title, date, rate in [
-                        ('Lira Dovell', 'August 15, 2012', '+12.34%'),
-                        ('Kaelan Virell', 'April 01, 2016', '-7.89%'),
-                        ('Seraphine Marlowe', 'December 23, 2019', '+5.67%'),
-                        ('Tyren Galwick', 'June 07, 2014', '-19.45%'),
-                        ('Elira Quinlan', 'February 28, 2021', '+8.22%'),
-                        ('Elira Quinlan', 'February 28, 2021', '+8.22%')
-                    ]]
-                ),
-                cls='uk-table uk-table-hover uk-table-divider'
+                        Div(
+                            Div(get_account_balance(client), cls='uk-text-lead uk-text-bolder'),
+                            Span(get_portfolio_performance_return_on_investment(client),
+                                 cls='uk-text-bolder uk-text-small uk-border-pill',
+                                 style=f'background-color: #5F9EA0; padding: 3px;')
+                        ),
+                        href=f'#modal-{get_profile_client_id(client)}', data_uk_toggle=True,
+                        cls='uk-flex uk-flex-between uk-link-toggle'
+                    ),
+                    client_modal(client)
+                ) for client in get_clients()],
+                cls='uk-list uk-list-divider'
             ),
             cls='uk-card-body'
         ),
@@ -428,7 +613,7 @@ page = Div(
     Div(
         Div(menu_card()), Div(overview_card()), Div(portfolio_value_card()),
         Div(assets_card()), Div(performance_summary_card(), cls='uk-width-1-2@m'),
-        Div(client_insights_card(), cls='uk-width-1-2@m'),Div(get_clients()),
+        Div(client_insights_card(), cls='uk-width-1-2@m'),
         data_uk_grid=True, cls='uk-padding uk-child-width-1-4@m uk-grid-small uk-grid-match uk-flex-right'
     ),
     style='background-color: #091235'

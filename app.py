@@ -11,6 +11,7 @@ import home
 import services
 import who_we_serve
 from interface import nav, footer, supabase, supabase_admin
+from utility_functions import get_clients
 
 app = FastHTML(
     hdrs=(
@@ -45,9 +46,6 @@ def user_login(email):
         return f'Authentication error: {e}'
 
 
-history = False
-
-
 @app.route('/')
 def get():
     return Body(
@@ -58,6 +56,7 @@ def get():
 
 @app.route('/home/')
 def get(req: Request, sess):
+    get_clients()
     user = None
     try:
         if sess['access_token']:
