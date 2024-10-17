@@ -140,7 +140,7 @@ def nav(user=None, history='/home/'):
                             A(
                                 href='#', cls='uk-icon-link', data_uk_icon='icon: chevron-left; ratio: 3',
                                 _='on click go back'
-                            ) if history not in ['/home/', '/admin/'] else Img(
+                            ) if history not in ['/home/'] else Img(
                                 src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
                                     '/Blue%20Chip%20Invest%20Logo.001.png', width='60', height='60'
                             ),

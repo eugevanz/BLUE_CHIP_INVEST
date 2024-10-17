@@ -4,6 +4,7 @@ from starlette.requests import Request
 
 import admin
 import advisors
+import client_edit
 import client_portal
 import contact_us
 import guides
@@ -11,7 +12,7 @@ import home
 import services
 import who_we_serve
 from interface import nav, footer, supabase, supabase_admin
-from utility_functions import get_clients
+from utility_functions import get_clients, get_client
 
 app = FastHTML(
     hdrs=(
@@ -214,5 +215,15 @@ def post(data: dict):
     except Exception as e:
         return P(f'Invitation error: {e}', cls='uk-text-danger uk-text-bolder')
 
+@app.route('/edit-client/{id}')
+def get(id:str, req: Request, sess):
+    try:
+        response = supabase.auth.get_user(sess['access_token'])
+        user = response.user
+    except Exception as e:
+        print(f'Authentication error: {e}')
+        user = None
 
+    client = get_client(id)
+    return Title('Who We Serve'), nav(user=user, history=req.url.path), client_edit.page(client)
 serve()
