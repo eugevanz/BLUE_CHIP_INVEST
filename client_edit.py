@@ -4,11 +4,11 @@ from fasthtml.components import Form, Div, Ul, Li, A, H1, Input, H2, Span, H3, S
 
 from interface import add_save_button
 from utility_functions import get_profile_picture_url, get_profile_email, get_profile_first_name, get_profile_last_name, \
-    get_profile_created_at, get_investments_from_data
+    get_profile_created_at, get_investments_from_data, get_accounts_from_data
 
 
 def slider_item_account(client: dict, account_options: list):
-    account_balance=np.sum()
+    account_balance=np.sum([account.get('balance', 0) for account in get_accounts_from_data(client)])
     return Div(
         Div(
             Div(
@@ -43,11 +43,8 @@ def slider_item_account(client: dict, account_options: list):
         Div(
             Div(
                 Div('Account Balance', cls='uk-text-small'),
-                H2(f'R {get_accounts_from_data(client)}',
+                H2(f'R {account_balance}',
                    cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
-                Div('Compared to last month ',
-                    Span(f'{get_portfolio_performance_return_on_investment(client)}%', cls='uk-text-success'),
-                    cls='uk-text-small uk-margin-remove-top'),
                 cls='uk-margin'
             ),
             Div(

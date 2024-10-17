@@ -2,3 +2,4 @@ python-fasthtml
 supabase~=2.8.1
 matplotlib
 uvicorn
+numpy
