@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from fasthtml.common import FastHTML, serve
-from fasthtml.components import Script, Link, Body, Div, Title, Label, Span, Input, P, Button, Style, Strong
+from fasthtml.components import Script, Link, Body, Div, Title, Label, Span, Input, P, Button, Style, Strong, H4
 from starlette.requests import Request
 
 import admin
@@ -51,7 +53,7 @@ def user_login(email):
 def get():
     return Body(
         Div(id='page'), footer(),
-        hx_get='/home/', hx_trigger='load', hx_target='#page', hx_push_url=True
+        hx_get='/home/', hx_trigger='load', hx_target='#page', hx_push_url=True, id='super-page'
     )
 
 
@@ -67,7 +69,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Blue Chip Invest'), nav(user=user, history=req.url.path), home.page
+    return Title('Blue Chip Invest'), nav(user=user, current_path=req.url.path), home.page
 
 
 @app.route('/home/')
@@ -92,7 +94,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Who We Serve'), nav(user=user, history=req.url.path), who_we_serve.page
+    return Title('Who We Serve'), nav(user=user, current_path=req.url.path), who_we_serve.page
 
 
 @app.route('/contact-us/')
@@ -104,7 +106,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Contact Us'), nav(user=user, history=req.url.path), contact_us.page
+    return Title('Contact Us'), nav(user=user, current_path=req.url.path), contact_us.page
 
 
 @app.route('/services/')
@@ -116,7 +118,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Services'), nav(user=user, history=req.url.path), services.page
+    return Title('Services'), nav(user=user, current_path=req.url.path), services.page
 
 
 @app.route('/advisors/')
@@ -128,7 +130,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Advisors'), nav(user=user, history=req.url.path), advisors.page
+    return Title('Advisors'), nav(user=user, current_path=req.url.path), advisors.page
 
 
 @app.route('/guides/')
@@ -140,7 +142,7 @@ def get(req: Request, sess):
         print(f'Authentication error: {e}')
         user = None
 
-    return Title('Guides'), nav(user=user, history=req.url.path), guides.page
+    return Title('Guides'), nav(user=user, current_path=req.url.path), guides.page
 
 
 @app.route('/request-code/', methods=['post'])
@@ -195,9 +197,10 @@ def post(data: dict, req: Request, sess):
             admin_users = ['travis@bluechipinvest.co.za', 'eugevanz@gmail.com', 'raymondanthony.m@gmail.com']
             print()
             if response.user.email in admin_users:
-                return Title('Admin'), nav(user=response.user, history=req.url.path), admin.page
+                return Title('Admin'), nav(user=response.user, current_path=req.url.path), admin.page(
+                    user=response.user)
             else:
-                return Title('Client'), nav(user=response.user, history=req.url.path), client_portal.page
+                return Title('Client'), nav(user=response.user, current_path=req.url.path), client_portal.page
         else:
             print(response)
     except Exception as e:
@@ -211,12 +214,13 @@ def post(data: dict):
         if response and response.user:
             return P(f'Invite sent to {data["form-invite-name"]}', cls='uk-text-success uk-text-bolder')
         else:
-            return P(f'Error sending invite: response[\'error\'][\'message\']', cls='uk-text-danger uk-text-bolder')
+            return P(f'Error sending invite: {response["error"]["message"]}', cls='uk-text-danger uk-text-bolder')
     except Exception as e:
         return P(f'Invitation error: {e}', cls='uk-text-danger uk-text-bolder')
 
-@app.route('/edit-client/{id}')
-def get(id:str, req: Request, sess):
+
+@app.route('/edit-client/{id}/')
+def get(id: str, req: Request, sess):
     try:
         response = supabase.auth.get_user(sess['access_token'])
         user = response.user
@@ -225,5 +229,42 @@ def get(id:str, req: Request, sess):
         user = None
 
     client = get_client(id)
-    return Title('Who We Serve'), nav(user=user, history=req.url.path), client_edit.page(client)
+    return Title('Edit Client'), nav(user=user, current_path=req.url.path), client_edit.page(client)
+
+
+@app.route('/update-client/', methods=['POST'])
+def post(data: dict):
+    return Div(
+        Div(
+            Div(
+                Div(
+                    Div('Account Balance', cls='uk-text-small'),
+                    H4(f'R {data["account-balance"]}', cls='uk-text-bolder uk-margin-remove-top')
+                ),
+                Div(
+                    Div(
+                        Div('Account Type', cls='uk-text-small'),
+                        H4(data['account-type'], cls='uk-margin-remove-top uk-text-bolder')
+                    ),
+                    Div(
+                        Div('Account Number', cls='uk-text-small'),
+                        H4(data['account-number'], cls='uk-text-bolder uk-margin-remove-top')
+                    ),
+                    Div(
+                        Div('Last Updated', cls='uk-text-small'),
+                        H4(datetime.now().strftime('%B %d, %Y'), cls='uk-text-bolder uk-margin-remove-top')
+                    )
+                ),
+                data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider'
+            ),
+            cls='uk-card uk-card-body uk-card-default', style='background-color: #88A9C3;'
+        ),
+        Span(data_uk_icon='icon: trash;', cls='uk-icon-button uk-position-medium uk-position-top-right uk-light',
+             style='background-color: #CD5B45;'),
+        cls='uk-card uk-card-body uk-card-default uk-inline uk-width-expand'
+    )
+
+
+# datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
+
 serve()

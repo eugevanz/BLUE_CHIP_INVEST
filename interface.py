@@ -3,7 +3,7 @@ from datetime import datetime
 from os import environ
 
 from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, Br, P, Input, Strong, \
-    Label, Img
+    Label, Img, Select, Option
 from supabase import create_client
 
 SUPABASE_URL = environ.get('SUPABASE_URL')
@@ -63,9 +63,57 @@ calculator_group4 = [nav_link(href, title) for href, title in [
 ]]
 
 
-def add_save_button():
+def add_save_button(name: str):
+    account_options = [
+        'Savings Account', 'Investment Account', 'Retirement Account',
+        'Brokerage Account', 'Trust Account', 'Custodial Account',
+        'Taxable Account', 'Tax-Deferred Account', 'Tax-Exempt Account',
+        'Money Market Account', 'Certificate of Deposit (CD) Account',
+        'Mutual Fund Account', 'Pension Account',
+        'Self-Directed Investment Account', 'High-Yield Savings Account',
+        'Fixed-Income Account', 'Annuity Account', 'Forex Trading Account',
+        'Commodities Trading Account'
+    ]
+
     return Div(
-        A(href='', data_uk_icon='icon: plus', cls='uk-icon-button'),
+        Div(
+            Button(Span(data_uk_icon='icon: plus', cls='uk-margin-small-right'), name,
+                   cls='uk-button uk-button-default uk-button-small uk-flex uk-flex-middle'),
+            Form(
+                Div('Account Type', cls='uk-text-small'),
+                H3(
+                    Select(
+                        *[Option(title) for title in account_options],
+                        aria_label='Custom controls',
+                        cls='uk-select uk-text-center', name='account-type'
+                    ),
+                    Span(
+                        Span(),
+                        Span(data_uk_icon='icon: pencil')
+                    ),
+                    cls='uk-text-bolder uk-margin-remove-top',
+                    data_uk_form_custom='target: > * > span:first-child'
+                ),
+                Div('Account Number', cls='uk-text-small'),
+                H3(
+                    Input(type='text', placeholder='Account Number', aria_label='Account Number',
+                          cls='uk-input uk-form-blank uk-text-bolder', name='account-number'),
+                    cls='uk-margin-remove-top'
+                ),
+                Div('Balance', cls='uk-text-small'),
+                H3(
+                    Input(type='number', placeholder='Balance', aria_label='Balance',
+                          cls='uk-input uk-form-blank uk-text-bolder', name='account-balance'),
+                    cls='uk-margin-remove-top'
+                ),
+                Button('Confirm', type='submit', cls='uk-button uk-button-primary uk-margin-large-top',
+                       _='on click UIkit.drop(#add-account-drop).hide()'),
+                data_uk_drop='mode: click;', id='add-account-drop', hx_post='/update-client/',
+                hx_target='#account-desc', hx_swap='afterend',
+                cls='uk-card uk-card-body uk-card-default uk-width-xlarge'
+            ),
+            cls='uk-inline'
+        ),
         Button('Save', cls='uk-button uk-button-small uk-text-bolder uk-button-secondary'),
         cls='uk-margin-medium-top uk-flex uk-flex-between'
     )
@@ -130,20 +178,19 @@ def precision_financial_tools():
     )
 
 
-def nav(user=None, history='/home/'):
+def nav(user=None, current_path='/home/'):
+    back_button = Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                          '/Blue%20Chip%20Invest%20Logo.001.png', width='60', height='60')
+    if current_path not in ['/home/']:
+        back_button = A(href='#', cls='uk-icon-link', data_uk_icon='icon: chevron-left; ratio: 3', _='on click go back')
+
     return Div(
         Nav(
             Div(
                 Div(
                     Div(
                         Div(
-                            A(
-                                href='#', cls='uk-icon-link', data_uk_icon='icon: chevron-left; ratio: 3',
-                                _='on click go back'
-                            ) if history not in ['/home/'] else Img(
-                                src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                    '/Blue%20Chip%20Invest%20Logo.001.png', width='60', height='60'
-                            ),
+                            back_button,
                             A(
                                 Div('BLUE CHIP INVESTMENTS', aria_label='Back to Home',
                                     style='font-family: "Noto Sans", sans-serif; font-optical-sizing: auto; '
@@ -192,9 +239,13 @@ def nav(user=None, history='/home/'):
                                hx_get='/contact-us/',
                                hx_target='#page', hx_push_url='/home/',
                                style='background-color: #091235'),
-                        Button(data_uk_icon='close', cls='uk-icon-button uk-icon uk-light', hx_post='/admin/',
-                               hx_target='#page') if user else
-                        Div(
+                        Button(
+                            cls='uk-icon-button uk-icon uk-icon-image',
+                            style='background-image: url('
+                                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
+                                  '/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp);', hx_post='/admin/',
+                            hx_target='#page', hx_replace_url=True
+                        ) if user else Div(
                             A(data_uk_icon='user', cls='uk-icon-button uk-icon',
                               style='background-color: #091235'),
                             Div(
@@ -216,7 +267,7 @@ def nav(user=None, history='/home/'):
                                 Div(
                                     Button("Send Code",
                                            cls='uk-button uk-button-large uk-width-1-1 uk-light',
-                                           style='background-color: #091235', hx_post=f'/request-code/',
+                                           style='background-color: #091235', hx_post='/request-code/',
                                            hx_target='#code-notifications',
                                            hx_include="[name='form-username']"),
                                     cls='uk-margin'
