@@ -48,9 +48,8 @@ def get_accounts(profile_id: str):
     try:
         response = (
             supabase_admin.table('accounts')
-            .select('id, balance, updated_at, account_type')
+            .select('id, balance, updated_at, account_type, account_number')
             .eq('profile_id', profile_id)
-            .maybe_single()
             .execute()
         )
         if response and response.data:
@@ -67,7 +66,6 @@ def get_client_goals(profile_id: str):
             supabase_admin.table('client_goals')
             .select('id, goal_type, target_amount, current_savings, target_date')
             .eq('profile_id', profile_id)
-            .maybe_single()
             .execute()
         )
         if response and response.data:
@@ -84,7 +82,6 @@ def get_investments(account_id: str):
             supabase_admin.table('investments')
             .select('id, investment_type, symbol, quantity, purchase_price, current_price, purchase_date')
             .eq('account_id', account_id)
-            .maybe_single()
             .execute()
         )
         if response and response.data:
@@ -101,7 +98,6 @@ def get_transactions(account_id: str):
             supabase_admin.table('transactions')
             .select('id, type, amount, description')
             .eq('account_id', account_id)
-            .maybe_single()
             .execute()
         )
         if response and response.data:
@@ -118,7 +114,6 @@ def get_dividends_and_payouts(account_id: str):
             supabase_admin.table('dividends_and_payouts')
             .select('id, amount, payment_date')
             .eq('account_id', account_id)
-            .maybe_single()
             .execute()
         )
         if response and response.data:
@@ -148,3 +143,14 @@ def get_portfolio_performance(account_id: str):
 dt_object = lambda timestamp: datetime.strptime(
     timestamp, '%Y-%m-%dT%H:%M:%S.%f%z'
 ).strftime('%B %d, %Y') if timestamp else datetime.now().strftime('%B %d, %Y')
+
+account_types = [
+    'Savings Account', 'Investment Account', 'Retirement Account',
+    'Brokerage Account', 'Trust Account', 'Custodial Account',
+    'Taxable Account', 'Tax-Deferred Account', 'Tax-Exempt Account',
+    'Money Market Account', 'Certificate of Deposit (CD) Account',
+    'Mutual Fund Account', 'Pension Account',
+    'Self-Directed Investment Account', 'High-Yield Savings Account',
+    'Fixed-Income Account', 'Annuity Account', 'Forex Trading Account',
+    'Commodities Trading Account'
+]

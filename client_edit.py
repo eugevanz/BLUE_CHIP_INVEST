@@ -1,12 +1,251 @@
-from datetime import datetime
+import json
 
-import numpy as np
-from fasthtml.components import Div, Ul, Li, A, H1, Input, H2, Span, H3, Select, Option, Table, Thead, Tr, \
-    Th, Tbody, Td, Nav, P, Strong
+from fasthtml.components import Div, Ul, Li, A, H1, Input, Span, Table, Thead, Tr, \
+    Th, Tbody, Td, P, Strong, Form, H3, Button, Select, Option
 
 from interface import add_save_button
 from utility_functions import get_accounts, get_investments, get_transactions, get_client_goals, \
     get_dividends_and_payouts, dt_object
+
+
+def account_form(profile_id: str):
+    return Div(
+        Form(
+            Div('Account Type', cls='uk-text-small'),
+            H3(
+                Select(
+                    *[Option(title) for title in [
+                        'Savings Account', 'Investment Account', 'Retirement Account',
+                        'Brokerage Account', 'Trust Account', 'Custodial Account',
+                        'Taxable Account', 'Tax-Deferred Account', 'Tax-Exempt Account',
+                        'Money Market Account', 'Certificate of Deposit (CD) Account',
+                        'Mutual Fund Account', 'Pension Account',
+                        'Self-Directed Investment Account', 'High-Yield Savings Account',
+                        'Fixed-Income Account', 'Annuity Account', 'Forex Trading Account',
+                        'Commodities Trading Account'
+                    ]],
+                    aria_label='Custom controls',
+                    cls='uk-select uk-text-center', name='account_type'
+                ),
+                Span(
+                    Span(),
+                    Span(data_uk_icon='icon: pencil')
+                ),
+                cls='uk-text-bolder uk-margin-remove-top',
+                data_uk_form_custom='target: > * > span:first-child'
+            ),
+            Div('Account Number', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Account Number', aria_label='Account Number',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='account_number'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Balance', cls='uk-text-small'),
+            H3(
+                Input(type='number', placeholder='Balance', aria_label='Balance',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='balance'),
+                cls='uk-margin-remove-top'
+            ),
+            Button('Save', type='submit', cls='uk-button uk-button-primary uk-margin-large-top uk-modal-close',
+                   hx_post='/update-client/', hx_target='#account-table', hx_swap='beforeend',
+                   hx_vals=json.dumps({'target': 'accounts', 'profile_id': profile_id})),
+            cls='uk-modal-dialog uk-modal-body'
+        ),
+        id='account-modal', data_uk_modal=True
+    )
+
+
+def select_account(accounts: list):
+    return Div(
+        Div('Account', cls='uk-text-small'),
+        H3(
+            Select(
+                *[Option(f'{account["account_type"]} #{account["account_number"]}', value=account['id']) for
+                  account in accounts],
+                aria_label='Custom controls',
+                cls='uk-select uk-text-center', name='account_id'
+            ),
+            Span(
+                Span(),
+                Span(data_uk_icon='icon: pencil')
+            ),
+            cls='uk-text-bolder uk-margin-remove-top',
+            data_uk_form_custom='target: > * > span:first-child'
+        )
+    )
+
+
+def investment_form(accounts: list):
+    return Div(
+        Form(
+            select_account(accounts),
+            Div('Investment Type', cls='uk-text-small'),
+            H3(
+                Select(
+                    *[Option(title) for title in [
+                        'Stocks (Equities)', 'Bonds (Fixed Income)', 'Mutual Funds', 'Exchange-Traded Funds (ETFs)',
+                        'Real Estate', 'Commodities', 'Cryptocurrency', 'Private Equity', 'Hedge Funds',
+                        'Savings Accounts & Certificates of Deposit (CDs)', 'Annuities', 'Options'
+                    ]],
+                    aria_label='Custom controls',
+                    cls='uk-select uk-text-center', name='investment_type'
+                ),
+                Span(
+                    Span(),
+                    Span(data_uk_icon='icon: pencil')
+                ),
+                cls='uk-text-bolder uk-margin-remove-top',
+                data_uk_form_custom='target: > * > span:first-child'
+            ),
+            Div('Investment Amount', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Investment Amount', aria_label='Investment Amount',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='quantity'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Investment Purchase Price', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Investment Purchase Price', aria_label='Investment Purchase Price',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='purchase_price'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Investment Start Date', cls='uk-text-small'),
+            H3(
+                Input(type='number', placeholder='Investment Start Date', aria_label='Investment Start Date',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='purchase_date'),
+                cls='uk-margin-remove-top'
+            ),
+            Button('Save', type='submit', cls='uk-button uk-button-primary uk-margin-large-top uk-modal-close',
+                   hx_post='/update-client/', hx_target='#invest-table', hx_swap='beforeend',
+                   hx_vals='{"target": "investments"}'),
+            cls='uk-modal-dialog uk-modal-body'
+        ) if accounts and len(accounts) > 0 else Div(
+            'Add account to profile',
+            cls='uk-text-danger uk-text-uppercase uk-text-bolder'
+        ),
+        id='invest-modal', data_uk_modal=True
+    )
+
+
+def transaction_form(accounts: list):
+    return Div(
+        Form(
+            select_account(accounts),
+            Div('Transaction', cls='uk-text-small'),
+            H3(
+                Select(
+                    *[Option(title) for title in ['debit', 'credit']],
+                    aria_label='Custom controls',
+                    cls='uk-select uk-text-center', name='type'
+                ),
+                Span(
+                    Span(),
+                    Span(data_uk_icon='icon: pencil')
+                ),
+                cls='uk-text-bolder uk-margin-remove-top',
+                data_uk_form_custom='target: > * > span:first-child'
+            ),
+            Div('Description', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Transaction Description', aria_label='Transaction Description',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='description'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Transaction Amount', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Transaction Amount', aria_label='Transaction Amount',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='amount'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Transaction Date', cls='uk-text-small'),
+            H3(
+                Input(type='number', placeholder='Transaction Date', aria_label='Transaction Date',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='updated_at'),
+                cls='uk-margin-remove-top'
+            ),
+            Button('Save', type='submit', cls='uk-button uk-button-primary uk-margin-large-top uk-modal-close',
+                   hx_post='/update-client/', hx_target='#transaction-table', hx_swap='beforeend',
+                   hx_vals='{"target": "transactions"}'),
+            cls='uk-modal-dialog uk-modal-body'
+        ) if accounts and len(accounts) > 0 else Div(
+            'Add account to profile',
+            cls='uk-text-danger uk-text-uppercase uk-text-bolder'
+        ),
+        id='transaction-modal', data_uk_modal=True
+    )
+
+
+def client_goals_form(profile_id: str):
+    return Div(
+        Form(
+            Div('Goal', cls='uk-text-small'),
+            H3(
+                Select(
+                    *[Option(title) for title in [
+                        'Retirement Savings', 'Emergency Fund', 'Education Fund', 'Home Purchase', 'Debt Reduction',
+                        'Vacation Fund', 'Investment Growth', 'Business Start-Up', 'Charitable Giving',
+                        'Wealth Accumulation', 'Major Purchase', 'Health and Wellness', 'Estate Planning',
+                        'Early Retirement', 'Legacy Planning'
+                    ]],
+                    aria_label='Custom controls',
+                    cls='uk-select uk-text-center', name='goal_type'
+                ),
+                Span(
+                    Span(),
+                    Span(data_uk_icon='icon: pencil')
+                ),
+                cls='uk-text-bolder uk-margin-remove-top',
+                data_uk_form_custom='target: > * > span:first-child'
+            ),
+            Div('Target Amount', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Target Amount', aria_label='Target Amount',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='target_amount'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Target Date', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Target Date', aria_label='Target Date',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='target_date'),
+                cls='uk-margin-remove-top'
+            ),
+            Button('Save', type='submit', cls='uk-button uk-button-primary uk-margin-large-top uk-modal-close',
+                   hx_post='/update-client/', hx_target='#goals-table', hx_swap='beforeend',
+                   hx_vals=json.dumps({'target': 'client_goals', 'profile_id': profile_id})),
+            cls='uk-modal-dialog uk-modal-body'
+        ),
+        id='goal-modal', data_uk_modal=True
+    )
+
+
+def payouts_form(accounts: list):
+    return Div(
+        Form(
+            select_account(accounts),
+            Div('Payout Date', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Payout Date', aria_label='Payout Date',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='payment_date'),
+                cls='uk-margin-remove-top'
+            ),
+            Div('Amount', cls='uk-text-small'),
+            H3(
+                Input(type='text', placeholder='Amount', aria_label='Amount',
+                      cls='uk-input uk-form-blank uk-text-bolder', name='amount'),
+                cls='uk-margin-remove-top'
+            ),
+            Button(
+                'Save', type='submit', cls='uk-button uk-button-primary uk-margin-large-top uk-modal-close',
+                hx_post='/update-client/', hx_target='#payout-table', hx_swap='beforeend',
+                hx_vals='{"target": "dividends_and_payouts"}'
+            ),
+            cls='uk-modal-dialog uk-modal-body'
+        ) if accounts and len(accounts) > 0 else Div(
+            'Add account to profile',
+            cls='uk-text-danger uk-text-uppercase uk-text-bolder'
+        ),
+        id='payout-modal', data_uk_modal=True
+    )
 
 
 def slider_item_account(client: dict, accounts: list):
@@ -47,120 +286,39 @@ def slider_item_account(client: dict, accounts: list):
             Div(client['email'], cls='uk-text-bolder', style='font-size: 11px'),
             cls='uk-text-small uk-margin-large-top'
         ),
-        *[Div(
-            Div(
-                Div('Account Balance', cls='uk-text-small'),
-                H2(f'R {account["balance"]}',
-                   cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
-                cls='uk-margin'
-            ),
-            Div(
-                Div(
-                    Div(
-                        Div('Account Type', cls='uk-text-small'),
-                        H3(account['account_type']),
-                        cls='uk-card uk-card-body', style='background-color: #88A9C3;'
-                    )
-                ),
-                Div(
-                    Div(
-                        Div('Last Updated', cls='uk-text-small'),
-                        H3(account['updated_at'],
-                           cls='uk-text-bolder uk-margin-remove-top uk-text-truncate'),
-                        cls='uk-card uk-card-body', style='background-color: #88A9C3;'
-                    )
-                ),
-                data_uk_grid=True,
-                cls='uk-child-width-1-2@m uk-grid-match uk-margin'
-            ),
-            cls='uk-card uk-card-body uk-card-default uk-margin'
-        ) for account in accounts] if accounts else Div(),
         P('A financial ',
           Strong('account'),
           ' manages your assets, such as stocks, bonds, and savings. It tracks transactions, portfolio performance, '
           'and balance, while providing advisory services to support your financial goals.',
-          cls='uk-text-small', id='account-desc'),
-        add_save_button('Add account')
+          cls='uk-text-small'),
+        Div(
+            Table(
+                Thead(
+                    Tr(Th('Balance'), Th('Account'), Th('Account #'), Th('Last Updated'), Th(''))
+                ),
+                Tbody(
+                    *[Tr(
+                        Td(f'R {account["balance"]}'),
+                        Td(account['account_type']),
+                        Td(account['account_number']),
+                        Td(account['updated_at']),
+                        Td(A(href='', data_uk_icon='trash', cls='uk-icon-button uk-text-danger'))
+                    ) for account in accounts if account is not None and isinstance(account, dict)] if accounts and len(
+                        accounts) > 0 else Span(),
+                    id='account-table'
+                ),
+                cls='uk-table uk-table-justify uk-table-divider uk-table-small'
+            ),
+            cls='uk-overflow-auto'
+        ),
+        add_save_button('Add account', target='account'),
+        account_form(profile_id=client['id'])
     )
 
 
-def slider_item_investments(investments: list):
-    investment_options = ['Stocks (Equities)', 'Bonds (Fixed Income)', 'Mutual Funds', 'Exchange-Traded Funds (ETFs)',
-                          'Real Estate', 'Commodities', 'Cryptocurrency', 'Private Equity', 'Hedge Funds',
-                          'Savings Accounts & Certificates of Deposit (CDs)', 'Annuities', 'Options']
-
+def slider_item_investments(investments: list, accounts: list):
+    print(investments)
     return Div(
-        *[Div(
-            Div(
-                Div('Investment Amount', cls='uk-text-small'),
-                H2(f'R {investment["current_price"]}',
-                   cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
-                Div('Compared to purchase value ',
-                    Span(f'R {investment["purchase_price"]}', cls='uk-text-success'),
-                    cls='uk-text-small uk-margin-remove-top'),
-                cls='uk-margin'
-            ),
-            Div(
-                Div(
-                    Div(
-                        Div('Investment Type', cls='uk-text-small'),
-                        H3(
-                            Select(
-                                *[Option(title) for title in investment_options],
-                                aria_label='Custom controls',
-                                cls='uk-select uk-text-center'
-                            ),
-                            Span(
-                                Span(),
-                                Span(data_uk_icon='icon: pencil')
-                            ),
-                            cls='uk-text-bolder uk-margin-remove-top',
-                            data_uk_form_custom='target: > * > span:first-child'
-                        )
-                    ),
-                    Div(
-                        Div(
-                            Div('Investment Purchase Price', cls='uk-text-small'),
-                            H3(
-                                Input(type='text', placeholder=investment['purchase_price'],
-                                      aria_label=investment['purchase_price'],
-                                      cls='uk-input uk-form-blank uk-text-bolder'),
-                                cls='uk-margin-remove-top'
-                            )
-                        ),
-                        Div(
-                            Div('Investment Start Date', cls='uk-text-small'),
-                            H3(
-                                Input(type='text', placeholder=investment['purchase_date'],
-                                      aria_label=investment['purchase_date'],
-                                      cls='uk-text-bolder uk-input uk-form-blank'),
-                                cls='uk-margin-remove-top'
-                            )
-                        )
-                    ),
-                    data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider uk-margin'
-                ),
-                cls='uk-card uk-card-body uk-card-default', style='background-color: #88A9C3;'
-            ),
-            Div(
-                Div('Investment Type', cls='uk-text-small'),
-                H3(
-                    Select(
-                        *[Option(title) for title in investment_options],
-                        aria_label='Custom controls',
-                        cls='uk-select uk-text-center'
-                    ),
-                    Span(
-                        Span(),
-                        Span(data_uk_icon='icon: pencil')
-                    ),
-                    cls='uk-text-bolder uk-margin-remove-top',
-                    data_uk_form_custom='target: > * > span:first-child'
-                ),
-                cls='uk-margin'
-            ),
-            cls='uk-card uk-card-body uk-card-default uk-margin'
-        ) for investment in investments] if investments else Div(),
         P(
             'An ',
             Strong('investment'),
@@ -169,79 +327,31 @@ def slider_item_investments(investments: list):
             'or achieve specific financial goals.',
             cls='uk-text-small'
         ),
-        add_save_button('Add investment')
+        Table(
+            Thead(
+                Tr(Th('Investment'), Th('Amount'), Th('Purchase Price'), Th('Current Price'), Th('Start Date'), Th(''))
+            ),
+            Tbody(
+                *[Tr(
+                    Td(investment['investment_type']),
+                    Td(investment['quantity']),
+                    Td(investment['purchase_price']),
+                    Td(investment['current_price']),
+                    Td(investment['purchase_date'])
+                ) for investment in investments if
+                    investment is not None and isinstance(investment, dict)] if investments and len(investments) > 0
+                else Span(),
+                id='invest-table'
+            ),
+            cls='uk-table uk-table-justify uk-table-divider'
+        ),
+        add_save_button('Add investment', target='invest'),
+        investment_form(accounts=accounts)
     )
 
 
-def slider_item_transactions(transactions: list):
+def slider_item_transactions(transactions: list, accounts: list):
     return Div(
-        Div(
-            Div(
-                Div(
-                    Div('Recent Transactions', cls='uk-text-default uk-text-bolder'),
-                    Div(
-                        Span(data_uk_icon='icon: table;'),
-                        Span('Filter', cls='uk-margin-small-left'),
-                        cls='uk-text-small uk-flex uk-flex-middle'
-                    ),
-                    cls='uk-flex uk-flex-between'
-                ),
-                cls='uk-card-header'
-            ),
-            Div(
-                Table(
-                    Thead(
-                        Tr(
-                            Th('Type'),
-                            Th('Amount')
-                        )
-                    ),
-                    Tbody(
-                        *[Tr(
-                            Td(
-                                Span(
-                                    uk_icon=f'icon:  '
-                                            f'{"plus-circle" if transaction["type"] == "debit" else "minus-circle"}; ratio: 1.5',
-                                    cls=f'uk-text-{"success" if transaction["type"] == "debit" else "danger"}'),
-                                Div(
-                                    Div(transaction['description'], cls='uk-text-bolder'),
-                                    Div(f'{transaction["type"]} • {transaction["type"]}', cls='uk-text-small'),
-                                    cls='uk-margin-small-left'
-                                ),
-                                cls='uk-flex uk-flex-middle'
-                            ),
-                            Td(Div(f'R {transaction["amount"]}', cls='uk-text-bolder'))
-                        ) for transaction in transactions] if transactions else Div()
-                    ),
-                    cls='uk-table uk-table-divider'
-                ),
-                cls='uk-card-body'
-            ),
-            Div(
-                Nav(
-                    Ul(
-                        Li(
-                            A(
-                                Span(data_uk_pagination_previous=True, cls='uk-margin-small-right'),
-                                'Previous',
-                                href='#'
-                            )
-                        ),
-                        Li(
-                            A(
-                                'Next',
-                                Span(data_uk_pagination_next=True, cls='uk-margin-small-left'),
-                                href='#'
-                            ),
-                            cls='uk-margin-auto-left'
-                        ),
-                        cls='uk-pagination', data_uk_margin=True
-                    )
-                ),
-                cls='uk-card-footer'
-            ),
-            cls='uk-card uk-card-body uk-card-default uk-margin uk-light', style='background-color: #88A9C3;'
-        ),
         P(
             'A ',
             Strong('transaction'),
@@ -250,71 +360,30 @@ def slider_item_transactions(transactions: list):
             'balances.',
             cls='uk-text-small'
         ),
-        add_save_button('Add transaction')
+        Table(
+            Thead(
+                Tr(Th('Description'), Th('Transaction'), Th('Amount'), Th('Last Updated'), Th(''))
+            ),
+            Tbody(
+                *[Tr(
+                    Td(transaction['description']),
+                    Td(transaction['type'], cls=f'uk-text-{"success" if transaction["type"] == "debit" else "danger"}'),
+                    Td(f'R {transaction["amount"]}'),
+                    Td(A(href='', data_uk_icon='trash', cls='uk-icon-button'))
+                ) for transaction in transactions if
+                    transaction is not None and isinstance(transaction, dict)] if transactions and len(
+                    transactions) > 0 else Span(),
+                id='transaction-table'
+            ),
+            cls='uk-table uk-table-justify uk-table-divider'
+        ),
+        add_save_button('Add transaction', target='transaction'),
+        transaction_form(accounts=accounts)
     )
 
 
-def slider_item_client_goals(client_goals: list):
-    goal_options = ['Retirement Savings', 'Emergency Fund', 'Education Fund', 'Home Purchase', 'Debt Reduction',
-                    'Vacation Fund', 'Investment Growth', 'Business Start-Up', 'Charitable Giving',
-                    'Wealth Accumulation', 'Major Purchase', 'Health and Wellness', 'Estate Planning',
-                    'Early Retirement', 'Legacy Planning']
-
+def slider_item_client_goals(client_goals: list, profile_id: str):
     return Div(
-        *[Div(
-            Div(
-                Div('Progress (%)', cls='uk-text-small'),
-                H2(f'R {goal["current_savings"]}',
-                   cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
-                Div('Compared to last month ',
-                    Span(f'{(goal["current_savings"] / goal["target_amount"]) * 100}%', cls='uk-text-success'),
-                    cls='uk-text-small uk-margin-remove-top'),
-                cls='uk-margin'
-            ),
-            Div(
-                Div(
-                    Div(
-                        Div('Goal Description', cls='uk-text-small'),
-                        H3(
-                            Select(
-                                *[Option(title) for title in goal_options],
-                                aria_label='Custom controls',
-                                cls='uk-select uk-text-center'
-                            ),
-                            Span(
-                                Span(),
-                                Span(data_uk_icon='icon: pencil')
-                            ),
-                            cls='uk-text-bolder uk-margin-remove-top',
-                            data_uk_form_custom='target: > * > span:first-child'
-                        )
-                    ),
-                    Div(
-                        Div(
-                            Div('Target Amount', cls='uk-text-small'),
-                            H3(
-                                Input(type='text', placeholder=goal['target_amount'],
-                                      aria_label=goal['target_amount'],
-                                      cls='uk-input uk-form-blank uk-text-bolder'),
-                                cls='uk-margin-remove-top'
-                            )
-                        ),
-                        Div(
-                            Div('Goal Timeline', cls='uk-text-small'),
-                            H3(
-                                Input(type='text', placeholder=goal['target_date'],
-                                      aria_label=goal['target_date'],
-                                      cls='uk-text-bolder uk-input uk-form-blank'),
-                                cls='uk-margin-remove-top'
-                            )
-                        )
-                    ),
-                    data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider uk-margin'
-                ),
-                cls='uk-card uk-card-body uk-card-default', style='background-color: #88A9C3;'
-            ),
-            cls='uk-card uk-card-body uk-card-default uk-margin'
-        ) for goal in client_goals] if client_goals else Div(),
         P(
             'A ',
             Strong('client goal'),
@@ -322,60 +391,30 @@ def slider_item_client_goals(client_goals: list):
             'or funding education. It guides investment strategies and decisions, helping to align financial planning with personal aspirations.',
             cls='uk-text-small'
         ),
-        add_save_button('Add goal')
+        Table(
+            Thead(
+                Tr(Th('Current Savings'), Th('Target Amount'), Th('Goal'), Th('Target Date'), Th(''))
+            ),
+            Tbody(
+                *[Tr(
+                    Td(f'R {goal["current_savings"]}'),
+                    Td(goal['target_amount']),
+                    Td(goal['goal_type']),
+                    Td(goal['target_date']),
+                    Td(A(href='', data_uk_icon='trash', cls='uk-icon-button'))
+                ) for goal in client_goals if goal is not None and isinstance(goal, dict)] if client_goals and len(
+                    client_goals) > 0 else Span(),
+                id='goals-table'
+            ),
+            cls='uk-table uk-table-justify uk-table-divider'
+        ),
+        add_save_button('Add goal', target='goal'),
+        client_goals_form(profile_id)
     )
 
 
-def slider_item_payouts(dividends_and_payouts: list):
-    latest_dividend = max(
-        dividends_and_payouts,
-        key=lambda x: datetime.strptime(x["payment_date"], "%Y-%m-%dT%H:%M:%SZ")
-    )['amount'] if dividends_and_payouts else 0
-    total_payouts_to_date = np.sum(
-        [payout.get("amount", 0) for payout in dividends_and_payouts if dividends_and_payouts])
-
+def slider_item_payouts(dividends_and_payouts: list, accounts: list):
     return Div(
-        Div(
-            Div(
-                Div('Last Dividend Paid', cls='uk-text-small'),
-                H2(f'R {latest_dividend}',
-                   cls='uk-text-bolder uk-margin-remove-top uk-margin-remove-bottom uk-text-truncate'),
-                Div('Total payouts to date ',
-                    Span(
-                        f'R {total_payouts_to_date}',
-                        cls='uk-text-success'
-                    ),
-                    cls='uk-text-small uk-margin-remove-top'),
-                cls='uk-margin'
-            ),
-            *[Div(
-                Div(
-                    Div(
-                        Div('Payout Date', cls='uk-text-small'),
-                        H3(
-                            Input(type='text', placeholder=payout['payment_date'],
-                                  aria_label=payout['payment_date'],
-                                  cls='uk-input uk-form-blank uk-text-bolder'),
-                            cls='uk-margin-remove-top'
-                        )
-                    ),
-                    Div(
-                        Div(
-                            Div('Payout Amount', cls='uk-text-small'),
-                            H3(
-                                Input(type='text', placeholder=payout['amount'],
-                                      aria_label=payout['amount'],
-                                      cls='uk-input uk-form-blank uk-text-bolder'),
-                                cls='uk-margin-remove-top'
-                            )
-                        )
-                    ),
-                    data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider uk-margin'
-                ),
-                cls='uk-card uk-card-body uk-card-default uk-margin', style='background-color: #88A9C3;'
-            ) for payout in dividends_and_payouts] if dividends_and_payouts else Div(),
-            cls='uk-card uk-card-body uk-card-default uk-margin'
-        ),
         P(
             'A ',
             Strong('dividend/payout'),
@@ -384,7 +423,24 @@ def slider_item_payouts(dividends_and_payouts: list):
             'investments.',
             cls='uk-text-small'
         ),
-        add_save_button('Add payout')
+        Table(
+            Thead(
+                Tr(Th('Payment Date'), Th('Amount'), Th(''))
+            ),
+            Tbody(
+                *[Tr(
+                    Td(payout['payment_date']),
+                    Td(f'R {payout["amount"]}'),
+                    Td(A(href='', data_uk_icon='trash', cls='uk-icon-button'))
+                ) for payout in dividends_and_payouts if
+                    payout is not None and isinstance(payout, dict)] if dividends_and_payouts and len(
+                    dividends_and_payouts) > 0 else Span(),
+                id='payout-table'
+            ),
+            cls='uk-table uk-table-justify uk-table-divider'
+        ),
+        add_save_button('Add payout', target='payout'),
+        payouts_form(accounts=accounts)
     )
 
 
@@ -392,19 +448,19 @@ def page(client: dict):
     accounts = get_accounts(client['id'])
     client_goals = get_client_goals(client['id'])
     investments = [
-        get_investments(account_id=account['id'])
+        investment
         for account in (accounts or [])
-        if account and account['id']
+        for investment in get_investments(account_id=account['id'])
     ]
     transactions = [
-        get_transactions(account_id=account['id'])
+        transaction
         for account in (accounts or [])
-        if account and account['id']
+        for transaction in get_transactions(account_id=account['id'])
     ]
     dividends_and_payouts = [
-        get_dividends_and_payouts(account_id=account['id'])
+        payout
         for account in (accounts or [])
-        if account and account['id']
+        for payout in get_dividends_and_payouts(account_id=account['id'])
     ]
 
     return Div(
@@ -424,10 +480,10 @@ def page(client: dict):
                 ),
                 Div(
                     slider_item_account(client=client, accounts=accounts),
-                    slider_item_investments(investments=investments),
-                    slider_item_transactions(transactions=transactions),
-                    slider_item_client_goals(client_goals=client_goals),
-                    slider_item_payouts(dividends_and_payouts=dividends_and_payouts),
+                    slider_item_investments(investments=investments, accounts=accounts),
+                    slider_item_transactions(transactions=transactions, accounts=accounts),
+                    slider_item_client_goals(client_goals=client_goals, profile_id=client['id']),
+                    slider_item_payouts(dividends_and_payouts=dividends_and_payouts, accounts=accounts),
                     cls='uk-switcher uk-margin'
                 ),
                 cls='uk-padding-large',

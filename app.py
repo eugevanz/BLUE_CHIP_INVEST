@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from fasthtml.common import FastHTML, serve
-from fasthtml.components import Script, Link, Body, Div, Title, Label, Span, Input, P, Button, Style, Strong, H4
+from fasthtml.components import Script, Link, Body, Div, Title, Label, Span, Input, P, Button, Style, Strong, Tr, Td, A, \
+    Ul, Li
 from starlette.requests import Request
 
 import admin
@@ -234,35 +235,140 @@ def get(id: str, req: Request, sess):
 
 @app.route('/update-client/', methods=['POST'])
 def post(data: dict):
-    return Div(
-        Div(
-            Div(
-                Div(
-                    Div('Account Balance', cls='uk-text-small'),
-                    H4(f'R {data["account-balance"]}', cls='uk-text-bolder uk-margin-remove-top')
-                ),
-                Div(
-                    Div(
-                        Div('Account Type', cls='uk-text-small'),
-                        H4(data['account-type'], cls='uk-margin-remove-top uk-text-bolder')
-                    ),
-                    Div(
-                        Div('Account Number', cls='uk-text-small'),
-                        H4(data['account-number'], cls='uk-text-bolder uk-margin-remove-top')
-                    ),
-                    Div(
-                        Div('Last Updated', cls='uk-text-small'),
-                        H4(datetime.now().strftime('%B %d, %Y'), cls='uk-text-bolder uk-margin-remove-top')
-                    )
-                ),
-                data_uk_grid=True, cls='uk-child-width-1-2@m uk-grid-divider'
-            ),
-            cls='uk-card uk-card-body uk-card-default', style='background-color: #88A9C3;'
-        ),
-        Span(data_uk_icon='icon: trash;', cls='uk-icon-button uk-position-medium uk-position-top-right uk-light',
-             style='background-color: #CD5B45;'),
-        cls='uk-card uk-card-body uk-card-default uk-inline uk-width-expand'
-    )
+    if data['target'] == 'accounts':
+        try:
+            response = (
+                supabase_admin.table(data['target'])
+                .insert({'balance': data['balance'], 'account_type': data['account_type'],
+                         'account_number': data['account_number'], 'profile_id': data['profile_id']})
+                .execute()
+            )
+            if response and response.data:
+                update_id = response.data[0]['id']
+                return Tr(
+                    Td('R ', data['balance']),
+                    Td(data['account_type']),
+                    Td('#', data['account_number']),
+                    Td(datetime.now().strftime('%B %d, %Y')),
+                    Td(Ul(Li(A(
+                        data_uk_icon='icon: trash',
+                        hx_delete=f'/delete-for-client/accounts/{update_id}',
+                        hx_confirm='Are you sure you want to delete this account?',
+                        hx_target='closest tr', hx_swap='outerHTML'
+                    )), cls='uk-iconnav'))
+                )
+        except Exception as e:
+            print(f'Insert Error: {e}')
+
+    elif data['target'] == 'investments':
+        try:
+            response = (
+                supabase_admin.table(data['target'])
+                .insert({'investment_type': data['investment_type'], 'quantity': data['quantity'],
+                         'account_id': data['account_id'], 'purchase_price': data['purchase_price'],
+                         'current_price': data['purchase_price']})  # 'purchase_date': data['purchase_date']
+                .execute()
+            )
+            if response and response.data:
+                update_id = response.data[0]['id']
+                return Tr(
+                    Td(data['investment_type']),
+                    Td(data['quantity']),
+                    Td(data['purchase_price']),
+                    Td(data['purchase_price']),  # current_price
+                    Td(data['purchase_date']),
+                    Td(Ul(Li(A(
+                        data_uk_icon='icon: trash',
+                        hx_delete=f'/delete-for-client/investments/{update_id}',
+                        hx_confirm='Are you sure you want to delete this account?',
+                        hx_target='closest tr', hx_swap='outerHTML'
+                    )), cls='uk-iconnav'))
+                )
+        except Exception as e:
+            print(f'Insert Error: {e}')
+
+    elif data['target'] == 'transactions':
+        try:
+            response = (
+                supabase_admin.table(data['target'])
+                .insert({'description': data['description'], 'type': data['type'], 'account_id': data['account_id'],
+                         'amount': data['amount']})  # 'updated_at': data['updated_at']
+                .execute()
+            )
+            if response and response.data:
+                update_id = response.data[0]['id']
+                return Tr(
+                    Td(data['description']),
+                    Td(data['type'], cls=f'uk-text-{"success" if data["type"] == "debit" else "danger"}'),
+                    Td(data['amount']),
+                    Td(data['updated_at']),
+                    Td(Ul(Li(A(
+                        data_uk_icon='icon: trash',
+                        hx_delete=f'/delete-for-client/transactions/{update_id}',
+                        hx_confirm='Are you sure you want to delete this account?',
+                        hx_target='closest tr', hx_swap='outerHTML'
+                    )), cls='uk-iconnav'))
+                )
+        except Exception as e:
+            print(f'Insert Error: {e}')
+
+    elif data['target'] == 'client_goals':
+        try:
+            response = (
+                supabase_admin.table(data['target'])
+                .insert({'current_savings': data['target_amount'], 'target_amount': data['target_amount'],
+                         'goal_type': data['goal_type'],'profile_id':data['profile_id']})  # 'target_date': data['target_date']
+                .execute()
+            )
+            if response and response.data:
+                update_id = response.data[0]['id']
+                return Tr(
+                    Td(f'R {data["target_amount"]}'),  # current_savings
+                    Td(f'R {data["target_amount"]}'),
+                    Td(data['goal_type']),
+                    Td(data['target_date']),
+                    Td(Ul(Li(A(
+                        data_uk_icon='icon: trash',
+                        hx_delete=f'/delete-for-client/client_goals/{update_id}',
+                        hx_confirm='Are you sure you want to delete this account?',
+                        hx_target='closest tr', hx_swap='outerHTML'
+                    )), cls='uk-iconnav'))
+                )
+        except Exception as e:
+            print(f'Insert Error: {e}')
+
+    else:
+        try:
+            response = (
+                supabase_admin.table(data['target'])
+                .insert({'amount': data['amount'],
+                         'account_id': data['account_id']})  # 'payment_date': data['payment_date']
+                .execute()
+            )
+            if response and response.data:
+                update_id = response.data[0]['id']
+                return Tr(
+                    Td(data['payment_date']),
+                    Td(f'R {data["amount"]}'),
+                    Td(Ul(Li(A(
+                        data_uk_icon='icon: trash',
+                        hx_delete=f'/delete-for-client/dividends_and_payouts/{update_id}',
+                        hx_confirm='Are you sure you want to delete this account?',
+                        hx_target='closest tr', hx_swap='outerHTML'
+                    )), cls='uk-iconnav'))
+                )
+        except Exception as e:
+            print(f'Insert Error: {e}')
+
+
+@app.route('/delete-for-client/{table}/{update_id}/', methods=['DELETE'])
+def delete(table: str, update_id: str):
+    try:
+        response = supabase_admin.table(table).delete().eq('id', update_id).execute()
+        if response and response.data:
+            print(f'{response.data.id} DELETED')
+    except Exception as e:
+        print(f'Delete Error: {e}')
 
 
 # datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')

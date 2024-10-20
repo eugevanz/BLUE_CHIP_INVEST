@@ -3,7 +3,7 @@ from datetime import datetime
 from os import environ
 
 from fasthtml.components import Div, Ul, Li, A, Span, Nav, Button, H3, H4, Form, Fieldset, Hr, Br, P, Input, Strong, \
-    Label, Img, Select, Option
+    Label, Img
 from supabase import create_client
 
 SUPABASE_URL = environ.get('SUPABASE_URL')
@@ -63,59 +63,25 @@ calculator_group4 = [nav_link(href, title) for href, title in [
 ]]
 
 
-def add_save_button(name: str):
-    account_options = [
-        'Savings Account', 'Investment Account', 'Retirement Account',
-        'Brokerage Account', 'Trust Account', 'Custodial Account',
-        'Taxable Account', 'Tax-Deferred Account', 'Tax-Exempt Account',
-        'Money Market Account', 'Certificate of Deposit (CD) Account',
-        'Mutual Fund Account', 'Pension Account',
-        'Self-Directed Investment Account', 'High-Yield Savings Account',
-        'Fixed-Income Account', 'Annuity Account', 'Forex Trading Account',
-        'Commodities Trading Account'
-    ]
+# def select_form():
+#     if target == 'account-table':
+#         return account_form()
+#     elif target == 'invest-table':
+#         return investment_form()
+#     elif target == 'transaction-table':
+#         return transaction_form()
+#     elif target == 'goals-table':
+#         return client_goals_form()
+#     elif target == 'payout-table':
+#         return payouts_form()
 
+
+def add_save_button(name: str, target: str):
     return Div(
-        Div(
-            Button(Span(data_uk_icon='icon: plus', cls='uk-margin-small-right'), name,
-                   cls='uk-button uk-button-default uk-button-small uk-flex uk-flex-middle'),
-            Form(
-                Div('Account Type', cls='uk-text-small'),
-                H3(
-                    Select(
-                        *[Option(title) for title in account_options],
-                        aria_label='Custom controls',
-                        cls='uk-select uk-text-center', name='account-type'
-                    ),
-                    Span(
-                        Span(),
-                        Span(data_uk_icon='icon: pencil')
-                    ),
-                    cls='uk-text-bolder uk-margin-remove-top',
-                    data_uk_form_custom='target: > * > span:first-child'
-                ),
-                Div('Account Number', cls='uk-text-small'),
-                H3(
-                    Input(type='text', placeholder='Account Number', aria_label='Account Number',
-                          cls='uk-input uk-form-blank uk-text-bolder', name='account-number'),
-                    cls='uk-margin-remove-top'
-                ),
-                Div('Balance', cls='uk-text-small'),
-                H3(
-                    Input(type='number', placeholder='Balance', aria_label='Balance',
-                          cls='uk-input uk-form-blank uk-text-bolder', name='account-balance'),
-                    cls='uk-margin-remove-top'
-                ),
-                Button('Confirm', type='submit', cls='uk-button uk-button-primary uk-margin-large-top',
-                       _='on click UIkit.drop(#add-account-drop).hide()'),
-                data_uk_drop='mode: click;', id='add-account-drop', hx_post='/update-client/',
-                hx_target='#account-desc', hx_swap='afterend',
-                cls='uk-card uk-card-body uk-card-default uk-width-xlarge'
-            ),
-            cls='uk-inline'
-        ),
-        Button('Save', cls='uk-button uk-button-small uk-text-bolder uk-button-secondary'),
-        cls='uk-margin-medium-top uk-flex uk-flex-between'
+        Button(Span(data_uk_icon='icon: plus', cls='uk-margin-small-right'), name,
+               data_uk_toggle=f'target: #{target}-modal',
+               cls='uk-button uk-button-default uk-button-small uk-flex uk-flex-middle'),
+        cls='uk-margin-medium-top'
     )
 
 
@@ -240,10 +206,11 @@ def nav(user=None, current_path='/home/'):
                                hx_target='#page', hx_push_url='/home/',
                                style='background-color: #091235'),
                         Button(
-                            cls='uk-icon-button uk-icon uk-icon-image',
+                            cls='uk-icon uk-icon-image uk-border-circle',
                             style='background-image: url('
                                   'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images'
-                                  '/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp);', hx_post='/admin/',
+                                  '/jurica-koletic-7YVZYZeITc8-unsplash_3_11zon.webp); height: 44px; width: 44px;',
+                            hx_post='/admin/',
                             hx_target='#page', hx_replace_url=True
                         ) if user else Div(
                             A(data_uk_icon='user', cls='uk-icon-button uk-icon',
