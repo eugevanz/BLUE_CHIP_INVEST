@@ -223,5 +223,4 @@ def footer():
                 ])
             ], **{'data-uk-grid': 'true'}, className='uk-child-width-1-2 uk-child-width-1-4@l')
         ], className='uk-container')
-    ], className='uk-section uk-section-large uk-light', style={'background-color': '#091235'},
-        **{'data-uk-scrollspy': 'cls: uk-animation-slide-bottom; repeat: true'})
+    ], className='uk-section uk-section-large uk-light', style={'background-color': '#091235'})

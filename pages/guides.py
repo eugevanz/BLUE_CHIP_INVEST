@@ -1,6 +1,8 @@
 import dash
 from dash import html
 
+from interface import footer
+
 dash.register_page(__name__)
 
 items = [
@@ -85,54 +87,60 @@ items = [
 layout = html.Div([
     html.Div([
         html.Div([
-            html.H2([
-                html.Span(['Personal'], style={'color': '#88A9C3'}),
-                ' Finance Guides',
-                html.Hr(style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
-                        className='uk-width-small'),
-            ], className='uk-text-bolder')
-        ], className='uk-card uk-card-body uk-light'),
-        html.Div([
             html.Div([
-                html.Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/tingey'
-                             '-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon.webp', alt='',
-                         **{'data-uk-cover': 'true'}),
-                html.Canvas(width='600', height='400')
-            ], className='uk-card-media-left uk-cover-container'),
+                html.H2([
+                    html.Span(['Personal'], style={'color': '#88A9C3'}),
+                    ' Finance Guides',
+                    html.Hr(style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
+                            className='uk-width-small'),
+                ], className='uk-text-bolder')
+            ], className='uk-card uk-card-body uk-light'),
             html.Div([
                 html.Div([
-                    html.H3([
-                        html.Span(['Frequently'], style={'color': '#88A9C3'}),
-                        html.Span([' Asked Questions']),
-                        html.Hr(
-                            style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
-                            className='uk-width-small')
-                    ], className='uk-text-bolder'),
-                    html.Ul([
-                        html.Li([
-                            html.A([question], href='', className='uk-accordion-title uk-text-default uk-text-bolder'),
-                            html.Div([
-                                html.P(answer)
-                            ], className='uk-accordion-content')
-                        ], className='uk-open' if idx == 0 else None) for idx, (question, answer, _) in
-                        enumerate(items[:4])
-                    ], **{'data-uk-accordion': 'true'})
-                ], className='uk-card-body')
-            ])
-        ], **{'data-uk-grid': 'true'},
-            className='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin',
-            style={'background-color': '#091235'}),
-        html.Div([
+                    html.Img(
+                        src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/tingey'
+                            '-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon.webp', alt='',
+                        **{'data-uk-cover': 'true'}),
+                    html.Canvas(width='600', height='400')
+                ], className='uk-card-media-left uk-cover-container'),
+                html.Div([
+                    html.Div([
+                        html.H3([
+                            html.Span(['Frequently'], style={'color': '#88A9C3'}),
+                            html.Span([' Asked Questions']),
+                            html.Hr(
+                                style={'height': '0px', 'border': 'none', 'border-top': '2px solid',
+                                       'color': '#88A9C3'},
+                                className='uk-width-small')
+                        ], className='uk-text-bolder'),
+                        html.Ul([
+                            html.Li([
+                                html.A([question], href='',
+                                       className='uk-accordion-title uk-text-default uk-text-bolder'),
+                                html.Div([
+                                    html.P(answer)
+                                ], className='uk-accordion-content')
+                            ], className='uk-open' if idx == 0 else None) for idx, (question, answer, _) in
+                            enumerate(items[:4])
+                        ], **{'data-uk-accordion': 'true'})
+                    ], className='uk-card-body')
+                ])
+            ], **{'data-uk-grid': 'true'},
+                className='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin',
+                style={'background-color': '#091235'}),
             html.Div([
                 html.Div([
-                    html.H3([
-                        html.Span(**{'data-uk-icon': f'icon: {icon}; ratio: 3'}, className='uk-width-auto'),
-                        html.Span([question])
-                    ], **{'data-uk-grid': 'true'},
-                        className='uk-child-width-expand@s uk-grid-small uk-flex-middle uk-text-bolder'),
-                    html.P(answer)
-                ], className='uk-card uk-card-body uk-light')
-            ]) for question, answer, icon in items[4:]
-        ], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@s')
-    ], className='uk-container')
-], className='uk-section', style={'background-color': '#2A3A58'})
+                    html.Div([
+                        html.H3([
+                            html.Span(**{'data-uk-icon': f'icon: {icon}; ratio: 3'}, className='uk-width-auto'),
+                            html.Span([question])
+                        ], **{'data-uk-grid': 'true'},
+                            className='uk-child-width-expand@s uk-grid-small uk-flex-middle uk-text-bolder'),
+                        html.P(answer)
+                    ], className='uk-card uk-card-body uk-light')
+                ]) for question, answer, icon in items[4:]
+            ], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@s')
+        ], className='uk-container')
+    ], className='uk-section', style={'background-color': '#2A3A58'}),
+    footer()
+])

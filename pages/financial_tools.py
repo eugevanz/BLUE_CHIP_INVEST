@@ -3,7 +3,7 @@ from dash import html
 
 dash.register_page(__name__)
 
-from interface import calc_input
+from interface import calc_input, footer
 
 calculator_tab = html.Div([
     html.Div([
@@ -122,25 +122,28 @@ calculator_tab = html.Div([
 layout = html.Div([
     html.Div([
         html.Div([
-            html.H3(['Potential Interest Calculators'], className='uk-text-uppercase uk-text-bolder'),
             html.Div([
-                '''These are tools designed to help individuals or businesses estimate the amount of 
-                        interest they could earn or owe over time based on various financial scenarios. These 
-                        calculators typically focus on interest accumulated from savings, loans, or investments and 
-                        can be tailored for specific financial goals.'''
-            ], className='uk-text-small uk-width-2-3@s'),
-            html.Ul([
-                html.Li(html.A('Potential Interest')),
-                html.Li(html.A('Return on Investment (ROI)')),
-                html.Li(html.A('Loan Amortisation')),
-                html.Li(html.A('Other Relevant Financial Metrics'))
-            ], **{'data-uk-tab': 'animation: uk-animation-slide-left-medium, uk-animation-slide-right-medium'}),
-            html.Div([
-                calculator_tab,
-                calculator_tab,
-                calculator_tab,
-                calculator_tab,
-            ], className='uk-switcher uk-margin'),
-        ], className='uk-container')
-    ], className='uk-section')
+                html.H3(['Potential Interest Calculators'], className='uk-text-uppercase uk-text-bolder'),
+                html.Div([
+                    '''These are tools designed to help individuals or businesses estimate the amount of 
+                            interest they could earn or owe over time based on various financial scenarios. These 
+                            calculators typically focus on interest accumulated from savings, loans, or investments and 
+                            can be tailored for specific financial goals.'''
+                ], className='uk-text-small uk-width-2-3@s'),
+                html.Ul([
+                    html.Li(html.A('Potential Interest')),
+                    html.Li(html.A('Return on Investment (ROI)')),
+                    html.Li(html.A('Loan Amortisation')),
+                    html.Li(html.A('Other Relevant Financial Metrics'))
+                ], **{'data-uk-tab': 'animation: uk-animation-slide-left-medium, uk-animation-slide-right-medium'}),
+                html.Div([
+                    calculator_tab,
+                    calculator_tab,
+                    calculator_tab,
+                    calculator_tab,
+                ], className='uk-switcher uk-margin'),
+            ], className='uk-container')
+        ], className='uk-section')
+    ]),
+    footer()
 ])

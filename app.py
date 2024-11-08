@@ -22,8 +22,7 @@ server = app.server
 
 app.layout = html.Div([
     nav(),
-    dash.page_container,
-    footer()
+    dash.page_container
 ])
 
 if __name__ == '__main__':

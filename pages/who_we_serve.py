@@ -1,6 +1,8 @@
 import dash
 from dash import html
 
+from interface import footer
+
 dash.register_page(__name__)
 
 
@@ -67,34 +69,38 @@ clientele = [
 layout = html.Div([
     html.Div([
         html.Div([
-            html.H2([
-                html.Span(['Who'], style={'color': '#88A9C3'}), html.Span([' We Serve']),
-                html.Hr(style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
-                        className='uk-width-small')
-            ], className='uk-text-bolder')
-        ], className='uk-card uk-card-body'),
-        html.Div([
+            html.Div([
+                html.H2([
+                    html.Span(['Who'], style={'color': '#88A9C3'}), html.Span([' We Serve']),
+                    html.Hr(style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
+                            className='uk-width-small')
+                ], className='uk-text-bolder')
+            ], className='uk-card uk-card-body'),
             html.Div([
                 html.Div([
-                    html.Div(
-                        style={'background-image': f'url({img})', 'filter': 'grayscale(90%)', 'opacity': '0.7'},
-                        className='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover '
-                                  'uk-background-center-center'),
                     html.Div([
-                        html.H3([name], className='uk-text-bolder'),
-                        html.A(['Talk to us'], className='uk-button uk-text-bolder uk-light', href='/contact-us/',
-                               style={'background-color': '#88A9C3', 'color': '#091235'})
-                    ], className='uk-card uk-card-body uk-width-1-2@s uk-overlay',
-                        style={'position': 'absolute', 'bottom': '0px'})
-                ], style={'position': 'relative'}),
-                html.Div([
+                        html.Div(
+                            style={'background-image': f'url({img})', 'filter': 'grayscale(90%)', 'opacity': '0.7'},
+                            className='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover '
+                                      'uk-background-center-center'),
+                        html.Div([
+                            html.H3([name], className='uk-text-bolder'),
+                            html.A(['Talk to us'], className='uk-button uk-text-bolder uk-light', href='/contact-us/',
+                                   style={'background-color': '#88A9C3', 'color': '#091235'})
+                        ], className='uk-card uk-card-body uk-width-1-2@s uk-overlay',
+                            style={'position': 'absolute', 'bottom': '0px'})
+                    ], style={'position': 'relative'}),
                     html.Div([
-                        html.P(desc, className='uk-text-bolder'),
-                        html.P(subdesc, style={'color': 'white'})
-                    ], className='uk-card uk-card-body')
-                ])
-            ], **{'data-uk-grid': 'true'}, className='uk-grid-collapse uk-child-width-1-2@m uk-margin uk-flex-middle')
-            for name, img, desc, subdesc in clientele
-        ])
-    ], className='uk-container')
-], className='uk-section uk-light', style={'background-color': '#091235'})
+                        html.Div([
+                            html.P(desc, className='uk-text-bolder'),
+                            html.P(subdesc, style={'color': 'white'})
+                        ], className='uk-card uk-card-body')
+                    ])
+                ], **{'data-uk-grid': 'true'},
+                    className='uk-grid-collapse uk-child-width-1-2@m uk-margin uk-flex-middle')
+                for name, img, desc, subdesc in clientele
+            ])
+        ], className='uk-container')
+    ], className='uk-section uk-light', style={'background-color': '#091235'}),
+    footer()
+])
