@@ -1,39 +1,35 @@
-from fasthtml.components import Div, H2, Br, Span, H3, Button, P
+import dash
+from dash import html
 
-page = Div(
-    Div(
-        Div(
-            H2(
-                'Planning objective', Br(), Span('financial advice (Services)', cls='uk-light'),
-                cls='uk-text-bolder', style='color: white;'
-            ),
-            cls='uk-card uk-card-body'
-        ),
-        Div(
-            *[Div(
-                Div(
-                    Div(
-                        style=f'background-image: url({img}); filter: grayscale(90%); opacity: 0.6;',
-                        cls='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover uk-background-center-center'
+dash.register_page(__name__)
+
+layout = html.Div([
+    html.Div([
+        html.Div([
+            html.H2([
+                'Planning objective', html.Br(), html.Span(['financial advice (Services)'], className='uk-light')
+            ], className='uk-text-bolder', style={'color': 'white'})
+        ], className='uk-card uk-card-body'),
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.Div(
+                        style={'background-image': f'url({img})', 'filter': 'grayscale(90%)', 'opacity': '0.6'},
+                        className='uk-height-medium uk-flex uk-flex-start uk-flex-middle uk-background-cover '
+                                  'uk-background-center-center'
                     ),
-                    Div(
-                        H3(title, cls='uk-text-bolder uk-width-1-2', style='color: white;'),
-                        Button('Find Out More', cls='uk-button uk-text-bolder', hx_get='/contact-us/',
-                               hx_target='#page',
-                               hx_push_url='/services/',
-                               style='background-color: #88A9C3'),
-                        cls='uk-padding',
-                        style='position: absolute; bottom: 0px;'
-                    ),
-                    style='position: relative;'
-                ),
-                Div(
-                    Div(
-                        P(subtitle, style='color: white;'),
-                        cls='uk-card uk-card-body'
-                    )
-                )
-            ) for title, subtitle, img in [
+                    html.Div([
+                        html.H3([title], className='uk-text-bolder uk-width-1-2', style={'color': 'white'}),
+                        html.A(['Find Out More'], className='uk-button uk-text-bolder', href='/contact-us/',
+                               style={'background-color': '#88A9C3'})
+                    ], className='uk-padding', style={'position': 'absolute', 'bottom': '0px'})
+                ], style={'position': 'relative'}),
+                html.Div([
+                    html.Div([
+                        html.P([subtitle], style={'color': 'white'})
+                    ], className='uk-card uk-card-body')
+                ])
+            ]) for title, subtitle, img in [
                 ('Financial Planning', 'Financial planning is a tailored strategy to help you achieve your '
                                        'financial goals, make smart decisions, and secure your future with '
                                        'confidence.',
@@ -59,10 +55,7 @@ page = Div(
                               'ensuring peace of mind for you and your family.',
                  'https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/jakub-zerdzicki'
                  '-GQn9GnMkVQg-unsplash_30_11zon.webp')
-            ]],
-            data_uk_grid=True, cls='uk-child-width-1-2@s uk-child-width-1-3@m'
-        ),
-        cls='uk-container'
-    ),
-    cls='uk-section', style='background-color: #091235'
-)
+            ]
+        ], **{'data-uk-grid': 'true'}, className='uk-child-width-1-2@s uk-child-width-1-3@m')
+    ], className='uk-container')
+], className='uk-section', style={'background-color': '#091235'})

@@ -1,12 +1,11 @@
+import json
 import random
-from datetime import datetime
 
-import numpy as np
 from fasthtml.components import Div, Ul, Li, A, Span, Img, H3, P, Label, Button, Input, H2, Table, Thead, Tr, Th, \
     Caption, Tbody, Td, Br, Hr, Nav
 
 from interface import calendar_view, sign_out_button
-from utility_functions import get_clients, dt_object
+from utility_functions import dt_object
 
 
 def menu_card():
@@ -88,7 +87,6 @@ def overview_card():
         Div(
             Div(
                 Div('Overview', cls='uk-text-default uk-text-bolder'),
-                Div(datetime.now().strftime('%B %Y'), cls='uk-text-small'),
                 cls='uk-flex uk-flex-between'
             ),
             cls='uk-card-header'
@@ -105,42 +103,7 @@ def overview_card():
             ),
             cls='uk-card-body'
         ),
-        Div(
-            calendar_view(),
-            Nav(
-                Ul(
-                    Li(
-                        A(
-                            Span(data_uk_pagination_previous=True, cls='uk-margin-small-right'),
-                            'Previous',
-                            href='#'
-                        )
-                    ),
-                    Li(
-                        A(
-                            'Next',
-                            Span(data_uk_pagination_next=True, cls='uk-margin-small-left'),
-                            href='#'
-                        ),
-                        cls='uk-margin-auto-left'
-                    ),
-                    cls='uk-pagination', data_uk_margin=True
-                ),
-                cls='uk-margin-medium-top'
-            ),
-            A(
-                Div(
-                    Span(data_uk_icon='icon: mail', cls='uk-margin-small-right', style='color: #89CFF0;'),
-                    cls='uk-width-auto'
-                ),
-                Div(
-                    Div('Top 5 Portfolio Holdings: Tech Giants Lead with Apple, Tesla, and Amazon Driving Strong '
-                        'Returns'[:80] + '...', style='color: #89CFF0;', cls='uk-text-bolder')
-                ),
-                data_uk_grid=True, cls='uk-child-width-expand uk-grid-small uk-margin-medium-top uk-text-muted'
-            ),
-            cls='uk-card-footer'
-        ),
+        Div(calendar_view(), cls='uk-card-footer'),
         cls='uk-card uk-card-default uk-light', style='background-color: #172031;'
     )
 
@@ -341,10 +304,52 @@ def performance_summary_card():
     )
 
 
-def client_insights_card(clients: list, user: dict):
-    balance = lambda accounts: np.sum([
-        account['balance'] for account in accounts
-    ], dtype=np.float16) if accounts else 0.0
+def client_insights_card(clients: list):
+    # Function to calculate total balance
+    # def calculate_balance(client_id):
+    #     return np.sum([account['balance'] for account in get_accounts(client_id)], dtype=np.float16) if get_accounts(
+    #         client_id) else 0.0
+
+    if not clients:  # Early return if no clients
+        return Div('No clients available', cls='uk-text-danger')
+
+    client_items = [
+        Li(
+            A(
+                Div(
+                    Div(
+                        Img(
+                            cls='uk-border-circle', width='48', height='48',
+                            src=client.profile_picture_url or '',
+                            alt='profile-pic'
+                        ) if client.profile_picture_url or '' else Span(data_uk_icon='icon: user; ratio: 4;'),
+                        cls='uk-width-auto'
+                    ),
+                    Div(
+                        H3(
+                            Span(client.first_name or 'First name', cls='uk-text-bolder'),
+                            Span(' '),
+                            client.last_name or 'Last name',
+                            cls='uk-card-title uk-margin-remove-bottom', style='color:white;'
+                        ),
+                        Div(client.email or 'No email provided', style='font-size: 11px;'),
+                        P('Last active',
+                          Span(client.created_at.strftime('%B %d, %Y'),
+                               cls='uk-text-default uk-text-bolder uk-margin-small-left'),
+                          cls='uk-text-meta uk-margin-remove-top'),
+                        cls='uk-width-expand'
+                    ),
+                    cls='uk-grid-small uk-flex-middle', data_uk_grid=True
+                ),
+                # Div(
+                #     Div(f'R {calculate_balance(client_id=client["id"])}', cls='uk-text-lead uk-text-bolder')
+                # ),
+                cls='uk-flex uk-flex-between',
+                hx_post='/edit-client/', hx_target='#page', hx_push_url='/admin/',
+                hx_vals=json.dumps({'email': client.email})
+            )
+        ) for client in clients
+    ]
 
     return Div(
         Div(
@@ -360,46 +365,7 @@ def client_insights_card(clients: list, user: dict):
             cls='uk-card-header'
         ),
         Div(
-            Ul(
-                *[Li(
-                    A(
-                        Div(
-                            Div(
-                                Img(
-                                    cls='uk-border-circle', width='48', height='48',
-                                    src=client['profile_picture_url'],
-                                    alt='profile-pic'
-                                ) if client['profile_picture_url'] else Span(data_uk_icon='icon: user; ratio: 4;'),
-                                cls='uk-width-auto'
-                            ),
-                            Div(
-                                H3(
-                                    Span(
-                                        client['first_name'] if client['first_name'] else 'First name',
-                                        cls='uk-text-bolder'
-                                    ),
-                                    Span(' '),
-                                    client['last_name'] if client['last_name'] else 'Last name',
-                                    cls='uk-card-title uk-margin-remove-bottom', style='color:white;'
-                                ),
-                                Div(client['email'], style='font-size: 11px;'),
-                                P('Last active',
-                                  Span(dt_object(client['created_at']),
-                                       cls='uk-text-default uk-text-bolder uk-margin-small-left'),
-                                  cls='uk-text-meta uk-margin-remove-top'),
-                                cls='uk-width-expand'
-                            ),
-                            cls='uk-grid-small uk-flex-middle', data_uk_grid=True
-                        ),
-                        Div(
-                            Div(f'R {balance(client["accounts"])}', cls='uk-text-lead uk-text-bolder')
-                        ),
-                        cls='uk-flex uk-flex-between', hx_get=f'/edit-client/{client["id"]}/', hx_target='#page',
-                        hx_push_url='/admin/'
-                    ),
-                ) for client in clients] if clients else Div(),
-                cls='uk-list uk-list-divider'
-            ),
+            Ul(*client_items, cls='uk-list uk-list-divider'),
             cls='uk-card-body'
         ),
         Div(
@@ -429,14 +395,12 @@ def client_insights_card(clients: list, user: dict):
     )
 
 
-def page(user: dict):
-    clients = get_clients()
-
+def page(clients: list):
     return Div(
         Div(
             Div(menu_card()), Div(overview_card()), Div(portfolio_value_card()),
             Div(assets_card()), Div(performance_summary_card(), cls='uk-width-1-2@m'),
-            Div(client_insights_card(clients=clients, user=user), cls='uk-width-1-2@m'),
+            Div(client_insights_card(clients=clients), cls='uk-width-1-2@m'),
             data_uk_grid=True, cls='uk-padding uk-child-width-1-4@m uk-grid-small uk-grid-match uk-flex-right'
         ),
         style='background-color: #091235'

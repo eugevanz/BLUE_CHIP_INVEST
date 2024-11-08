@@ -1,4 +1,7 @@
-from fasthtml.components import Div, Img, Canvas, P, H2, Span, Hr, Ul, Li, A, H3
+import dash
+from dash import html
+
+dash.register_page(__name__)
 
 items = [
     ('Why don\'t you change as much as other financial planners?',
@@ -79,67 +82,57 @@ items = [
      'advantages.', 'info')
 ]
 
-page = Div(
-    Div(
-        Div(
-            H2(
-                Span('Personal', style='color: #88A9C3'),
+layout = html.Div([
+    html.Div([
+        html.Div([
+            html.H2([
+                html.Span(['Personal'], style={'color': '#88A9C3'}),
                 ' Finance Guides',
-                Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;',
-                   cls='uk-width-small'),
-                cls='uk-text-bolder'
-            ),
-            cls='uk-card uk-card-body uk-light'
-        ),
-        Div(
-            Div(
-                Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/tingey'
-                        '-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon.webp', alt='', data_uk_cover=True),
-                Canvas(width='600', height='400'),
-                cls='uk-card-media-left uk-cover-container'
-            ),
-            Div(
-                Div(
-                    H3(
-                        Span('Frequently', style='color: #88A9C3;'), Span(' Asked Questions'),
-                        Hr(style='height: 0px; border: none; border-top: 2px solid; color: #88A9C3;',
-                           cls='uk-width-small'),
-                        cls='uk-text-bolder'
-                    ),
-                    Ul(
-                        *[Li(
-                            A(question, href='',
-                              cls='uk-accordion-title uk-text-default uk-text-bolder'),
-                            Div(
-                                P(answer),
-                                cls='uk-accordion-content'
-                            ),
-                            cls='uk-open' if idx == 0 else None
-                        ) for idx, (question, answer, _) in enumerate(items[:4])],
-                        data_uk_accordion=True
-                    ),
-                    cls='uk-card-body'
-                )
-            ),
-            data_uk_grid=True,
-            cls='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin',
-            style='background-color: #091235'
-        ),
-        Div(
-            *[Div(
-                Div(
-                    H3(
-                        Span(data_uk_icon=f'icon: {icon}; ratio: 3', cls='uk-width-auto'),
-                        Span(question), data_uk_grid=True,
-                        cls='uk-child-width-expand@s uk-grid-small uk-flex-middle uk-text-bolder'),
-                    P(answer),
-                    cls='uk-card uk-card-body uk-light'
-                )
-            ) for question, answer, icon in items[4:]],
-            data_uk_grid='masonry: pack',
-            cls='uk-child-width-1-2@s'
-        ),
-        cls='uk-container'
-    ),
-    cls='uk-section', style='background-color: #2A3A58'
-)
+                html.Hr(style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
+                        className='uk-width-small'),
+            ], className='uk-text-bolder')
+        ], className='uk-card uk-card-body uk-light'),
+        html.Div([
+            html.Div([
+                html.Img(src='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/tingey'
+                             '-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon.webp', alt='',
+                         **{'data-uk-cover': 'true'}),
+                html.Canvas(width='600', height='400')
+            ], className='uk-card-media-left uk-cover-container'),
+            html.Div([
+                html.Div([
+                    html.H3([
+                        html.Span(['Frequently'], style={'color': '#88A9C3'}),
+                        html.Span([' Asked Questions']),
+                        html.Hr(
+                            style={'height': '0px', 'border': 'none', 'border-top': '2px solid', 'color': '#88A9C3'},
+                            className='uk-width-small')
+                    ], className='uk-text-bolder'),
+                    html.Ul([
+                        html.Li([
+                            html.A([question], href='', className='uk-accordion-title uk-text-default uk-text-bolder'),
+                            html.Div([
+                                html.P(answer)
+                            ], className='uk-accordion-content')
+                        ], className='uk-open' if idx == 0 else None) for idx, (question, answer, _) in
+                        enumerate(items[:4])
+                    ], **{'data-uk-accordion': 'true'})
+                ], className='uk-card-body')
+            ])
+        ], **{'data-uk-grid': 'true'},
+            className='uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin',
+            style={'background-color': '#091235'}),
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.H3([
+                        html.Span(**{'data-uk-icon': f'icon: {icon}; ratio: 3'}, className='uk-width-auto'),
+                        html.Span([question])
+                    ], **{'data-uk-grid': 'true'},
+                        className='uk-child-width-expand@s uk-grid-small uk-flex-middle uk-text-bolder'),
+                    html.P(answer)
+                ], className='uk-card uk-card-body uk-light')
+            ]) for question, answer, icon in items[4:]
+        ], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@s')
+    ], className='uk-container')
+], className='uk-section', style={'background-color': '#2A3A58'})
