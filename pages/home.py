@@ -13,10 +13,8 @@ layout = html.Div([
                     html.Div([
                         html.Div([
                             html.H1([
-                                html.Span(['Get a clear path to']),
-                                html.Br(),
-                                html.Span(['your financial goals.'])
-                            ], className='uk-text-bolder'),
+                                'Get a clear path to your financial goals.'
+                            ], className='uk-text-bolder uk-width-medium'),
                             html.P(['Our Wealth Activating team can help you']),
                             html.A(['Get Started'], className='uk-button uk-button-small uk-light', href='/contact-us/',
                                    style={'background-color': '#091235'})

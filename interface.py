@@ -46,29 +46,463 @@ calculator_group4 = [nav_link(href, title) for href, title in [
     ("#other-relevant-financial-metrics-calculators", "Profit Margin Calculator")
 ]]
 
-
-def precision_financial_tools():
-    return html.Li(
-        html.A([
-            'Financial Tools',
-            html.Span(**{'data-uk-navbar-parent-icon': 'true'})
-        ], href='#'),
+potential_interest_calculator_tab = html.Div([
+    html.Div([
         html.Div([
-            html.Ul([
-                html.Li('Potential Interest Calculators', className='uk-nav-header'),
-                *calculator_group1,
-                html.Li(className='uk-nav-divider'),
-                html.Li('Return on Investment (ROI) Calculators', className='uk-nav-header'),
-                *calculator_group2,
-                html.Li(className='uk-nav-divider'),
-                html.Li('Loan Amortisation Calculators', className='uk-nav-header'),
-                *calculator_group3,
-                html.Li(className='uk-nav-divider'),
-                html.Li('Other Relevant Financial Metrics Calculators', className='uk-nav-header'),
-                *calculator_group4
-            ], className='uk-nav uk-navbar-dropdown-nav')
-        ], className='uk-navbar-dropdown uk-width-large')
-    )
+            html.H4('Simple Interest Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Principal (P)', icon='bag',
+                               description='The initial amount of money that is being invested or '
+                                           'loaned.'),
+                    calc_input(label='Interest Rate (R)', icon='arrow-up-right',
+                               description='The annual interest rate, usually provided as a '
+                                           'percentage (e.g., 5%)'),
+                    calc_input(label='Time (T)', icon='clock',
+                               description='The time period for which the interest is calculated, '
+                                           'typically in years.'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' per year'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4(['Compound Interest Calculator']),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Principal (P)', icon='bag',
+                               description='The initial amount of money that is being invested or '
+                                           'loaned.'),
+                    calc_input(label='Interest Rate (R)', icon='arrow-up-right',
+                               description='The annual interest rate, usually provided as a '
+                                           'percentage (e.g., 5%)'),
+                    calc_input(label='Time (T)', icon='clock',
+                               description='The time period for which the interest is '
+                                           'calculated, typically in years.'),
+                    calc_input(label='Compounding Frequency (n)', icon='calendar',
+                               description='The number of times the interest is compounded '
+                                           'per year (e.g., annually, semi-annually, quarterly, '
+                                           'monthly, daily).'),
+                    html.Div(['Common values for compounding frequency:'],
+                             className='uk-text-small uk-padding-small uk-padding-remove-top'),
+                    html.Div([
+                        html.Ul([
+                            html.Li(['Annually (n = 1)']),
+                            html.Li(['Semi-Annually (n = 2)']),
+                            html.Li(['Quarterly (n = 4)']),
+                            html.Li(['Monthly (n = 12)']),
+                            html.Li(['Daily (n = 365)'])
+                        ], className='uk-list uk-list-collapse uk-list-disc')
+                    ], className='uk-text-small uk-padding-small uk-padding-remove-top'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span('0.00', className='uk-text-bolder'), ' per year'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4(['Savings Interest Calculator']),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Principal (P)', icon='bag',
+                               description='The initial amount of money that is being '
+                                           'invested or loaned.'),
+                    calc_input(label='Monthly Contributions (C)', icon='mail',
+                               description='The amount of money added to the account each '
+                                           'month, if applicable.'),
+                    calc_input(label='Annual Interest Rate (R)', icon='mail',
+                               description='The interest rate provided by the savings '
+                                           'account, usually expressed as a percentage.'),
+                    calc_input(label='Time (T)', icon='clock',
+                               description='The duration for which the savings will '
+                                           'accumulate interest, typically measured in years.'),
+                    calc_input(label='Compounding Frequency (n)', icon='calendar',
+                               description='The number of times the interest is compounded '
+                                           'per year (e.g., annually, semi-annually, quarterly, '
+                                           'monthly, daily).'),
+                    html.Div(['Common values for compounding frequency:'],
+                             className='uk-text-small uk-padding-small uk-padding-remove-top'),
+                    html.Div([
+                        html.Ul([
+                            html.Li(['Annually (n = 1)']),
+                            html.Li(['Semi-Annually (n = 2)']),
+                            html.Li(['Quarterly (n = 4)']),
+                            html.Li(['Monthly (n = 12)']),
+                            html.Li(['Daily (n = 365)'])
+                        ], className='uk-list uk-list-collapse uk-list-disc'),
+                    ], className='uk-text-small uk-padding-small uk-padding-remove-top'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span('0.00', className='uk-text-bolder'), ' per year'
+                        ]),
+                        html.Hr()
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ])
+], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@m uk-margin-medium-top')
+
+return_on_investment_calculator_tab = html.Div([
+    html.Div([
+        html.Div([
+            html.H4('Basic ROI Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment (I)', icon='bag',
+                               description='The starting amount of money invested.'),
+                    calc_input(label='Final Value (F)', icon='arrow-up-right',
+                               description='The value of the investment after it has matured.'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00%'], className='uk-text-bolder'), ' ROI'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Annualised ROI Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment (I)', icon='bag',
+                               description='The starting amount of money invested.'),
+                    calc_input(label='Final Value (F)', icon='arrow-up-right',
+                               description='The value of the investment at the end of the period.'),
+                    calc_input(label='Number of Years (N)', icon='clock',
+                               description='The total number of years the investment was held.'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00%'], className='uk-text-bolder'), ' Annualised ROI'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Adjusted ROI Calculator for Taxes and Fees'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment (I)', icon='bag',
+                               description='The starting amount of money invested.'),
+                    calc_input(label='Final Value (F)', icon='arrow-up-right',
+                               description='The value of the investment at the end of the period.'),
+                    calc_input(label='Number of Years (N)', icon='clock',
+                               description='The total number of years the investment was held.'),
+                    calc_input(label='Taxes (%)', icon='tag',
+                               description='The percentage of taxes applied to the profit.'),
+                    calc_input(label='Fees (%)', icon='credit-card',
+                               description='The percentage of fees applied to the profit.'),
+                    html.Div([
+                        html.Div(['Result'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00%'], className='uk-text-bolder'), ' Adjusted ROI after Taxes and Fees'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ])
+], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@m uk-margin-medium-top')
+
+loan_amortisation_calculator_tab = html.Div([
+    html.Div([
+        html.Div([
+            html.H4('Fixed-Rate Loan Amortisation Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Loan Amount (Principal)', icon='credit-card',
+                               description='The total amount of the loan.'),
+                    calc_input(label='Annual Interest Rate (%)', icon='tag',
+                               description='The annual fixed interest rate of the loan.'),
+                    calc_input(label='Loan Term (Years)', icon='calendar',
+                               description='The number of years to pay off the loan.'),
+                    html.Div([
+                        html.Div(['Monthly Payment'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' per month'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Mortgage Loan Amortisation Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Home Price', icon='home',
+                               description='The total price of the home being purchased.'),
+                    calc_input(label='Down Payment (%)', icon='credit-card',
+                               description='The percentage of the home price paid upfront.'),
+                    calc_input(label='Loan Term (Years)', icon='calendar',
+                               description='The number of years over which the mortgage will be repaid.'),
+                    calc_input(label='Annual Interest Rate (%)', icon='tag',
+                               description='The yearly interest rate of the mortgage.'),
+                    html.Div([
+                        html.Div(['Monthly Mortgage Payment'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' per month'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Car Loan Amortisation Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Car Price', icon='cart',
+                               description='The total cost of the car being financed.'),
+                    calc_input(label='Down Payment (%)', icon='credit-card',
+                               description='The initial payment made, expressed as a percentage of the car price.'),
+                    calc_input(label='Loan Term (Years)', icon='calendar',
+                               description='The number of years over which the car loan will be repaid.'),
+                    calc_input(label='Annual Interest Rate (%)', icon='tag',
+                               description='The yearly interest rate applied to the car loan.'),
+                    html.Div([
+                        html.Div(['Monthly Car Loan Payment'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' per month'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ])
+], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@m uk-margin-medium-top')
+
+other_relevant_financial_metrics_calculator_tab = html.Div([
+    html.Div([
+        html.Div([
+            html.H4('Net Present Value (NPV) Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment', icon='bag',
+                               description='The initial amount invested at the start of the project.'),
+                    calc_input(label='Discount Rate (%)', icon='shrink',
+                               description='The rate of return used to discount future cash flows.'),
+                    calc_input(label='Cash Flow Year 1', icon='calendar',
+                               description='The cash inflow/outflow for the first year.'),
+                    calc_input(label='Cash Flow Year 2', icon='calendar',
+                               description='The cash inflow/outflow for the second year.'),
+                    calc_input(label='Cash Flow Year 3', icon='calendar',
+                               description='The cash inflow/outflow for the third year.'),
+                    html.Div([
+                        html.Div(['Net Present Value (NPV)'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' currency units'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Internal Rate of Return (IRR) Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment', icon='bag',
+                               description='The initial amount invested at the start of the project.'),
+                    calc_input(label='Cash Flow Year 1', icon='calendar',
+                               description='The cash inflow/outflow for the first year.'),
+                    calc_input(label='Cash Flow Year 2', icon='calendar',
+                               description='The cash inflow/outflow for the second year.'),
+                    calc_input(label='Cash Flow Year 3', icon='calendar',
+                               description='The cash inflow/outflow for the third year.'),
+                    calc_input(label='Cash Flow Year 4', icon='calendar',
+                               description='The cash inflow/outflow for the fourth year.'),
+                    calc_input(label='Cash Flow Year 5', icon='calendar',
+                               description='The cash inflow/outflow for the fifth year.'),
+                    html.Div([
+                        html.Div(['Internal Rate of Return (IRR)'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' %'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Debt-to-Income (DTI) Ratio Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Total Monthly Debt Payments', icon='credit-card',
+                               description='The total monthly payments for all your debts, including mortgages, '
+                                           'loans, credit cards, etc.'),
+                    calc_input(label='Gross Monthly Income', icon='users',
+                               description='Your total monthly income before taxes and deductions.'),
+                    html.Div([
+                        html.Div(['Debt-to-Income Ratio (DTI)'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' %'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Break-Even Point (BEP) Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Fixed Costs', icon='cloud-upload',
+                               description='These are the costs that remain constant regardless of the production or sales '
+                                           'volume, such as rent, salaries, utilities, etc.'),
+                    calc_input(label='Variable Cost per Unit', icon='bag',
+                               description='The costs that vary with the production or sales volume, such as materials '
+                                           'or labor costs for each unit produced or sold.'),
+                    calc_input(label='Price per Unit', icon='credit-card',
+                               description='The selling price for each unit of product or service.'),
+                    html.Div([
+                        html.Div(['Break-Even Point (Units)'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' units'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Future Value (FV) Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Present Value (PV)', icon='calendar',
+                               description='The initial investment or principal amount at the beginning of the time period.'),
+                    calc_input(label='Annual Interest Rate (r)', icon='arrow-up-right',
+                               description='The annual interest rate, typically expressed as a percentage (e.g., 5%).'),
+                    calc_input(label='Number of Periods (t)', icon='clock',
+                               description='The number of time periods (usually years) for which the investment will grow.'),
+                    calc_input(label='Compounding Frequency (n)', icon='refresh',
+                               description='The number of times the interest is compounded per year (e.g., monthly = 12, quarterly = 4).'),
+                    html.Div([
+                        html.Div(['Future Value (FV)'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' currency'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Cash Flow Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Cash Inflows', icon='arrow-right',
+                               description='The total income or revenue received over a given period.'),
+                    calc_input(label='Cash Outflows', icon='arrow-left',
+                               description='The total expenses or payments made over a given period.'),
+                    html.Div([
+                        html.Div(['Net Cash Flow'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' currency'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Payback Period Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Initial Investment', icon='bag',
+                               description='The total amount of money invested at the start.'),
+                    calc_input(label='Annual Cash Inflows', icon='arrow-right',
+                               description='The cash inflows or profits generated annually from the investment.'),
+                    html.Div([
+                        html.Div(['Payback Period'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' years'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ]),
+    html.Div([
+        html.Div([
+            html.H4('Profit Margin Calculator'),
+            html.Form([
+                html.Fieldset([
+                    calc_input(label='Revenue', icon='bag',
+                               description='The total revenue or sales from which profit is derived.'),
+                    calc_input(label='Net Profit', icon='crosshairs',
+                               description='The profit after subtracting expenses, taxes, and other costs from revenue.'),
+                    html.Div([
+                        html.Div(['Profit Margin'], className='uk-text-bolder uk-text-small'),
+                        html.Hr(),
+                        html.Div([
+                            html.Span(['0.00'], className='uk-text-bolder'), ' %'
+                        ]),
+                        html.Hr(),
+                    ], className='uk-margin'),
+                ], className='uk-fieldset')
+            ]),
+        ], className='uk-card uk-card-default uk-card-body uk-light', style={'background-color': '#091235'})
+    ])
+], **{'data-uk-grid': 'masonry: pack'}, className='uk-child-width-1-2@m uk-margin-medium-top')
 
 
 def nav():
