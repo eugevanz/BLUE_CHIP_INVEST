@@ -1,0 +1,58 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Mortgage Loan Amortisation Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Home Price Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Home Price</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-mortgage/" hx-target="#calculate-monthly-mortgage-output"
+                           hx-trigger="keyup changed delay:1s" name="home_price" placeholder="Enter home price"
+                           type="number">
+                </div>
+                <small>The total price of the home being purchased.</small>
+            </div>
+
+            <!-- Down Payment (%) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Down Payment (%)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-mortgage/" hx-target="#calculate-monthly-mortgage-output"
+                           hx-trigger="keyup changed delay:1s" name="down_payment_pct"
+                           placeholder="Enter down payment percentage" type="number">
+                </div>
+                <small>The percentage of the home price paid upfront.</small>
+            </div>
+
+            <!-- Loan Term (Years) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Loan Term (Years)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-mortgage/" hx-target="#calculate-monthly-mortgage-output"
+                           hx-trigger="keyup changed delay:1s" name="loan_term_years"
+                           placeholder="Enter loan term in years" type="number">
+                </div>
+                <small>The number of years over which the mortgage will be repaid.</small>
+            </div>
+
+            <!-- Annual Interest Rate (%) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Annual Interest Rate (%)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-mortgage/" hx-target="#calculate-monthly-mortgage-output"
+                           hx-trigger="keyup changed delay:1s" name="annual_rate"
+                           placeholder="Enter annual interest rate" type="number">
+                </div>
+                <small>The yearly interest rate of the mortgage.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Monthly Mortgage Payment</div>
+                <hr>
+                <div id="calculate-monthly-mortgage-output"><span class="uk-text-bolder">0.00</span> per month</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

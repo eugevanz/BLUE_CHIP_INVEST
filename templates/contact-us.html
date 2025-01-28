@@ -1,0 +1,90 @@
+{% extends "index.html" %}
+{% block logo %}
+<button class="uk-button uk-button-link" onclick="history.back()">
+    <img height="64" src="{{ url_for('static', path='icons/angle-left-solid.svg') }}" uk-svg width="64">
+</button>
+{% endblock %}
+{% block content %}
+<div class="uk-animation-fade">
+    <div class="uk-section" style="background-color: #091235;">
+        <div class="uk-container">
+            <div class="uk-child-width-1-2@m uk-grid-match uk-grid-divider" uk-grid>
+                <div>
+                    <div class="uk-card uk-card-body uk-light">
+                        <h3 class="uk-text-bolder">
+                            <span style="color: #88A9C3">Request</span> an<br>Appointment
+                        </h3>
+                        <hr class="uk-width-small"
+                            style="height: 0px; border: none; border-top: 2px solid; color: #88A9C3">
+                        <p>Need help with something? Want a demo? Reach out to our friendly team, and we'll get back to
+                            you
+                            in no time.</p>
+                        <div class="uk-grid-match uk-child-width-1-2@m uk-margin-large" uk-grid>
+                            <div>
+                                <div class="uk-text-small uk-flex uk-flex-middle">
+                                    <div><img height="40"
+                                              src="{{ url_for('static', path='icons/location-dot-solid.svg') }}" uk-svg
+                                              width="40"></div>
+                                    <div class="uk-margin-left">Unit 17, No.30 Surprise Road, Pinetown, 3610</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-text-small uk-flex uk-flex-middle">
+                                    <div><img height="40"
+                                              src="{{ url_for('static', path='icons/mobile-solid.svg') }}" uk-svg
+                                              width="40"></div>
+                                    <div class="uk-margin-left">0860 258 2447</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-text-small uk-flex uk-flex-middle">
+                                    <div><img height="40"
+                                              src="{{ url_for('static', path='icons/envelope-solid.svg') }}" uk-svg
+                                              width="40"></div>
+                                    <div class="uk-margin-left">info@bluechipinvest.co.za</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-text-small uk-flex uk-flex-middle">
+                                    <div><img height="40"
+                                              src="{{ url_for('static', path='icons/clock-solid.svg') }}" uk-svg
+                                              width="40"></div>
+                                    <div class="uk-margin-left">Mon - Sat, 08:00 - 16:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-body uk-light">
+                        <form>
+                            <div class="uk-margin">
+                                <div class="uk-inline">
+                                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                                    <input class="uk-input uk-width-large" placeholder="Your name" type="text">
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline">
+                                    <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                                    <input class="uk-input uk-width-large" placeholder="you@company.com" type="text">
+                                </div>
+                            </div>
+                            <div class="uk-margin">
+                                <textarea class="uk-textarea" placeholder="Leave a message" rows="5"></textarea>
+                            </div>
+                            <div class="uk-text-small uk-margin">
+                                No worries, your info stays with us. We don’t do the oversharing thing.
+                            </div>
+                            <button class="uk-button uk-button-large uk-width-1-1 uk-margin-top uk-text-bolder"
+                                    style="color: #88A9C3; background-color: #091235" type="submit">
+                                Send your message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

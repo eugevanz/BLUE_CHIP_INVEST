@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+{% block logo %}
+<button class="uk-button uk-button-link" onclick="history.back()">
+    <img height="64" src="{{ url_for('static', path='icons/angle-left-solid.svg') }}" uk-svg width="64">
+</button>
+{% endblock %}
+{% block content %}
+<div class="uk-animation-fade">
+    <div class="uk-section uk-light" style="background-color: #091235;">
+        <div class="uk-container">
+            <div class="uk-card uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+                <div class="uk-flex-last@s uk-card-media-right uk-cover-container uk-visible@m">
+                    <div class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover"
+                         data-src="{{ url_for('static', path='youssef-naddam-iJ2IG8ckCpA-unsplash_15_11zon-grayscale.webp') }}"
+                         uk-img></div>
+                </div>
+                <div>
+                    <div class="uk-card-body">
+                        <h2 class="uk-text-bolder">
+                            <span style="color: #88A9C3;">We Help</span> financial<br>
+                            <span>Advisors that</span><br>
+                            <span>exclusively serve.</span>
+                        </h2>
+                        <p>
+                            Dedicated to the needs of financial advisors who serve clients exclusively, we offer
+                            customized
+                            solutions
+                            and resources that enhance their practices. Our mission is to equip advisors with the tools
+                            and
+                            support
+                            they need to foster meaningful client relationships, allowing them to focus on delivering
+                            top-notch
+                            financial guidance and personalized service.
+                        </p>
+                        <a class="uk-button uk-button-large uk-text-bolder" href="/contact-us/"
+                           style="background-color: #88A9C3; color: #091235;">Talk to us</a>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card uk-card-body">
+                <h2 class="uk-text-bolder">
+                    <span style="color: #88A9C3;">Meet</span><span> Our Team</span>
+                    <hr class="uk-width-small"
+                        style="height: 0px; border: none; border-top: 2px solid; color: #88A9C3;">
+                </h2>
+            </div>
+            <div class="uk-grid-match uk-child-width-1-3@s uk-child-width-1-4@m" uk-grid>
+                {% for advisor in advisors %}
+                <div>
+                    <div class="uk-background-top-right uk-background-cover uk-height-medium uk-panel uk-flex uk-flex-bottom"
+                         style="background-image: url({{ url_for('static', path='jurica-koletic-7YVZYZeITc8-unsplash_3_11zon-grayscale.webp') }});">
+                        <div class="uk-card uk-card-small uk-card-body">
+                            <div class="uk-text-large uk-text-bolder">{{ advisor.name }}</div>
+                            <div class="uk-text-small uk-text-bolder"
+                                 style="padding: 8px; background-color: #88A9C3; color: #091235;">{{ advisor.position }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

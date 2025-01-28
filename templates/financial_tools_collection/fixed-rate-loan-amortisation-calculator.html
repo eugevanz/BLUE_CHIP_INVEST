@@ -1,0 +1,47 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Fixed-Rate Loan Amortisation Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Loan Amount (Principal) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Loan Amount (Principal)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-payment/" hx-target="#calculate-monthly-payment-output"
+                           hx-trigger="keyup changed delay:1s" name="loan" placeholder="Enter loan amount"
+                           type="number">
+                </div>
+                <small>The total amount of the loan.</small>
+            </div>
+
+            <!-- Annual Interest Rate (%) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Annual Interest Rate (%)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-payment/" hx-target="#calculate-monthly-payment-output"
+                           hx-trigger="keyup changed delay:1s" name="annual_rate"
+                           placeholder="Enter annual interest rate" type="number">
+                </div>
+                <small>The annual fixed interest rate of the loan.</small>
+            </div>
+
+            <!-- Loan Term (Years) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Loan Term (Years)</span>
+                    <input class="uk-input" hx-post="/calculate-monthly-payment/" hx-target="#calculate-monthly-payment-output"
+                           hx-trigger="keyup changed delay:1s" name="term_years" placeholder="Enter loan term in years"
+                           type="number">
+                </div>
+                <small>The number of years to pay off the loan.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Monthly Payment</div>
+                <hr>
+                <div id="calculate-monthly-payment-output"><span class="uk-text-bolder">0.00</span> per month</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,49 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Break-Even Point (BEP) Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Fixed Costs Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Fixed Costs</span>
+                    <input class="uk-input" hx-post="/calculate-bep/" hx-target="#calculate-bep-output"
+                           hx-trigger="keyup changed delay:1s" name="fixed_costs" placeholder="Enter fixed costs"
+                           type="number">
+                </div>
+                <small>These are the costs that remain constant regardless of the production or sales volume, such as
+                    rent, salaries, utilities, etc.</small>
+            </div>
+
+            <!-- Variable Cost per Unit Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Variable Cost per Unit</span>
+                    <input class="uk-input" hx-post="/calculate-bep/" hx-target="#calculate-bep-output"
+                           hx-trigger="keyup changed delay:1s" name="variable_costs"
+                           placeholder="Enter variable cost per unit" type="number">
+                </div>
+                <small>The costs that vary with the production or sales volume, such as materials or labor costs for
+                    each unit produced or sold.</small>
+            </div>
+
+            <!-- Price per Unit Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Price per Unit</span>
+                    <input class="uk-input" hx-post="/calculate-bep/" hx-target="#calculate-bep-output"
+                           hx-trigger="keyup changed delay:1s" name="price_per_unit" placeholder="Enter price per unit"
+                           type="number">
+                </div>
+                <small>The selling price for each unit of product or service.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Break-Even Point (Units)</div>
+                <hr>
+                <div id="calculate-bep-output"><span class="uk-text-bolder">0.00</span> units</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

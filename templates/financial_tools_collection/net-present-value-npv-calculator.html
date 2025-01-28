@@ -1,0 +1,69 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Net Present Value (NPV) Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Initial Investment Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Initial Investment</span>
+                    <input class="uk-input" hx-post="/calculate-npv/" hx-target="#calculate-npv-output"
+                           hx-trigger="keyup changed delay:1s" name="initial_investment"
+                           placeholder="Enter initial investment" type="number">
+                </div>
+                <small>The initial amount invested at the start of the project.</small>
+            </div>
+
+            <!-- Discount Rate (%) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Discount Rate (%)</span>
+                    <input class="uk-input" hx-post="/calculate-npv/" hx-target="#calculate-npv-output"
+                           hx-trigger="keyup changed delay:1s" name="discount_rate" placeholder="Enter discount rate"
+                           type="number">
+                </div>
+                <small>The rate of return used to discount future cash flows.</small>
+            </div>
+
+            <!-- Cash Flow Year 1 Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Cash Flow Year 1</span>
+                    <input class="uk-input" hx-post="/calculate-npv/" hx-target="#calculate-npv-output"
+                           hx-trigger="keyup changed delay:1s" name="cash_flow_1"
+                           placeholder="Enter cash flow for year 1" type="number">
+                </div>
+                <small>The cash inflow/outflow for the first year.</small>
+            </div>
+
+            <!-- Cash Flow Year 2 Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Cash Flow Year 2</span>
+                    <input class="uk-input" hx-post="/calculate-npv/" hx-target="#calculate-npv-output"
+                           hx-trigger="keyup changed delay:1s" name="cash_flow_2"
+                           placeholder="Enter cash flow for year 2" type="number">
+                </div>
+                <small>The cash inflow/outflow for the second year.</small>
+            </div>
+
+            <!-- Cash Flow Year 3 Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Cash Flow Year 3</span>
+                    <input class="uk-input" hx-post="/calculate-npv/" hx-target="#calculate-npv-output"
+                           hx-trigger="keyup changed delay:1s" name="cash_flow_3"
+                           placeholder="Enter cash flow for year 3" type="number">
+                </div>
+                <small>The cash inflow/outflow for the third year.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Net Present Value (NPV)</div>
+                <hr>
+                <div id="calculate-npv-output"><span class="uk-text-bolder">0.00</span> currency units</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

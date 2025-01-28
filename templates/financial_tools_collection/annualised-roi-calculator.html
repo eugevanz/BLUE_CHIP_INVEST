@@ -1,0 +1,47 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Annualised ROI Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Initial Investment Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Initial Investment (I)</span>
+                    <input class="uk-input" hx-post="/calculate-annualised-roi/" hx-target="#calculate-annualised-roi-output"
+                           hx-trigger="keyup changed delay:1s" name="initial" placeholder="Enter initial investment"
+                           type="number">
+                </div>
+                <small>The starting amount of money invested.</small>
+            </div>
+
+            <!-- Final Value Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Final Value (F)</span>
+                    <input class="uk-input" hx-post="/calculate-annualised-roi/" hx-target="#calculate-annualised-roi-output"
+                           hx-trigger="keyup changed delay:1s" name="final" placeholder="Enter final value"
+                           type="number">
+                </div>
+                <small>The value of the investment at the end of the period.</small>
+            </div>
+
+            <!-- Number of Years Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Number of Years (N)</span>
+                    <input class="uk-input" hx-post="/calculate-annualised-roi/" hx-target="#calculate-annualised-roi-output"
+                           hx-trigger="keyup changed delay:1s" name="years" placeholder="Enter number of years"
+                           type="number">
+                </div>
+                <small>The total number of years the investment was held.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Result</div>
+                <hr>
+                <div id="calculate-annualised-roi-output"><span class="uk-text-bolder">0.00%</span> Annualised ROI</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

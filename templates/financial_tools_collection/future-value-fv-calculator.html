@@ -1,0 +1,59 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Future Value (FV) Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Present Value (PV) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Present Value (PV)</span>
+                    <input class="uk-input" hx-post="/calculate-fv/" hx-target="#calculate-fv-output"
+                           hx-trigger="keyup changed delay:1s" name="present" placeholder="Enter present value"
+                           type="number">
+                </div>
+                <small>The initial investment or principal amount at the beginning of the time period.</small>
+            </div>
+
+            <!-- Annual Interest Rate (r) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Annual Interest Rate (r)</span>
+                    <input class="uk-input" hx-post="/calculate-fv/" hx-target="#calculate-fv-output"
+                           hx-trigger="keyup changed delay:1s" name="annual" placeholder="Enter annual interest rate"
+                           type="number">
+                </div>
+                <small>The annual interest rate, typically expressed as a percentage (e.g., 5%).</small>
+            </div>
+
+            <!-- Number of Periods (t) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Number of Periods (t)</span>
+                    <input class="uk-input" hx-post="/calculate-fv/" hx-target="#calculate-fv-output"
+                           hx-trigger="keyup changed delay:1s" name="periods" placeholder="Enter number of periods"
+                           type="number">
+                </div>
+                <small>The number of time periods (usually years) for which the investment will grow.</small>
+            </div>
+
+            <!-- Compounding Frequency (n) Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Compounding Frequency (n)</span>
+                    <input class="uk-input" hx-post="/calculate-fv/" hx-target="#calculate-fv-output"
+                           hx-trigger="keyup changed delay:1s" name="compound" placeholder="Enter compounding frequency"
+                           type="number">
+                </div>
+                <small>The number of times the interest is compounded per year (e.g., monthly = 12, quarterly =
+                    4).</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Future Value (FV)</div>
+                <hr>
+                <div id="calculate-fv-output"><span class="uk-text-bolder">0.00</span> currency</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

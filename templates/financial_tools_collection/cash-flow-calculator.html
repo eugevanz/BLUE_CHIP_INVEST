@@ -1,0 +1,36 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Cash Flow Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Cash Inflows Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Cash Inflows</span>
+                    <input class="uk-input" hx-post="/calculate-net-cash-flow/" hx-target="#calculate-net-cash-flow-output"
+                           hx-trigger="keyup changed delay:1s" name="inflows" placeholder="Enter cash inflows"
+                           type="text">
+                </div>
+                <small>The total income or revenue received over a given period.</small>
+            </div>
+
+            <!-- Cash Outflows Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Cash Outflows</span>
+                    <input class="uk-input" hx-post="/calculate-net-cash-flow/" hx-target="#calculate-net-cash-flow-output"
+                           hx-trigger="keyup changed delay:1s" name="outflows" placeholder="Enter cash outflows"
+                           type="text">
+                </div>
+                <small>The total expenses or payments made over a given period.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Net Cash Flow</div>
+                <hr>
+                <div id="calculate-net-cash-flow-output"><span class="uk-text-bolder">0.00</span> currency</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

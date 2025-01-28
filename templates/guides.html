@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+{% block logo %}
+<button class="uk-button uk-button-link" onclick="history.back()">
+    <img height="64" src="{{ url_for('static', path='icons/angle-left-solid.svg') }}" uk-svg width="64">
+</button>
+{% endblock %}
+{% block content %}
+<div class="uk-animation-fade">
+    <div class="uk-section" style="background-color: #2A3A58;">
+        <div class="uk-container">
+            <div class="uk-card uk-card-body uk-light">
+                <h2 class="uk-text-bolder">
+                    <span style="color: #88A9C3;">Personal</span> Finance Guides
+                    <hr class="uk-width-small"
+                        style="height: 0px; border: none; border-top: 2px solid; color: #88A9C3;">
+                </h2>
+            </div>
+            <div class="uk-card uk-card-secondary uk-grid-collapse uk-child-width-1-2@s uk-margin"
+                 style="background-color: #091235;" uk-grid>
+                <div class="uk-card-media-left uk-cover-container">
+                    <img
+                            src="{{ url_for('static', path='tingey-injury-law-firm-9SKhDFnw4c4-unsplash_14_11zon-grayscale.webp') }}"
+                            uk-cover>
+                    <canvas height="400" width="600"></canvas>
+                </div>
+                <div>
+                    <div class="uk-card-body">
+                        <h3 class="uk-text-bolder">
+                            <span style="color: #88A9C3;">Frequently</span> Asked Questions
+                            <hr class="uk-width-small"
+                                style="height: 0px; border: none; border-top: 2px solid; color: #88A9C3;">
+                        </h3>
+                        <ul uk-accordion>
+                            {% for qa in qas[:4] %}
+                            <li class="{% if loop.first %}uk-open{% endif %}">
+                                <a class="uk-accordion-title uk-text-default uk-text-bolder" href="">{{ qa.que }}</a>
+                                <div class="uk-accordion-content">
+                                    <p>{{ qa.ans }}</p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-margin-large">
+                {% for qa in qas[4:] %}
+                <div class="uk-margin-large uk-light">
+                    <div class="uk-grid-small" uk-grid>
+                        <div><img height="40" src="{{ qa.type }}" uk-svg width="40"></div>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-text-bolder">{{ qa.que }}</h3>
+                            <p>{{ qa.ans }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

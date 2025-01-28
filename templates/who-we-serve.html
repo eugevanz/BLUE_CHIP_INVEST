@@ -1,0 +1,39 @@
+{% extends "index.html" %}
+{% block logo %}
+<button class="uk-button uk-button-link" onclick="history.back()">
+    <img height="64" src="{{ url_for('static', path='icons/angle-left-solid.svg') }}" uk-svg width="64">
+</button>
+{% endblock %}
+{% block content %}
+<div class="uk-animation-fade">
+    <div class="uk-section uk-light" style="background-color: #091235;">
+        <div class="uk-container">
+            <div class="uk-card uk-card-body">
+                <h2 class="uk-text-bolder">
+                    <span style="color: #88A9C3;">Who</span> We Serve
+                    <hr class="uk-width-small"
+                        style="height: 0px; border: none; border-top: 2px solid; color: #88A9C3;">
+                </h2>
+            </div>
+            <div class="uk-child-width-1-2@m uk-margin" uk-grid>
+                {% for item in whoweserve %}
+                <div id="{{ item.id }}">
+                    <div class="uk-height-medium uk-flex uk-flex-bottom uk-background-cover uk-background-center-center"
+                         data-src="{{ item.img }}" uk-img>
+                        <div class="uk-card uk-card-body uk-width-1-2@s uk-overlay">
+                            <h3 class="uk-text-bolder">{{ item.name }}</h3>
+                            <a class="uk-button uk-text-bolder uk-light" href="/contact-us/"
+                               style="background-color: #88A9C3; color: #091235;">Talk to us</a>
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <p class="uk-text-bolder">{{ item.desc }}</p>
+                        <p style="color: white;">{{ item.subdesc }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

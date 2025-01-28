@@ -1,0 +1,36 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Payback Period Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Initial Investment Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Initial Investment</span>
+                    <input class="uk-input" hx-post="/calculate-payback-period/" hx-target="#calculate-payback-period-output"
+                           hx-trigger="keyup changed delay:1s" name="initial_investment"
+                           placeholder="Enter initial investment" type="number">
+                </div>
+                <small>The total amount of money invested at the start.</small>
+            </div>
+
+            <!-- Annual Cash Inflows Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Annual Cash Inflows</span>
+                    <input class="uk-input" hx-post="/calculate-payback-period/" hx-target="#calculate-payback-period-output"
+                           hx-trigger="keyup changed delay:1s" name="annual_inflows"
+                           placeholder="Enter annual cash inflows" type="number">
+                </div>
+                <small>The cash inflows or profits generated annually from the investment.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Payback Period</div>
+                <hr>
+                <div id="calculate-payback-period-output"><span class="uk-text-bolder">0.00</span> years</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

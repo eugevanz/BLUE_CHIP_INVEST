@@ -1,0 +1,37 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Debt-to-Income (DTI) Ratio Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Total Monthly Debt Payments Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <label>Total Monthly Debt Payments</label>
+                    <input class="uk-input" hx-post="/calculate-dti/" hx-target="#calculate-dti-output"
+                           hx-trigger="keyup changed delay:1s" name="debt_payments"
+                           placeholder="Enter total monthly debt payments" type="number">
+                </div>
+                <small>The total monthly payments for all your debts, including mortgages, loans, credit cards,
+                    etc.</small>
+            </div>
+
+            <!-- Gross Monthly Income Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <label>Gross Monthly Income</label>
+                    <input class="uk-input" hx-post="/calculate-dti/" hx-target="#calculate-dti-output"
+                           hx-trigger="keyup changed delay:1s" name="income" placeholder="Enter gross monthly income"
+                           type="number">
+                </div>
+                <small>Your total monthly income before taxes and deductions.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Debt-to-Income Ratio (DTI)</div>
+                <hr>
+                <div id="calculate-dti-output"><span class="uk-text-bolder">0.00</span> %</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

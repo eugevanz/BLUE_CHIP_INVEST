@@ -1,0 +1,36 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Basic ROI Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Initial Investment Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Initial Investment (I)</span>
+                    <input class="uk-input" hx-post="/calculate-roi/" hx-target="#calculate-roi-output"
+                           hx-trigger="keyup changed delay:1s" name="initial" placeholder="Enter initial investment"
+                           type="number">
+                </div>
+                <small>The starting amount of money invested.</small>
+            </div>
+
+            <!-- Final Value Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Final Value (F)</span>
+                    <input class="uk-input" hx-post="/calculate-roi/" hx-target="#calculate-roi-output"
+                           hx-trigger="keyup changed delay:1s" name="final" placeholder="Enter final value"
+                           type="number">
+                </div>
+                <small>The value of the investment after it has matured.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Result</div>
+                <hr>
+                <div id="calculate-roi-output"><span class="uk-text-bolder">0.00%</span> ROI</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

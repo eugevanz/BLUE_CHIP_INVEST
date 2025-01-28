@@ -1,0 +1,47 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Simple Interest Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Principal Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Principal (P)</span>
+                    <input class="uk-input" hx-post="/calculate-simple-interest/" hx-target="#calculate-simple-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="principal" placeholder="Enter principal amount"
+                           type="number">
+                </div>
+                <small>The initial amount of money that is being invested or loaned.</small>
+            </div>
+
+            <!-- Interest Rate Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Interest Rate (R)</span>
+                    <input class="uk-input" hx-post="/calculate-simple-interest/" hx-target="#calculate-simple-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="rate" placeholder="Enter interest rate"
+                           type="number">
+                </div>
+                <small>The annual interest rate, usually provided as a percentage (e.g., 5%).</small>
+            </div>
+
+            <!-- Time Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Time (T)</span>
+                    <input class="uk-input" hx-post="/calculate-simple-interest/" hx-target="#calculate-simple-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="time" placeholder="Enter time in years"
+                           type="number">
+                </div>
+                <small>The time period for which the interest is calculated, typically in years.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Result</div>
+                <hr>
+                <div id="calculate-simple-interest-output"><span class="uk-text-bolder">0.00</span> per year</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

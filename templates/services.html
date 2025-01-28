@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+{% block logo %}
+<button class="uk-button uk-button-link" onclick="history.back()">
+    <img height="64" src="{{ url_for('static', path='icons/angle-left-solid.svg') }}" uk-svg width="64">
+</button>
+{% endblock %}
+{% block content %}
+<div class="uk-animation-fade">
+    <div class="uk-section" style="background-color: #091235;">
+        <div class="uk-container">
+            <div class="uk-card uk-card-body">
+                <h2 class="uk-text-bolder" style="color: white;">
+                    Planning objective<br>
+                    <span class="uk-light">financial advice (Services)</span>
+                </h2>
+            </div>
+            <div class="uk-child-width-1-2@s uk-child-width-1-3@m" data-uk-grid="true">
+                {% for item in services %}
+                <div id="{{ item.id }}">
+                    <div class="uk-height-medium uk-flex uk-flex-bottom uk-background-cover uk-background-center-center"
+                         data-src="{{ item.img }}" uk-img>
+                        <div class="uk-padding">
+                            <h3 class="uk-text-bolder uk-width-1-2" style="color: white;">{{ item.title }}</h3>
+                            <a class="uk-button uk-text-bolder" href="/contact-us/" style="background-color: #88A9C3;">
+                                Find Out More
+                            </a>
+                        </div>
+                    </div>
+                    <div class="uk-card uk-card-body">
+                        <p style="color: white;">{{ item.subtitle }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Savings Interest Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Principal Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Principal (P)</span>
+                    <input class="uk-input" hx-post="/calculate-savings-interest/"
+                           hx-target="#calculate-savings-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="principal" placeholder="Enter principal amount"
+                           type="number">
+                </div>
+                <small>The initial amount of money that is being invested or loaned.</small>
+            </div>
+
+            <!-- Monthly Contributions Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Monthly Contributions (C)</span>
+                    <input class="uk-input" hx-post="/calculate-savings-interest/"
+                           hx-target="#calculate-savings-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="monthly_contrib"
+                           placeholder="Enter monthly contributions" type="number">
+                </div>
+                <small>The amount of money added to the account each month, if applicable.</small>
+            </div>
+
+            <!-- Annual Interest Rate Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Annual Interest Rate (R)</span>
+                    <input class="uk-input" hx-post="/calculate-savings-interest/"
+                           hx-target="#calculate-savings-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="annual_rate"
+                           placeholder="Enter annual interest rate" type="number">
+                </div>
+                <small>The interest rate provided by the savings account, usually expressed as a percentage.</small>
+            </div>
+
+            <!-- Time Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Time (T)</span>
+                    <input class="uk-input" hx-post="/calculate-savings-interest/"
+                           hx-target="#calculate-savings-interest-output"
+                           hx-trigger="keyup changed delay:1s" name="time" placeholder="Enter time in years"
+                           type="number">
+                </div>
+                <small>The duration for which the savings will accumulate interest, typically measured in years.</small>
+            </div>
+
+            <!-- Compounding Frequency Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Compounding Frequency (n)</span>
+                    <select class="uk-select" hx-post="/calculate-savings-interest/"
+                           hx-target="#calculate-savings-interest-output" name="frequency">
+                        <option value="1">Annually</option>
+                        <option value="2">Semi-Annually</option>
+                        <option value="4">Quarterly</option>
+                        <option value="12">Monthly</option>
+                        <option value="365">Daily</option>
+                    </select>
+                </div>
+                <small>The number of times the interest is compounded per year (e.g., annually, semi-annually,
+                    quarterly, monthly, daily).</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Result</div>
+                <hr>
+                <div id="calculate-savings-interest-output"><span class="uk-text-bolder">0.00</span> per year</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>

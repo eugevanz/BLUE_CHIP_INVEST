@@ -1,0 +1,36 @@
+<div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #2A3A58;">
+    <h4>Profit Margin Calculator</h4>
+    <form>
+        <fieldset class="uk-fieldset">
+            <!-- Revenue Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Revenue</span>
+                    <input class="uk-input" hx-post="/calculate-profit-margin/" hx-target="#calculate-profit-margin-output"
+                           hx-trigger="keyup changed delay:1s" name="revenue" placeholder="Enter total revenue"
+                           type="number">
+                </div>
+                <small>The total revenue or sales from which profit is derived.</small>
+            </div>
+
+            <!-- Net Profit Input -->
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    <span>Net Profit</span>
+                    <input class="uk-input" hx-post="/calculate-profit-margin/" hx-target="#calculate-profit-margin-output"
+                           hx-trigger="keyup changed delay:1s" name="net_profit" placeholder="Enter net profit"
+                           type="number">
+                </div>
+                <small>The profit after subtracting expenses, taxes, and other costs from revenue.</small>
+            </div>
+
+            <!-- Result Section -->
+            <div class="uk-margin">
+                <div class="uk-text-bolder uk-text-small">Profit Margin</div>
+                <hr>
+                <div id="calculate-profit-margin-output"><span class="uk-text-bolder">0.00</span> %</div>
+                <hr>
+            </div>
+        </fieldset>
+    </form>
+</div>
