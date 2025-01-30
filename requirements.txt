@@ -6,5 +6,4 @@ httpx
 numpy_financial
 python-multipart
 asyncio
-smtplib
 email
