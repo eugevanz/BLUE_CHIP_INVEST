@@ -5,3 +5,7 @@ jinja2
 httpx
 numpy_financial
 python-multipart
+asyncio
+json
+smtplib
+email

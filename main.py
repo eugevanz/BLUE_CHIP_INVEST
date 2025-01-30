@@ -1,4 +1,9 @@
+import asyncio
 import json
+import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import numpy as np
 import numpy_financial as npf
@@ -10,6 +15,9 @@ from fastapi.templating import Jinja2Templates
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+EMAIL_LOGIN = os.getenv("EMAIL_LOGIN")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 with open("static/data.json", "r") as file:
     data = json.load(file)
@@ -436,3 +444,38 @@ async def calculate_simple_interest(principal: int = Form(0), rate: int = Form(0
 
     # Return only the formatted numerical result
     return HTMLResponse(content=f"<span><span class='uk-text-bolder'>R {simple_interest:,.2f}</span> per year</span>")
+
+
+# SENDING EMAILS
+# --------------
+
+async def send_email(name: str, sender_email: str, message: str):
+    msg = MIMEMultipart()
+    msg["Subject"] = "New contact from bluechip-invest.co.za"
+    msg["From"] = sender_email
+    msg["To"] = "blueche3j9g3@bluechip-invest.co.za"
+
+    # Attach plain text and HTML versions
+    msg.attach(MIMEText(message, "plain"))
+    msg.attach(MIMEText(f"<html><body><p>{name}</p><p>{message}</p></body></html>", "html"))
+
+    def smtp_send():
+        try:
+            with smtplib.SMTP_SSL("webmail.bluechip-invest.co.za", 465) as server:
+                server.login(EMAIL_LOGIN, EMAIL_PASSWORD)
+                server.send_message(msg)
+        except Exception as e:
+            print(f"Email sending failed: {e}")  # Log errors (replace with proper logging in production)
+
+    await asyncio.to_thread(smtp_send)
+
+
+@app.post("/send-contact-form/", response_class=HTMLResponse)
+async def post(name: str = Form(...), email: str = Form(...), message: str = Form(...)):
+    await send_email(name, email, message)
+    return HTMLResponse(content="""<article class="uk-article">
+    <h1 class="uk-article-title">We look forward to the journey ahead!</h1>
+    <p class="uk-article-meta">Your message has been sent</p>
+    <p class="uk-text-lead">Thank you for reaching out to Blue Chip Investments! We appreciate your interest and the 
+    opportunity to help you navigate the world of smart investing.</p>
+    </article>""")

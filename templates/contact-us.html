@@ -58,21 +58,24 @@
                 </div>
                 <div>
                     <div class="uk-card uk-card-body uk-light">
-                        <form>
+                        <form hx-post="/send-contact-form/" method="post">
                             <div class="uk-margin">
                                 <div class="uk-inline">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                                    <input class="uk-input uk-width-large" placeholder="Your name" type="text">
+                                    <input class="uk-input uk-width-large" name="name" placeholder="Your name"
+                                           required type="text">
                                 </div>
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline">
                                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                    <input class="uk-input uk-width-large" placeholder="you@company.com" type="text">
+                                    <input class="uk-input uk-width-large" name="email" placeholder="you@company.com"
+                                           required type="text">
                                 </div>
                             </div>
                             <div class="uk-margin">
-                                <textarea class="uk-textarea" placeholder="Leave a message" rows="5"></textarea>
+                                <textarea class="uk-textarea" name="message" placeholder="Leave a message"
+                                          required rows="5"></textarea>
                             </div>
                             <div class="uk-text-small uk-margin">
                                 No worries, your info stays with us. We don’t do the oversharing thing.
