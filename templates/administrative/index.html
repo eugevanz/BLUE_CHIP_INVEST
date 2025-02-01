@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:hx-on="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/css/uikit.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com' rel="stylesheet">
+    <link href='https://fonts.gstatic.com' rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'
+          rel="stylesheet">
+    <link href='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/favicon.ico' rel='icon'
+          type='image/x-icon'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
+    <title>Welcome to Blue Chip Investments</title>
+</head>
+<style>
+    .header-image {
+        background-image: url('{{ url_for('static', path='marten-bjork-6dW3xyQvcYE-unsplash_6_11zon-grayscale.webp') }}');
+    }
+    .logo-text {
+        font-family: 'Noto Sans', sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        color: #091235;
+    }
+</style>
+<body>
+<div uk-sticky="end: !body; show-on-up: true; animation: uk-animation-slide-top">
+    <nav class="uk-navbar-container">
+        <div class="uk-container">
+            <div class="uk-navbar" uk-navbar="mode: click">
+                <div class="uk-navbar-left">
+                    {% block logo %}
+                    <img height="64" src="{{ url_for('static', path='icons/blue-keys.svg') }}"
+                         style="fill: none; color: #091235" uk-svg width="64">
+                    {% endblock %}
+                    <div class="uk-navbar-item uk-logo">
+                        <a class="uk-link-text" href="/">
+                            <div class="logo-text uk-width-small" style="line-height: 22px;">
+                                BLUE CHIP INVESTMENTS
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="uk-navbar-right">
+                    <a class="uk-navbar-toggle uk-navbar-toggle-animate uk-hidden@l uk-icon uk-navbar-toggle-icon"
+                       href="#" role="button" uk-navbar-toggle-icon="true"></a>
+                    <div class="uk-navbar-dropdown uk-width-large">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li><a href="/who-we-serve/">Who We Serve</a></li>
+                            <li><a href="/services/">Services</a></li>
+                            <li><a href="/advisors/">Advisors</a></li>
+                            <li><a href="/guides/">Guides</a></li>
+                            <li><a href="/financial-tools/">Financial Tools</a></li>
+                            <li class="uk-margin uk-padding-small" style="background-color: #091235;">
+                                <a class="uk-button uk-button-small uk-light" href="/contact-us/">Let's Talk</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="uk-navbar-nav uk-visible@l">
+                        <li><a href="/who-we-serve/">Who We Serve</a></li>
+                        <li><a href="/services/">Services</a></li>
+                        <li><a href="/advisors/">Advisors</a></li>
+                        <li><a href="/guides/">Guides</a></li>
+                        <li><a href="/financial-tools/">Financial Tools</a></li>
+                    </ul>
+                    <a class="uk-button uk-button-small uk-light uk-visible@l" href="/contact-us/"
+                       style="background-color: #091235;">Let's Talk</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>
