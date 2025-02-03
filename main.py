@@ -2,7 +2,7 @@ import asyncio
 import json
 import os
 import smtplib
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import Optional, List
@@ -14,6 +14,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from redis_om import Field, JsonModel, get_redis_connection
+from starlette.middleware.base import RequestResponseEndpoint
 from supabase import create_client
 
 
@@ -82,6 +83,19 @@ class Transaction(JsonModel):
         database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
 
 
+class StoreSession(JsonModel):
+    user_id: str = Field(index=True)
+    profile_picture_url: Optional[str] = Field(default=None)
+    first_name: Optional[str] = Field(default=None)
+    last_name: Optional[str] = Field(default=None)
+    profile_type: Optional[str] = Field(default=None)
+    email: Optional[str] = Field(default=None)
+    access_token: str = Field()
+
+    class Meta:
+        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
+
+
 templates = Jinja2Templates(directory="templates")
 
 EMAIL_LOGIN = os.getenv("EMAIL_LOGIN")
@@ -99,6 +113,22 @@ with open("static/data.json", "r") as file:
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+async def auth_middleware(request: Request, call_next: RequestResponseEndpoint) -> Response:
+    if request.url.path in ["/client/", "/admin/"]:
+        session = StoreSession.find(StoreSession.user_id == request.headers.get("Authorization")).first()
+        if session.access_token:
+            auth_response = supabase_admin.auth.get_session(access_token=session.access_token)
+            if auth_response.session is None:
+                return RedirectResponse("/login/")
+        else:
+            return RedirectResponse("/login/")
+    response = await call_next(request)
+    return response
+
+
+app.middleware('http')(auth_middleware)
 
 
 # ACCOUNT Routes
@@ -774,13 +804,16 @@ async def index(request: Request):
 
 @app.get("/admin/", response_class=HTMLResponse)
 async def admin(request: Request):
-    profile_data = {
-        "profile_picture_url": request.cookies.get("profile_picture_url"),
-        "first_name": request.cookies.get("first_name"),
-        "last_name": request.cookies.get("last_name"),
-        "email": request.cookies.get("email")
-    }
-    return templates.TemplateResponse(request=request, name="admin.html", context=profile_data)
+    session = StoreSession.find(StoreSession.user_id == request.headers.get("Authorization")).first()
+    if session.access_token:
+        profile_data = {
+            "profile_picture_url": session.profile_picture_url,
+            "first_name": session.first_name,
+            "last_name": session.last_name,
+            "email": session.email
+        }
+        return templates.TemplateResponse(request=request, name="administrative/admin.html", context=profile_data)
+    return RedirectResponse("/login/", status_code=302)
 
 
 @app.get("/client/", response_class=HTMLResponse)
@@ -834,21 +867,30 @@ async def request_otp(email: str = Form(...)):
             content=f"<p class='uk-text-danger' id='send_code_notifications'>{response.error_message}</p>")
 
 
-@app.post("/verify_otp/", response_class=HTMLResponse)
-async def verify_otp(response: Response, sent_email: str = Form(...), sent_code: str = Form(...)):
+@app.post("/verify_otp/")
+async def verify_otp(sent_email: str = Form(...), sent_code: str = Form(...)):
     auth_response = supabase_admin.auth.verify_otp({"email": sent_email, "token": sent_code, "type": "email"})
 
     if auth_response and auth_response.user:
         profile_response = supabase_.table("profiles").select("*").eq("id", auth_response.user.id).single().execute()
-        profile = profile_response.data[0]
-        response.set_cookie(key="profile_picture_url", value=profile['profile_picture_url'])
-        response.set_cookie(key="first_name", value=profile['first_name'])
-        response.set_cookie(key="last_name", value=profile['last_name'])
-        response.set_cookie(key="profile_type", value=profile['profile_type'])
-        response.set_cookie(key="email", value=profile['email'])
-        response.set_cookie(key="access_token", value=auth_response.session.access_token, httponly=True, secure=True)
+        profile = profile_response.data
 
-        return RedirectResponse("/admin/") if profile["profile_type"] == "admin" else RedirectResponse("/client/")
+        new_session = StoreSession(
+            user_id=auth_response.user.id,
+            first_name=profile['first_name'],
+            last_name=profile['last_name'],
+            profile_picture_url=profile['profile_picture_url'],
+            profile_type=profile['profile_type'],
+            email=profile['email'],
+            access_token=auth_response.session.access_token
+        )
+        new_session.db().set(new_session.key(), new_session.model_dump_json(), ex=timedelta(seconds=3600))
+
+        return RedirectResponse(
+            "/admin/", headers={"Authorization": auth_response.user.id}, status_code=302
+        ) if profile["profile_type"] == "admin" else RedirectResponse(
+            "/client/", headers={"Authorization": auth_response.user.id}, status_code=302
+        )
     else:
         RedirectResponse("/login/")
 
