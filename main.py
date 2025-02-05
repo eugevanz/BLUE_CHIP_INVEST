@@ -2,10 +2,10 @@ import asyncio
 import json
 import os
 import smtplib
-from datetime import datetime, timedelta
+from contextlib import asynccontextmanager
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Optional, List
 
 import numpy as np
 import numpy_financial as npf
@@ -13,117 +13,55 @@ from fastapi import FastAPI, Request, Form, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from redis_om import Field, JsonModel, get_redis_connection
+from redis_om import Migrator
 from starlette.middleware.base import RequestResponseEndpoint
 from supabase import create_client
 
+from database import StoreSession, Account, ClientGoal, DividendPayout, Investment, Transaction
+from routes import login
 
-class Account(JsonModel):
-    account_number: str = Field(index=True)
-    account_type: str
-    balance: float = Field(index=True)
-    profile_id: str  # Add profile_id for reference
-    created_at: datetime = Field(index=True)
-    updated_at: Optional[datetime] = Field(index=True)
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
-
-
-class ClientGoal(JsonModel):
-    goal_number: str = Field(index=True)
-    goal_type: str
-    target_amount: float
-    current_savings: float
-    target_date: datetime
-    profile_id: str = Field(index=True)
-    created_at: datetime = Field(index=True)
-    updated_at: Optional[datetime] = Field(index=True)
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
-
-
-class DividendPayout(JsonModel):
-    account_id: str
-    payout_number: str = Field(index=True)
-    amount: float
-    payment_date: datetime
-    created_at: datetime = Field(index=True)
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
-
-
-class Investment(JsonModel):
-    account_id: str
-    inv_number: str = Field(index=True)
-    investment_type: str
-    symbol: str
-    quantity: float
-    purchase_price: float
-    current_price: float
-    purchase_date: datetime
-    created_at: datetime = Field(index=True)
-    updated_at: Optional[datetime] = Field(index=True)
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
-
-
-class Transaction(JsonModel):
-    account_id: str
-    txn_number: str = Field(index=True)
-    amount: float
-    txn_type: str
-    description: str
-    created_at: datetime = Field(index=True)
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
-
-
-class StoreSession(JsonModel):
-    user_id: str = Field(index=True)
-    profile_picture_url: Optional[str] = Field(default=None)
-    first_name: Optional[str] = Field(default=None)
-    last_name: Optional[str] = Field(default=None)
-    profile_type: Optional[str] = Field(default=None)
-    email: Optional[str] = Field(default=None)
-    access_token: str = Field()
-
-    class Meta:
-        database = get_redis_connection(url=os.environ.get("REDIS_URL"), decode_responses=True)
 
 
 templates = Jinja2Templates(directory="templates")
 
-EMAIL_LOGIN = os.getenv("EMAIL_LOGIN")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-SUPABASE_URL = os.environ.get('SUPABASE_URL')
-SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
-SUPABASE_SERVICE_ROLE_KEY = os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
-SUPABASE_PASSWORD = os.environ.get('SUPABASE_PASSWORD')
-supabase_ = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_KEY)
-supabase_admin = create_client(supabase_url=SUPABASE_URL, supabase_key=SUPABASE_SERVICE_ROLE_KEY)
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    app.state.EMAIL_LOGIN = os.getenv("EMAIL_LOGIN")
+    app.state.EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-with open("static/data.json", "r") as file:
-    data = json.load(file)
+    supabase_url = os.environ.get('SUPABASE_URL')
+    supabase_key = os.environ.get('SUPABASE_KEY')
+    supabase_service_role_key = os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
+    # SUPABASE_PASSWORD = os.environ.get('SUPABASE_PASSWORD')
+    app.state.supabase_ = create_client(supabase_url=supabase_url, supabase_key=supabase_key)
+    app.state.supabase_admin = create_client(supabase_url=supabase_url, supabase_key=supabase_service_role_key)
 
-app = FastAPI()
+    Migrator().run()
+    with open("static/data.json", "r") as file:
+        app.state.data = json.load(file)
+
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(login.router)
 
+# app.include_router(home_router, prefix="/home/")
 
 async def auth_middleware(request: Request, call_next: RequestResponseEndpoint) -> Response:
-    if request.url.path in ["/client/", "/admin/"]:
-        session = StoreSession.find(StoreSession.user_id == request.headers.get("Authorization")).first()
-        if session.access_token:
-            auth_response = supabase_admin.auth.get_session(access_token=session.access_token)
-            if auth_response.session is None:
-                return RedirectResponse("/login/")
-        else:
+    protected_routes = ["/client/", "/admin/"]
+    if any(request.url.path.startswith(route) for route in protected_routes):
+        user_id = request.cookies.get("user_id")
+        if not user_id:
             return RedirectResponse("/login/")
+
+        session = StoreSession.find(StoreSession.user_id == user_id).first()
+        print(session)
+        if not session:
+            return RedirectResponse("/login/")
+
     response = await call_next(request)
     return response
 
@@ -133,35 +71,27 @@ app.middleware('http')(auth_middleware)
 
 # ACCOUNT Routes
 
-@app.get("/select_all_from_accounts_where_profile_id/{profile_id}/", response_model=List[Account])
+@app.get("/select_all_from_accounts_where_profile_id/{profile_id}/")
 async def select_all_from_accounts_where_profile_id(profile_id: str):
     accounts = Account.find(Account.profile_id == profile_id).all()
     return accounts
 
 
 @app.post("/create_account/", response_class=HTMLResponse)
-async def create_account(profile_id: str = Form(...), account_type: str = Form(...), balance: float = Form(...)):
-    account_number = Account.Meta.database.incr("account_number_counter")
-    account_number = f"ACC{account_number + 100000}"
-
-    new_account = Account(
-        created_at=datetime.today().date().isoformat(),  # You could use a timestamp here
-        profile_id=profile_id,
-        account_number=account_number,
+async def create_account(profile_id: str = Form(...), account_type: str = Form(...), balance: float = Form(0.0)):
+    account_data = Account(
         account_type=account_type,
         balance=balance,
-        updated_at=datetime.today().date().isoformat(),  # Same here for updates
+        profile_id=profile_id,
     )
-    new_account.save()
-    return HTMLResponse(content=f"""<p class="uk-text-meta">
-        Account created successfully with account number <span class="uk-text-bold">{account_number}</span>
-    </p>""")
+    account_data.save()
+    return HTMLResponse(content=f"""<p class="uk-text-meta">Account created successfully</p>""")
 
 
 @app.post("/delete_account/{account_number}", response_class=HTMLResponse)
 async def delete_account(account_number: str):
     account = Account.find(Account.account_number == account_number).first()
-    account.delete()
+    Account.delete(account.pk)
     return HTMLResponse(content=f"""<p class="uk-text-meta">
         Account deleted successfully with account number <span class="uk-text-bold">{account_number}</span>
     </p>""")
@@ -180,30 +110,21 @@ async def create_client_goal(
         profile_id: str = Form(...), goal_type: str = Form(...), target_amount: float = Form(...),
         current_savings: float = Form(...), target_date: str = Form(...)
 ):
-    goal_number = ClientGoal.Meta.database.incr("goal_number_counter")
-    goal_number = f"GL{goal_number + 100000}"
-
-    new_client_goal = ClientGoal(
-        created_at=datetime.today().date().isoformat(),  # You could use a timestamp here
+    goal_data = ClientGoal(
         profile_id=profile_id,
         goal_type=goal_type,
-        goal_number=goal_number,
         target_amount=target_amount,
         current_savings=current_savings,
-        target_date=datetime.strptime(target_date, "%Y-%m-%d").date(),
-        updated_at=datetime.today().date().isoformat(),  # Same here for updates
+        target_date=datetime.strptime(target_date, "%Y-%m-%d").timestamp()
     )
-
-    new_client_goal.save()
-    return HTMLResponse(content=f"""<p class="uk-text-meta">
-        Client Goal created successfully for <span class="uk-text-bold">{goal_type}</span>
-    </p>""")
+    goal_data.save()
+    return HTMLResponse(content=f"""<p class="uk-text-meta">Client Goal created successfully</p>""")
 
 
 @app.post("/delete_client_goal/{goal_number}/", response_class=HTMLResponse)
 async def delete_client_goal(goal_number: str):
     goal = ClientGoal.find(ClientGoal.goal_number == goal_number).first()
-    goal.delete()
+    ClientGoal.delete(goal.pk)
     return HTMLResponse(content=f"""<p class="uk-text-meta">
         Client Goal deleted successfully for goal <span class="uk-text-bold">{goal_number}</span>
     </p>""")
@@ -213,38 +134,29 @@ async def delete_client_goal(goal_number: str):
 
 @app.get("/select_all_from_dividends_payouts_where_account/{account_number}/")
 async def select_all_from_dividends_payouts_where_account(account_number: str):
-    account = Account.find(Account.account_number == account_number).first()
-    payouts = DividendPayout.find(DividendPayout.account_id == account.pk).all()
+    payouts = DividendPayout.find(DividendPayout.account_number == account_number).all()
     return payouts
 
 
 @app.post("/create_dividend_payout/", response_class=HTMLResponse)
 async def create_dividend_payout(
-        profile_id: str = Form(...), account_id: str = Form(...), amount: float = Form(...),
+        profile_id: str = Form(...), account_number: str = Form(...), amount: float = Form(...),
         payment_date: str = Form(...)
 ):
-    payout_number = DividendPayout.Meta.database.incr("payout_number_counter")
-    payout_number = f"DIV{payout_number + 100000}"
-
-    new_dividend_payout = DividendPayout(
-        payout_number=payout_number,
-        created_at=datetime.today().date().isoformat(),  # You could use a timestamp here
+    payout_data = DividendPayout(
         profile_id=profile_id,
-        account_id=account_id,
+        account_number=account_number,
         amount=amount,
-        payment_date=payment_date
+        payment_date=datetime.strptime(payment_date, "%Y-%m-%d").timestamp()
     )
-
-    new_dividend_payout.save()
-    return HTMLResponse(content=f"""<p class="uk-text-meta">
-        Dividend/Payout created successfully for dividend/payout <span class="uk-text-bold">{payout_number}</span>
-    </p>""")
+    payout_data.save()
+    return HTMLResponse(content=f"""<p class="uk-text-meta">Dividend/Payout created successfully</p>""")
 
 
 @app.post("/delete_dividend_payout/{payout_number}/", response_class=HTMLResponse)
 async def delete_dividend_payout(payout_number: str):
     payout = DividendPayout.find(DividendPayout.payout_number == payout_number).first()
-    payout.delete()
+    DividendPayout.delete(payout.pk)
     return HTMLResponse(content=f"""<p class="uk-text-meta">
         Dividend/Payout deleted successfully for <span class="uk-text-bold">{payout_number}</span>
     </p>""")
@@ -254,43 +166,33 @@ async def delete_dividend_payout(payout_number: str):
 
 @app.get("/select_all_from_investments_where_account/{account_number}/")
 async def select_all_from_investments_where_account_id(account_number: str):
-    account = Account.find(Account.account_number == account_number).first()
-    investments = DividendPayout.find(DividendPayout.account_id == account.pk).all()
+    investments = Investment.find(Investment.account_number == account_number).all()
     return investments
 
 
 @app.post("/create_investment/")
 async def create_investment(
-        account_id: str = Form(...), investment_type: str = Form(...),
+        account_number: str = Form(...), investment_type: str = Form(...),
         symbol: str = Form(...), quantity: float = Form(...), purchase_price: float = Form(...),
         current_price: float = Form(...), purchase_date: str = Form(...)
 ):
-    inv_number = Investment.Meta.database.incr("inv_number_counter")
-    inv_number = f"INV{inv_number + 100000}"
-
-    new_investment = Investment(
-        inv_number=inv_number,
-        created_at=datetime.today().date().isoformat(),
-        account_id=account_id,
+    investment_data = Investment(
+        account_number=account_number,
         investment_type=investment_type,
         symbol=symbol,
         quantity=quantity,
         purchase_price=purchase_price,
         current_price=current_price,
-        purchase_date=purchase_date,
-        updated_at=datetime.today().date().isoformat()
+        purchase_date=datetime.strptime(purchase_date, "%Y-%m-%d").timestamp()
     )
-
-    new_investment.save()
-    return HTMLResponse(content=f"""<p class="uk-text-meta">
-        Investments created successfully for investment <span class="uk-text-bold">{inv_number}</span>
-    </p>""")
+    investment_data.save()
+    return HTMLResponse(content=f"""<p class="uk-text-meta">Investments created successfully</p>""")
 
 
 @app.post("/delete_investment/{inv_number}/")
 async def delete_investment(inv_number: str):
     investment = Investment.find(Investment.inv_number == inv_number).first()
-    investment.delete()
+    Investment.delete(investment.pk)
     return HTMLResponse(content=f"""<p class="uk-text-meta">
         Investment deleted successfully for <span class="uk-text-bold">{inv_number}</span>
     </p>""")
@@ -300,38 +202,29 @@ async def delete_investment(inv_number: str):
 
 @app.get("/select_all_from_transactions_where_account/{account_number}/")
 async def select_all_from_transactions_where_account_id(account_number: str):
-    account = Account.find(Account.account_number == account_number).first()
-    transactions = DividendPayout.find(DividendPayout.account_id == account.pk).all()
+    transactions = Transaction.find(Transaction.account_number == account_number).all()
     return transactions
 
 
 @app.post("/create_transaction/")
 async def create_transaction(
-        account_id: str = Form(...), amount: float = Form(...), txn_type: str = Form(...),
+        account_number: str = Form(...), amount: float = Form(...), txn_type: str = Form(...),
         description: str = Form(...)
 ):
-    txn_number = Transaction.Meta.database.incr("txn_number_counter")
-    txn_number = f"TXN{txn_number + 100000}"
-
-    new_transaction = Transaction(
-        txn_number=txn_number,
-        created_at=datetime.today().date().isoformat(),
-        account_id=account_id,
+    transaction_data = Transaction(
+        account_number=account_number,
         txn_type=txn_type,
         amount=amount,
         description=description
     )
-
-    new_transaction.save()
-    return HTMLResponse(content=f"""<p class="uk-text-meta">
-        Transaction created successfully for transaction <span class="uk-text-bold">{new_transaction}</span>
-    </p>""")
+    transaction_data.save()
+    return HTMLResponse(content=f"""<p class="uk-text-meta">Transaction created successfully</p>""")
 
 
 @app.post("/delete_transaction/{txn_number}/")
 async def delete_from_transactions(txn_number: str):
     transaction = Transaction.find(Transaction.txn_number == txn_number).first()
-    transaction.delete()
+    Transaction.delete(transaction.pk)
     return HTMLResponse(content=f"""<p class="uk-text-meta">
         Transaction deleted successfully for <span class="uk-text-bold">{txn_number}</span>
     </p>""")
@@ -343,8 +236,9 @@ async def delete_from_transactions(txn_number: str):
 async def get(request: Request):
     return templates.TemplateResponse(
         request=request, name="index.html", context={
-            "ctas": data["ctas"], "whatwedo": data["whatwedo"], "testimonials": data["testimonials"],
-            "whoweserve": data["whoweserve"]
+            "ctas": app.state.data["ctas"], "whatwedo": app.state.data["whatwedo"],
+            "testimonials": app.state.data["testimonials"],
+            "whoweserve": app.state.data["whoweserve"]
         }
     )
 
@@ -376,7 +270,7 @@ async def get(request: Request):
 @app.get("/services/", response_class=HTMLResponse)
 async def get(request: Request):
     return templates.TemplateResponse(
-        request=request, name="services.html", context={"services": data["services"]}
+        request=request, name="services.html", context={"services": app.state.data["services"]}
     )
 
 
@@ -390,14 +284,14 @@ async def get(request: Request):
 @app.get("/guides/", response_class=HTMLResponse)
 async def get(request: Request):
     return templates.TemplateResponse(
-        request=request, name="guides.html", context={"qas": data["qas"]}
+        request=request, name="guides.html", context={"qas": app.state.data["qas"]}
     )
 
 
 @app.get("/who-we-serve/", response_class=HTMLResponse)
 async def get(request: Request):
     return templates.TemplateResponse(
-        request=request, name="who-we-serve.html", context={"whoweserve": data["whoweserve"]}
+        request=request, name="who-we-serve.html", context={"whoweserve": app.state.data["whoweserve"]}
     )
 
 
@@ -541,13 +435,13 @@ async def calculate_net_cash_flow(inflows: int = Form(0), outflows: int = Form(0
 
 @app.post("/update-compound-interest/", response_class=HTMLResponse)
 async def update_compound_interest(
-        principal: int = Form(0), rate: int = Form(0), time: int = Form(0), frequency: int = Form(1)
+        principal: int = Form(0), rate: int = Form(0), time_: int = Form(0), frequency: int = Form(1)
 ):
     # Default inputs to zero if they are None
-    principal, rate, time, frequency = float(principal), float(rate) / 100, float(time), int(frequency)
+    principal, rate, time_, frequency = float(principal), float(rate) / 100, float(time_), int(frequency)
 
     # Calculate compound interest
-    amount = principal * (1 + rate / frequency) ** (frequency * time)
+    amount = principal * (1 + rate / frequency) ** (frequency * time_)
     compound_interest = amount - principal
 
     # Return the formatted result
@@ -729,33 +623,33 @@ async def calculate_profit_margin(revenue: int = Form(0), net_profit: int = Form
 
 @app.post("/calculate-savings-interest/", response_class=HTMLResponse)
 async def calculate_savings_interest(
-        principal: int = Form(0), monthly_contrib: int = Form(0), annual_rate: int = Form(0), time: int = Form(0),
+        principal: int = Form(0), monthly_contrib: int = Form(0), annual_rate: int = Form(0), time_: int = Form(0),
         frequency: int = Form(1)
 ):
     # Default inputs to zero if they are None
-    principal, monthly_contrib, annual_rate, time, frequency = (
-        float(principal), float(monthly_contrib), float(annual_rate) / 100, float(time), int(frequency)
+    principal, monthly_contrib, annual_rate, time_, frequency = (
+        float(principal), float(monthly_contrib), float(annual_rate) / 100, float(time_), int(frequency)
     )
 
     # Calculate total amount using the formula
-    if annual_rate > 0 and time > 0:
-        amount = principal * (1 + annual_rate / frequency) ** (frequency * time) + \
-                 (monthly_contrib * ((1 + annual_rate / frequency) ** (frequency * time) - 1)) / (
+    if annual_rate > 0 and time_ > 0:
+        amount = principal * (1 + annual_rate / frequency) ** (frequency * time_) + \
+                 (monthly_contrib * ((1 + annual_rate / frequency) ** (frequency * time_) - 1)) / (
                          annual_rate / frequency)
     else:
-        amount = principal + monthly_contrib * time  # No interest if the rate is 0
+        amount = principal + monthly_contrib * time_  # No interest if the rate is 0
 
     # Return the result
     return HTMLResponse(content=f"<span><span class='uk-text-bolder'>R {amount:,.2f}</span> per year</span>")
 
 
 @app.post("/calculate-simple-interest/", response_class=HTMLResponse)
-async def calculate_simple_interest(principal: int = Form(0), rate: int = Form(0), time: int = Form(0)):
+async def calculate_simple_interest(principal: int = Form(0), rate: int = Form(0), time_: int = Form(0)):
     # Set default values if any input is None
-    principal, rate, time = float(principal), float(rate), float(time)
+    principal, rate, time_ = float(principal), float(rate), float(time_)
 
     # Calculate simple interest
-    simple_interest = (principal * rate * time) / 100
+    simple_interest = (principal * rate * time_) / 100
 
     # Return only the formatted numerical result
     return HTMLResponse(content=f"<span><span class='uk-text-bolder'>R {simple_interest:,.2f}</span> per year</span>")
@@ -776,7 +670,7 @@ async def send_email(name: str, sender_email: str, message: str):
     def smtp_send():
         try:
             with smtplib.SMTP_SSL("webmail.bluechip-invest.co.za", 465) as server:
-                server.login(EMAIL_LOGIN, EMAIL_PASSWORD)
+                server.login(app.state.EMAIL_LOGIN, app.state.EMAIL_PASSWORD)
                 server.send_message(msg)
         except Exception as e:
             print(f"Email sending failed: {e}")  # Log errors (replace with proper logging in production)
@@ -804,16 +698,18 @@ async def index(request: Request):
 
 @app.get("/admin/", response_class=HTMLResponse)
 async def admin(request: Request):
-    session = StoreSession.find(StoreSession.user_id == request.headers.get("Authorization")).first()
-    if session.access_token:
+    user = StoreSession.find(StoreSession.user_id == request.cookies.get('user_id')).first()
+    print(user)
+    if user:
         profile_data = {
-            "profile_picture_url": session.profile_picture_url,
-            "first_name": session.first_name,
-            "last_name": session.last_name,
-            "email": session.email
+            "profile_picture_url": user.profile_picture_url,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email
         }
         return templates.TemplateResponse(request=request, name="administrative/admin.html", context=profile_data)
-    return RedirectResponse("/login/", status_code=302)
+    else:
+        return RedirectResponse("/login/", status_code=302)
 
 
 @app.get("/client/", response_class=HTMLResponse)
@@ -830,21 +726,18 @@ async def client(request: Request):
 # LOGON
 
 @app.get("/sign_out/")
-async def sign_out(response: Response):
-    supabase_admin.auth.sign_out()
-    response.delete_cookie("profile_picture_url")
-    response.delete_cookie("first_name")
-    response.delete_cookie("last_name")
-    response.delete_cookie("profile_type")
-    response.delete_cookie("email")
-    response.delete_cookie("access_token")
+async def sign_out(request: Request):
+    app.state.supabase_admin.auth.sign_out()
+    user = StoreSession.find(StoreSession.user_id == request.cookies.get('user_id')).first()
+    StoreSession.delete(user.pk)
 
-    return RedirectResponse("/")
+    return RedirectResponse("/login/")
 
 
 @app.post("/request_otp/", response_class=HTMLResponse)
 async def request_otp(email: str = Form(...)):
-    response = supabase_admin.auth.sign_in_with_otp({"email": email, "options": {"should_create_user": False}})
+    response = app.state.supabase_admin.auth.sign_in_with_otp(
+        {"email": email, "options": {"should_create_user": False}})
 
     if response and response.user is None:
         return HTMLResponse(content=f"""<form action="/verify_otp/" method="post" class="uk-margin">
@@ -869,28 +762,32 @@ async def request_otp(email: str = Form(...)):
 
 @app.post("/verify_otp/")
 async def verify_otp(sent_email: str = Form(...), sent_code: str = Form(...)):
-    auth_response = supabase_admin.auth.verify_otp({"email": sent_email, "token": sent_code, "type": "email"})
+    auth_response = app.state.supabase_admin.auth.verify_otp({"email": sent_email, "token": sent_code, "type": "email"})
 
     if auth_response and auth_response.user:
-        profile_response = supabase_.table("profiles").select("*").eq("id", auth_response.user.id).single().execute()
+        profile_response = app.state.supabase_.table("profiles").select("*").eq(
+            "id", auth_response.user.id
+        ).single().execute()
         profile = profile_response.data
 
-        new_session = StoreSession(
+        profile_data = StoreSession(
             user_id=auth_response.user.id,
-            first_name=profile['first_name'],
-            last_name=profile['last_name'],
-            profile_picture_url=profile['profile_picture_url'],
-            profile_type=profile['profile_type'],
-            email=profile['email'],
-            access_token=auth_response.session.access_token
+            first_name=profile["first_name"],
+            last_name=profile["last_name"],
+            profile_picture_url=profile["profile_picture_url"],
+            profile_type=profile["profile_type"],
+            email=profile["email"]
         )
-        new_session.db().set(new_session.key(), new_session.model_dump_json(), ex=timedelta(seconds=3600))
+        profile_data.expire(3600)
+        profile_data.save()
 
-        return RedirectResponse(
-            "/admin/", headers={"Authorization": auth_response.user.id}, status_code=302
+        response = RedirectResponse(
+            "/admin/", status_code=302
         ) if profile["profile_type"] == "admin" else RedirectResponse(
-            "/client/", headers={"Authorization": auth_response.user.id}, status_code=302
+            "/client/", status_code=302
         )
+        response.set_cookie(key="user_id", value=auth_response.user.id, httponly=True, max_age=3600)
+        return response
     else:
         RedirectResponse("/login/")
 
@@ -910,7 +807,7 @@ def update_profile(
     if last_name is not None:
         update_data["last_name"] = last_name
 
-    response = supabase_.table("profiles").update(update_data).eq("id", profile_id).execute()
+    response = app.state.supabase_.table("profiles").update(update_data).eq("id", profile_id).execute()
     if response.error:
         return HTMLResponse(content=f"""<p>Failed to update profile: {response.error_message}</p>""")
     if response.data:
@@ -919,7 +816,7 @@ def update_profile(
 
 @app.post("/send_invite/", response_class=HTMLResponse)
 def send_invite(email: str = Form(...)):
-    response = supabase_admin.auth.admin.invite_user_by_email(email)
+    response = app.state.supabase_admin.auth.admin.invite_user_by_email(email)
     if response and response.user:
         return HTMLResponse(content=f"""<p>Invite sent to {response.user.email}</p>""")
     else:
