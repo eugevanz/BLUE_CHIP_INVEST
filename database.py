@@ -1,3 +1,4 @@
+import os
 import time
 from typing import ClassVar, Optional
 
@@ -16,8 +17,8 @@ class Account(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)
 
     @classmethod
     def _next_id(cls) -> str:
@@ -39,8 +40,8 @@ class ClientGoal(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)
 
     @classmethod
     def _next_id(cls) -> str:
@@ -59,8 +60,8 @@ class DividendPayout(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)
 
     @classmethod
     def _next_id(cls) -> str:
@@ -84,8 +85,8 @@ class Investment(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)
 
     @classmethod
     def _next_id(cls) -> str:
@@ -105,8 +106,8 @@ class Transaction(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)
 
     @classmethod
     def _next_id(cls) -> str:
@@ -125,5 +126,5 @@ class StoreSession(HashModel):
 
     class Meta:
         database = redis.Redis(
-            host="redis-13807.c90.us-east-1-3.ec2.redns.redis-cloud.com", port=13807, db=0,
-            password="yqaH4aDnjOyceWhdtCodiT4rGkKIKYMN", decode_responses=True)
+            host=os.environ.get("REDIS_URL"), port=13807, db=0,
+            password=os.environ.get("REDIS_PWD"), decode_responses=True)

@@ -1,0 +1,36 @@
+from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
+
+router = APIRouter()
+
+@router.get("/client_goal_performance", response_class=HTMLResponse)
+async def about():
+    # Return a part of the page, with an image from the static folder
+    return HTMLResponse(content="""<div class="uk-card uk-card-default" style="background-color: #88A9C3;">
+        <div class="uk-card-header">
+            <div class="uk-text-small">Client Goals performance</div>
+            <span id="total_summary"></span>
+            <div class="uk-text-small uk-margin-remove-top" id="card_header"></div>
+        </div>
+
+        <div class="uk-card-body">
+            <div class="uk-grid-divider uk-child-width-expand uk-grid-small" data-uk-grid="true">
+                <div class="uk-width-auto">
+                    <div class="uk-flex uk-flex-column uk-height-small" style="font-size: 8px;">
+                        <div id="highest_"></div>
+                        <div class="uk-margin-auto-vertical" id="mid_"></div>
+                        <div id="lowest_"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- Placeholder for the Graph -->
+                    <div id="goals_fig" style="height: 150px; background-color: #f4f4f4;">
+                        <!-- Embed the actual graph here -->
+                    </div>
+                    <hr/>
+                    <div class="uk-flex uk-flex-wrap" id="legend"></div>
+                </div>
+            </div>
+        </div>
+    </div>""")

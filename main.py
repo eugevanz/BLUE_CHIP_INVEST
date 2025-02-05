@@ -18,7 +18,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from supabase import create_client
 
 from database import StoreSession, Account, ClientGoal, DividendPayout, Investment, Transaction
-from routes import login
+from routes import login, admin
 
 
 
@@ -47,6 +47,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(login.router)
+app.include_router(admin.router)
 
 # app.include_router(home_router, prefix="/home/")
 
@@ -691,27 +692,6 @@ async def post(name: str = Form(...), email: str = Form(...), message: str = For
 
 # LOGGED IN USER
 
-@app.get("/login/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="administrative/login.html")
-
-
-@app.get("/admin/", response_class=HTMLResponse)
-async def admin(request: Request):
-    user = StoreSession.find(StoreSession.user_id == request.cookies.get('user_id')).first()
-    print(user)
-    if user:
-        profile_data = {
-            "profile_picture_url": user.profile_picture_url,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email
-        }
-        return templates.TemplateResponse(request=request, name="administrative/admin.html", context=profile_data)
-    else:
-        return RedirectResponse("/login/", status_code=302)
-
-
 @app.get("/client/", response_class=HTMLResponse)
 async def client(request: Request):
     profile_data = {
@@ -721,7 +701,6 @@ async def client(request: Request):
         "email": request.cookies.get("email")
     }
     return templates.TemplateResponse(request=request, name="client.html", context=profile_data)
-
 
 # LOGON
 
