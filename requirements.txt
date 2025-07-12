@@ -9,3 +9,4 @@ supabase
 redis
 redis-om
 pydantic
+yfinance

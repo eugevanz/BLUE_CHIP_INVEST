@@ -1,0 +1,47 @@
+<div>
+    <div class="uk-card uk-card-body uk-width-1-2@m uk-card-small">
+        <div class="uk-text-bold">Investment Performance</div>
+        <div class="uk-text-large uk-text-bold">School fees</div>
+        <div class="uk-text-meta">Compared to last month | <span class="uk-text-bold">2.4</span>%</div>
+        <div class="uk-grid-match uk-grid-divider uk-grid-small uk-margin" uk-grid>
+            <div class="uk-width-auto">
+                <div class="uk-flex uk-flex-between uk-flex-column">
+                    <div class="uk-text-meta">R 1M</div>
+                    <div class="uk-text-meta">R 500K</div>
+                    <div class="uk-text-meta uk-margin-medium-bottom">R 10K</div>
+                </div>
+            </div>
+            <div class="uk-width-expand">
+                <div>{{ inv_chart_html | safe }}</div>
+                <hr class="uk-margin-small-top">
+                <span><img height="10" src="{{ url_for('static', path='icons/circle-solid.svg') }}"
+                           style="color: green" uk-svg width="10"> Africa</span>
+            </div>
+        </div>
+    </div>
+
+    <table class="uk-table uk-table-divider">
+        <thead>
+        <tr>
+            <th>Investment</th>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Purchase Price</th>
+            <th>Current Price</th>
+            <th>Purchase Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in investments %}
+        <tr>
+            <td>{{ item.investment_type }}</td>
+            <td>{{ item.symbol }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>R <strong>{{ item.purchase_price }}</strong></td>
+            <td>R <strong>{{ item.current_price }}</strong></td>
+            <td>{{ item.purchase_date }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

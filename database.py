@@ -3,10 +3,10 @@ import time
 from typing import ClassVar, Optional
 
 import redis
-from redis_om import HashModel, Field
+from redis_om import Field, JsonModel
 
 
-class Account(HashModel):
+class Account(JsonModel):
     _id_counter: ClassVar[int] = 100000
     account_number: str = Field(default_factory=lambda: Account._next_id(), index=True)
     account_type: str = Field(index=True)
@@ -22,12 +22,13 @@ class Account(HashModel):
 
     @classmethod
     def _next_id(cls) -> str:
-        cls._id_counter += 1
-        return f"ACC{cls._id_counter:06d}"
+        redis_conn = cls.Meta.database
+        next_id = redis_conn.incr('account_number_counter')
+        return f"ACC{next_id:06d}"
 
 
 # ----------------------------------------------------------------------------------------------------------
-class ClientGoal(HashModel):
+class ClientGoal(JsonModel):
     _id_counter: ClassVar[int] = 100000
     goal_number: str = Field(default_factory=lambda: ClientGoal._next_id(), index=True)
     goal_type: str = Field(index=True)
@@ -45,12 +46,13 @@ class ClientGoal(HashModel):
 
     @classmethod
     def _next_id(cls) -> str:
-        cls._id_counter += 1
-        return f"CLG{cls._id_counter:06d}"
+        redis_conn = cls.Meta.database
+        next_id = redis_conn.incr('goal_number_counter')
+        return f"CLG{next_id:06d}"
 
 
 # ----------------------------------------------------------------------------------------------------------
-class DividendPayout(HashModel):
+class DividendPayout(JsonModel):
     _id_counter: ClassVar[int] = 100000
     payout_number: str = Field(default_factory=lambda: DividendPayout._next_id(), index=True)
     account_number: str = Field(index=True)
@@ -65,12 +67,13 @@ class DividendPayout(HashModel):
 
     @classmethod
     def _next_id(cls) -> str:
-        cls._id_counter += 1
-        return f"DVP{cls._id_counter:06d}"
+        redis_conn = cls.Meta.database
+        next_id = redis_conn.incr('payout_number_counter')
+        return f"DVP{next_id:06d}"
 
 
 # ----------------------------------------------------------------------------------------------------------
-class Investment(HashModel):
+class Investment(JsonModel):
     _id_counter: ClassVar[int] = 100000
     inv_number: str = Field(default_factory=lambda: Investment._next_id(), index=True)
     account_number: str = Field(index=True)
@@ -90,12 +93,13 @@ class Investment(HashModel):
 
     @classmethod
     def _next_id(cls) -> str:
-        cls._id_counter += 1
-        return f"INV{cls._id_counter:06d}"
+        redis_conn = cls.Meta.database
+        next_id = redis_conn.incr('inv_number_counter')
+        return f"INV{next_id:06d}"
 
 
 # ----------------------------------------------------------------------------------------------------------
-class Transaction(HashModel):
+class Transaction(JsonModel):
     _id_counter: ClassVar[int] = 100000
     txn_number: str = Field(default_factory=lambda: Transaction._next_id(), index=True)
     account_number: str = Field(index=True)
@@ -111,12 +115,13 @@ class Transaction(HashModel):
 
     @classmethod
     def _next_id(cls) -> str:
-        cls._id_counter += 1
-        return f"TXN{cls._id_counter:06d}"
+        redis_conn = cls.Meta.database
+        next_id = redis_conn.incr('txn_number_counter')
+        return f"TXN{next_id:06d}"
 
 
 # ----------------------------------------------------------------------------------------------------------
-class StoreSession(HashModel):
+class StoreSession(JsonModel):
     user_id: str = Field(index=True)
     profile_picture_url: Optional[str]
     first_name: str = Field(index=True)

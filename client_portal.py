@@ -4,7 +4,7 @@ from datetime import datetime
 from fasthtml.components import Div, Nav, Ul, Li, A, Span, P, H3, Img, Tr, Td, Tbody, Th, Thead, \
     Table, H2, Caption, Button, Article
 
-from interface import calendar_view, sign_out_button
+# from interface import calendar_view, sign_out_button
 
 
 def nav_offcanvas(header: str):
@@ -284,7 +284,7 @@ def menu_card():
                     data_uk_drop='mode: click', cls='uk-card uk-card-body uk-card-default'),
                 cls='uk-inline'
             ),
-            sign_out_button(),
+            # sign_out_button(),
             cls='uk-nav uk-nav-default'
         ),
         cls='uk-card uk-card-body uk-card-default', style='background-color: #2A3A58'

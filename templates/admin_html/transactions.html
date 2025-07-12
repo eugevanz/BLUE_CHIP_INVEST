@@ -1,0 +1,26 @@
+<div>
+    <div class="uk-card uk-card-body uk-width-1-2@m uk-card-small">
+        <div class="uk-text-bold">Transactions</div>
+        <div class="uk-text-large uk-text-bold">School fees</div>
+        <div class="uk-text-meta">Compared to last month | <span class="uk-text-bold">2.4</span>%</div>
+    </div>
+
+    <table class="uk-table uk-table-divider">
+        <thead>
+        <tr>
+            <th>Transaction</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in transactions %}
+        <tr>
+            <td>{{ item.type }}</td>
+            <td>R <strong>{{ item.amount }}</strong></td>
+            <td>{{ item.description }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

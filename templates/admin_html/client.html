@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/css/uikit.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com' rel="stylesheet">
+    <link href='https://fonts.gstatic.com' rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap'
+          rel="stylesheet">
+    <link href='https://oujdrprpkkwxeavzbaow.supabase.co/storage/v1/object/public/website_images/favicon.ico' rel='icon'
+          type='image/x-icon'>
+    <link href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.15.10/js/uikit-icons.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>.rounded-border{border-radius: 30px;}</style>
+    <title>{{ first_name }}'s / Blue Chip Investments</title>
+</head>
+<body>
+<div class="uk-container">
+    <div class="uk-flex uk-flex-wrap">
+        <div hx-get="/market-performance/?ticker_symbol=AAPL" hx-trigger="load" hx-swap="outerHTML"></div>
+        <div hx-get="/account-performance/" hx-trigger="load" hx-swap="outerHTML"></div>
+        <div hx-get="/dividend-performance/" hx-trigger="load" hx-swap="outerHTML"></div>
+
+        <div class="uk-card uk-card-body uk-width-1-1 uk-card-small">
+            <div class="uk-text-bold">Client Goal Performance</div>
+            <div class="uk-text-large uk-text-bold">School fees</div>
+            <div class="uk-text-meta">Compared to last month | <span class="uk-text-bold">2.4</span>%</div>
+            <hr class="uk-margin-small-top">
+            <div class="uk-flex">
+                <div class="uk-grid-match uk-grid-divider uk-grid-small uk-width-1-2@m uk-margin-right" uk-grid>
+                    <div class="uk-width-auto">
+                        <div class="uk-flex uk-flex-between uk-flex-column">
+                            <div class="uk-text-meta">R 1M</div>
+                            <div class="uk-text-meta">R 500K</div>
+                            <div class="uk-text-meta uk-margin-medium-bottom">R 10K</div>
+                        </div>
+                    </div>
+                    <div class="uk-width-expand">
+                        <div>{{ goal_chart_html | safe }}</div>
+                        <hr class="uk-margin-small-top">
+                    </div>
+                </div>
+                <div class="uk-width-1-2@m uk-overflow-auto">
+                    <table class="uk-table uk-table-divider">
+                        <thead>
+                        <tr>
+                            <th>Goal</th>
+                            <th>Target Amount</th>
+                            <th>Current Savings</th>
+                            <th>Target Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in client_goals %}
+                        <tr>
+                            <td>{{ item.goal_type }}</td>
+                            <td>R <strong>{{ "{:,.2f}".format(item.target_amount) }}</strong></td>
+                            <td>R <strong>{{ "{:,.2f}".format(item.current_savings) }}</strong></td>
+                            <td>{{ item.target_date }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-card uk-card-body uk-width-1-1 uk-card-small">
+            <div class="uk-text-bold">Investment Performance</div>
+            <div class="uk-text-large uk-text-bold">School fees</div>
+            <div class="uk-text-meta">Compared to last month | <span class="uk-text-bold">2.4</span>%</div>
+            <hr class="uk-margin-small-top">
+            <div class="uk-flex">
+                <div class="uk-grid-match uk-grid-divider uk-grid-small uk-width-1-2@m uk-margin-right" uk-grid>
+                    <div class="uk-width-auto">
+                        <div class="uk-flex uk-flex-between uk-flex-column">
+                            <div class="uk-text-meta">R 1M</div>
+                            <div class="uk-text-meta">R 500K</div>
+                            <div class="uk-text-meta uk-margin-medium-bottom">R 10K</div>
+                        </div>
+                    </div>
+                    <div class="uk-width-expand">
+                        <div>{{ inv_chart_html | safe }}</div>
+                        <hr class="uk-margin-small-top">
+                        {% for investment_type, current_price in investment_totals.items() %}
+                        <span>
+                        <img height="10" src="{{ url_for('static', path='icons/circle-solid.svg') }}"
+                             style="color: green" uk-svg width="10">
+                        R{{ "{:,.2f}".format(current_price) }} {{ investment_type }}
+                    </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="uk-width-1-2@m uk-overflow-auto">
+                    <table class="uk-table uk-table-divider">
+                        <thead>
+                        <tr>
+                            <th>Investment</th>
+                            <th>Symbol</th>
+                            <th>Quantity</th>
+                            <th>Purchase Price</th>
+                            <th>Current Price</th>
+                            <th>Purchase Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in investments %}
+                        <tr>
+                            <td>{{ item.investment_type }}</td>
+                            <td>{{ item.symbol }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>R <strong>{{ "{:,.2f}".format(item.purchase_price) }}</strong></td>
+                            <td>R <strong>{{ "{:,.2f}".format(item.current_price) }}</strong></td>
+                            <td>{{ item.purchase_date }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
